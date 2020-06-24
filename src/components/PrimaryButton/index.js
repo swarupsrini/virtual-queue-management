@@ -2,7 +2,7 @@ import React from 'react';
 
 function PrimaryButton() {
 	return (
-		<div>
+		<div class="primaryColor">
 			<h1>general kenobi</h1>
 		</div>
 	);
