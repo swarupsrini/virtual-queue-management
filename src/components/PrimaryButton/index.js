@@ -1,11 +1,8 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
 
-function PrimaryButton() {
+export default function PrimaryButton(props) {
 	return (
-		<div class="primaryColor">
-			<h1>general kenobi</h1>
-		</div>
+		<Button color="primary" variant="contained" onClick={props.onClick}>{props.text}</Button>
 	);
 }
-
-export default PrimaryButton;
