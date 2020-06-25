@@ -25,7 +25,7 @@ Example: <LineGraph dataPoints= {
 import React from 'react';
 
 /* App.js */
-import CanvasJSReact from '.././CanvasJS/canvasjs.react';
+import CanvasJSReact from './CanvasJS/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 //class LineGraph extends React.Component {
