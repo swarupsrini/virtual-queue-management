@@ -9,15 +9,15 @@ joinClick: Called when "join queue" clicked
 viewClick: Called when "view data" clicked
 address: The string address
 
-Example: <InfoCard 
+Example: <StoreCard 
             title="Walmart" 
-            subtitle="10 minutes left" 
+            min="10" 
             verified={true} 
             favorited={false} 
             joinClick={joinCallback} 
             viewClick={viewCallback} 
             address="300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5">
-          </InfoCard>
+          </StoreCard>
 */
 
 import React, { useState } from "react";
