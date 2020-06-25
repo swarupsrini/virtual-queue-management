@@ -4,10 +4,11 @@ DataCard: Used to represent a data displaying card
 title: Card title, the data
 subtitle: A description of the data
 
-Example: <DataCard 
-            title="20" 
-            subtitle="In queue" >
-          </DataCard>
+Example: 
+<DataCard 
+  title="20" 
+  subtitle="In queue" >
+</DataCard>
 */
 
 import React, { useState } from "react";
