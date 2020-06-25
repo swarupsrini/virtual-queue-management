@@ -6,12 +6,13 @@ subtitle: Card subtitle
 editClick: Called when "edit" clicked
 address: The string address
 
-Example: <AdminCard 
-            title="Walmart" 
-            subtitle="Store ID: 1003" 
-            editClick={editCallback} 
-            address="300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5">
-          </AdminCard>
+Example:
+<AdminCard 
+  title="Walmart" 
+  subtitle="Store ID: 1003" 
+  editClick={editCallback} 
+  address="300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5">
+</AdminCard>
 */
 
 import React, { useState } from "react";
