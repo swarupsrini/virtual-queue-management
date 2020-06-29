@@ -15,6 +15,7 @@ import React from 'react';
 
 /* App.js */
 import CanvasJSReact from './CanvasJS/canvasjs.react';
+var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 //class LineGraph extends React.Component {
@@ -22,7 +23,7 @@ export default function LineGraph(props) {
 	var i;
 	let dataPoints = []
 	for (i = 0; i < props.yValues.length; i++) {
-		dataPoints.push({x:new Date(Date.UTC (2012, 1, 1, props.startTime + i + 5,0)),y:props.yValues[i]})
+		dataPoints.push({x:i,y:props.yValues[i]})
 	}
 
 	const options = {
@@ -36,13 +37,17 @@ export default function LineGraph(props) {
 		},
 		axisX: {
 			title: "Hour of Day",
-			interval: 1
+			interval: 1,
+			labelFormatter: function (e) {
+					return CanvasJS.formatDate( new Date(Date.UTC (2012, 1, 1, props.startTime + e.value + 5,0)), "htt");
+				},
 		},
 		data: [{
 			type: "line",
 			toolTipContent: "{y} people",
 			dataPoints: dataPoints
-		}]
+		}],
+		height:260
 	}
 	
 	
