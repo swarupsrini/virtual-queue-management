@@ -14,26 +14,26 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import FilterList from '@material-ui/icons/FilterList';
 
+const useStyles = makeStyles(() => ({
+  input: {
+    backgroundColor: "white",
+  },
+}));
+
 export default function Search(props) {
-  
-  let state={
-    text:""
+  const [text, setText] = useState()
+  const classes = useStyles()
+  function searchClick(e) {
+    props.search(text)
   }
 
-  function updateSearch(e){
-    state.text = e.target.value
-  }
-  function searchClick(e){
-    props.search(state.text)
-  }
-  
   return (
     <div>
-      <TextField label="Search" variant="outlined" size="small" onChange={updateSearch}></TextField>
+      <TextField className={classes.input} label="Search" variant="outlined" size="small" onChange={(e) => setText(e.target.value)}></TextField>
       <IconButton onClick={searchClick}>
         <SearchIcon size="medium"></SearchIcon>
       </IconButton>
-      <IconButton onClick={props.filter}>
+      <IconButton onClick={props.filterClick}>
         <FilterList size="medium"></FilterList>
       </IconButton>
     </div>
