@@ -8,11 +8,11 @@ Example: <Search filterClick= {filterClick}, searchClick = {searchClick}/>
 */
 
 import React, { useState } from "react";
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
-import FilterList from '@material-ui/icons/FilterList';
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import SearchIcon from "@material-ui/icons/Search";
+import FilterList from "@material-ui/icons/FilterList";
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -21,15 +21,22 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Search(props) {
-  const [text, setText] = useState()
-  const classes = useStyles()
+  const [text, setText] = useState();
+  const classes = useStyles();
   function searchClick(e) {
-    props.search(text)
+    props.search(text);
   }
 
   return (
     <div>
-      <TextField className={classes.input} label="Search" variant="outlined" size="small" onChange={(e) => setText(e.target.value)}></TextField>
+      <TextField
+        className={classes.input}
+        value={text}
+        label="Search"
+        variant="outlined"
+        size="small"
+        onChange={(e) => setText(e.target.value)}
+      ></TextField>
       <IconButton onClick={searchClick}>
         <SearchIcon size="medium"></SearchIcon>
       </IconButton>
