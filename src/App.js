@@ -1,19 +1,22 @@
-import React from "react";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Route, Switch, BrowserRouter, Link } from "react-router-dom";
 
 // importing all the pages
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import StoreSearchPage from "./pages/StoreSearchPage";
 
 import "./App.css";
+
 
 function App() {
 	return (
 		<div className="App">
       <BrowserRouter>
         <Switch>
-          <Route exact path='/' render={() => (<LoginPage/>)}/>
-          <Route exact path='/signup' render={() => (<SignupPage/>)}/>
+          <Route path='/search' render={() => (<StoreSearchPage/>)}/>
+          <Route exact path='/signup' render={() => (<SignupPage redirect="/search"/>)}/>
+          <Route exact path='/' render={() => (<LoginPage redirect="/search"/>)}/>
         </Switch>
       </BrowserRouter>
 		</div>
