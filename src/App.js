@@ -5,15 +5,17 @@ import { Route, Switch, BrowserRouter, Link } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import StoreSearchPage from "./pages/StoreSearchPage";
+import SettingsPage from "./pages/SettingsPage";
 
 import "./App.css";
 
 
-function App() {
+export default function App() {
 	return (
 		<div className="App">
       <BrowserRouter>
         <Switch>
+          <Route path='/settings' render={() => (<SettingsPage/>)}/>
           <Route path='/search' render={() => (<StoreSearchPage/>)}/>
           <Route exact path='/signup' render={() => (<SignupPage redirect="/search"/>)}/>
           <Route exact path='/' render={() => (<LoginPage redirect="/search"/>)}/>
@@ -22,5 +24,3 @@ function App() {
 		</div>
 	);
 }
-
-export default App;
