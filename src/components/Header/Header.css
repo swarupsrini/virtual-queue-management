@@ -1,0 +1,14 @@
+.links {
+    color: white;
+    font-weight: normal;
+    padding-left: 25px;
+    font-size: 15px;
+}
+
+.pageTitleLeft {
+    text-decoration: none;
+}
+
+.preview-title{
+    text-decoration: none !important;
+}
