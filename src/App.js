@@ -9,7 +9,7 @@ import StoreSearchPage from "./pages/StoreSearchPage";
 import "./App.css";
 
 
-function App() {
+export default function App() {
 	return (
 		<div className="App">
       <BrowserRouter>
@@ -22,5 +22,3 @@ function App() {
 		</div>
 	);
 }
-
-export default App;
