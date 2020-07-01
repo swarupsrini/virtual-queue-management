@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 
 import { Link } from "react-router-dom";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Paper,
   Container,
   Typography,
   TextField,
-  Button
+  Button,
+  InputAdornment,
+  IconButton,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   linkButton: {
     marginTop: theme.spacing(10 / 8),
     textDecoration: "none",
-  }
+  },
 }));
 
 export default function LoginPage(props) {
@@ -49,6 +53,7 @@ export default function LoginPage(props) {
   const [isError, setIsError] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState("");
 
   function postLogin() {
     if (userName == "test" && password == "test") {
@@ -66,41 +71,48 @@ export default function LoginPage(props) {
     <Container maxWidth={false} className={classes.background}>
       <Paper elevation={2} variant="elevation" className={classes.page}>
         <Typography className={classes.title}>Log in</Typography>
-        <TextField 
-          onChange={e => {
-            setUserName(e.target.value)
+        <TextField
+          onChange={(e) => {
+            setUserName(e.target.value);
             setIsError(false);
-          }} 
-          variant="outlined" 
-          size="small" 
+          }}
+          variant="outlined"
+          size="small"
           label="Username"
           error={isError}
-          className={classes.textField}>
-        </TextField>
-        <TextField 
-          onChange={e => {
-            setPassword(e.target.value)
+          className={classes.textField}
+        ></TextField>
+        <TextField
+          onChange={(e) => {
+            setPassword(e.target.value);
             setIsError(false);
-          }} 
-          variant="outlined" 
-          size="small" 
-          type="password"
+          }}
+          variant="outlined"
+          size="small"
+          type={showPassword ? "text" : "password"}
           label="Password"
           error={isError}
-          className={classes.textField}>
-        </TextField>
-        <Button 
-          color="primary" 
-          variant="contained" 
+          className={classes.textField}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        ></TextField>
+        <Button
+          color="primary"
+          variant="contained"
           onClick={postLogin}
-          className={classes.loginButton}>
+          className={classes.loginButton}
+        >
           Log In
         </Button>
         <Link to="/signup" className={classes.linkButton}>
-          <Button 
-            color="primary" 
-            variant="text" 
-            >
+          <Button color="primary" variant="text">
             Don't have an account? Sign up
           </Button>
         </Link>

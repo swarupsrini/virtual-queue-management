@@ -9,18 +9,25 @@ import SettingsPage from "./pages/SettingsPage";
 
 import "./App.css";
 
-
 export default function App() {
-	return (
-		<div className="App">
+  return (
+    <div className="App">
       <BrowserRouter>
         <Switch>
-          <Route path='/settings' render={() => (<SettingsPage/>)}/>
-          <Route path='/search' render={() => (<StoreSearchPage/>)}/>
-          <Route exact path='/signup' render={() => (<SignupPage redirect="/search"/>)}/>
-          <Route exact path='/' render={() => (<LoginPage redirect="/search"/>)}/>
+          <Route path="/settings" render={() => <SettingsPage />} />
+          <Route path="/search" render={() => <StoreSearchPage />} />
+          <Route
+            exact
+            path="/signup"
+            render={() => <SignupPage redirect="/search" />}
+          />
+          <Route
+            exact
+            path="/"
+            render={() => <LoginPage redirect="/search" />}
+          />
         </Switch>
       </BrowserRouter>
-		</div>
-	);
+    </div>
+  );
 }
