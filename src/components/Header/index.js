@@ -1,14 +1,11 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { Link } from "react-router-dom";
-import Button from '@material-ui/core/Button';
+import { Link, useLocation } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
-
-import "./Header.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,21 +17,43 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     fontSize: "25px",
-  }
+  },
+  linkTypo: {
+    fontSize: "15px",
+  },
+  Link: {
+    textDecoration: "none",
+    paddingLeft: "15px",
+    color: "white",
+  },
 }));
+
+function getPageTitle(location) {
+  const temp = location.substring(1, location.length).split("-");
+  let title = ""
+  for (let i = 0; i < temp.length; i++) {
+    title += temp[i].charAt(0).toUpperCase()
+    title += temp[i].substring(1, temp[i].length) + " "
+  }
+  return title
+}
 
 export default function Header(props) {
   const classes = useStyles();
+  let location = useLocation();
+
   return (
     <AppBar>
       <Toolbar variant="dense">
 
         <Typography variant="h4" className={classes.title}>
-          {props.pageTitle}
+          {getPageTitle(location.pathname)}
         </Typography>
 
-        <Link to="/search" className="pageTitleLeft"><h3 className="links"> STORE SEARCH </h3></Link>
-        <Link to="/admin-panel" className="pageTitleLeft"><h3 className="links"> ADMIN PANEL </h3></Link>
+        <Typography variant="h4" className={classes.linkTypo}>
+          <Link to="/search" className={classes.Link}> STORE SEARCH </Link>
+          <Link to="/admin-panel" className={classes.Link}> ADMIN PANEL </Link>
+        </Typography>
 
         <IconButton className={classes.accountIcon}
           onClick={() => console.log("clicked account icon")}
