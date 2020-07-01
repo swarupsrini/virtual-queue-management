@@ -5,6 +5,7 @@ import { Route, Switch, BrowserRouter, Link } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import StoreSearchPage from "./pages/StoreSearchPage";
+import AdminSettingsPage from "./pages/AdminSettingsPage";
 
 import "./App.css";
 
@@ -14,6 +15,7 @@ export default function App() {
 		<div className="App">
       <BrowserRouter>
         <Switch>
+          <Route path='/admin-settings' render={() => (<AdminSettingsPage/>)}/>
           <Route path='/search' render={() => (<StoreSearchPage/>)}/>
           <Route exact path='/signup' render={() => (<SignupPage redirect="/search"/>)}/>
           <Route exact path='/' render={() => (<LoginPage redirect="/search"/>)}/>
