@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { sizing } from "@material-ui/system";
 
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
