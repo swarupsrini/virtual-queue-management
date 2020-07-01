@@ -12,10 +12,8 @@ function App() {
 		<div className="App">
       <BrowserRouter>
         <Switch>
-          <Route exact path='/' render={() => 
-                          (<LoginPage/>)}/>
-          <Route exact path='/signup' render={() => 
-                          (<SignupPage/>)}/>
+          <Route exact path='/' render={() => (<LoginPage/>)}/>
+          <Route exact path='/signup' render={() => (<SignupPage/>)}/>
         </Switch>
       </BrowserRouter>
 		</div>
