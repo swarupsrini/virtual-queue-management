@@ -60,7 +60,7 @@ export default function StoreCard(props) {
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
-        {props.verified == true && <CheckIcon className={classes.topIcon}></CheckIcon>}
+        {props.verified === true && <CheckIcon className={classes.topIcon}></CheckIcon>}
         <Typography variant="h5" component="h2">
           {props.title}
         </Typography>
