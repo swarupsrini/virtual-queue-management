@@ -1,11 +1,13 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+} from "@material-ui/core";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import { Link, useLocation } from "react-router-dom";
-import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,16 +28,19 @@ const useStyles = makeStyles(() => ({
     paddingLeft: "15px",
     color: "white",
   },
+  spacerDiv: {
+    marginTop: "48px",
+  }
 }));
 
 function getPageTitle(location) {
   const temp = location.substring(1, location.length).split("-");
-  let title = ""
+  let title = "";
   for (let i = 0; i < temp.length; i++) {
-    title += temp[i].charAt(0).toUpperCase()
-    title += temp[i].substring(1, temp[i].length) + " "
+    title += temp[i].charAt(0).toUpperCase();
+    title += temp[i].substring(1, temp[i].length) + " ";
   }
-  return title
+  return title;
 }
 
 export default function Header(props) {
@@ -43,25 +48,27 @@ export default function Header(props) {
   let location = useLocation();
 
   return (
-    <AppBar>
-      <Toolbar variant="dense">
+    <div>
+      <AppBar>
+        <Toolbar variant="dense">
+          <Typography variant="h4" className={classes.title}>
+            {getPageTitle(location.pathname)}
+          </Typography>
 
-        <Typography variant="h4" className={classes.title}>
-          {getPageTitle(location.pathname)}
-        </Typography>
-
-        <Typography variant="h4" className={classes.linkTypo}>
-          <Link to="/search" className={classes.Link}> STORE SEARCH </Link>
-          <Link to="/admin-panel" className={classes.Link}> ADMIN PANEL </Link>
-        </Typography>
-
-        <IconButton className={classes.accountIcon}
-          onClick={() => console.log("clicked account icon")}
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-      </Toolbar>
-    </AppBar >
+          <Typography variant="h4" className={classes.linkTypo}>
+            <Link to="/search" className={classes.Link}>
+              <Button color="inherit">Store Search</Button>
+            </Link>
+            <Link to="/admin-panel" className={classes.Link}>
+              <Button color="inherit">Admin Panel</Button>
+            </Link>
+            <Link to="/settings" className={classes.Link}>
+              <Button color="inherit">Settings</Button>
+            </Link>
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <div className={classes.spacerDiv}></div>
+    </div>
   );
 }
