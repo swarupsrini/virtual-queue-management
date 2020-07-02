@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import { Map, TileLayer, Marker } from "react-leaflet";
 import { makeStyles } from "@material-ui/core/styles";
 import StoreCard from "../../components/StoreCard";
 import {
