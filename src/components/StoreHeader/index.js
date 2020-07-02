@@ -18,12 +18,12 @@ const useStyles = makeStyles({
   title: {
     marginTop: "40px",
     textAlign: "center",
-    fontSize: "72pt",
+    fontSize: "50pt",
     color: "#4455BB"
   },
   subtitle: {
     textAlign: "center",
-    fontSize: "24pt"
+    fontSize: "16pt"
   }
 });
 

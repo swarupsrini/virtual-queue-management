@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import StoreHeader from "../../components/StoreHeader";
 import LineGraph from "../../components/LineGraph";
@@ -37,35 +37,45 @@ const useStyles = makeStyles({
 
 export default function StoreAnalytics(props) {
   const classes = useStyles();
+  const [storeCount] = useState(0);
+  const [queue] = useState([2,1,1,3]);
+  const [avgShoppingLength] = useState(10);
+  const [storeCapacity] = useState(30);
+  const [storeOpenTime] = useState(8);
+  const [storeTraffic] = useState([8,8,8,15,30,30,28,25,33,18,10,10,5]);
+  const [storeName] = useState("Walmart");
+  const [smallAddress] = useState("300 Borough Dr Unit 3635,");
+  const [bigAddress] = useState("Scarborough, ON M1P 4P5");
+
   return (
     <div>
 		<Header></Header>
 		<Frame className={classes.frame} size={300} center width={904} height="auto" background={"#FFFFFF"} shadow="1px 1px 3px 2px grey" radius = {8}>
 			<div className={classes.header}>
 				<StoreHeader
-					title="Walmart"
-					subtitle1="300 Borough Dr Unit 3635,"
-					subtitle2="Scarborough, ON M1P 4P5"
+					title={storeName}
+					subtitle1={smallAddress}
+					subtitle2={bigAddress}
 					/>
 			</div>
 			<Grid className={classes.datacards} container>
 				<DataCard
-					title="20" 
+					title={queue.length}
 					subtitle="In queue" >
 				</DataCard>
 				<DataCard
-					title="20 min" 
+					title={Math.round(avgShoppingLength * queue.length / storeCapacity)+ " min"} 
 					subtitle="Estimated Wait Time" >
 				</DataCard>
 				<DataCard
-					title="45" 
+					title={storeCount}
 					subtitle="In-Store" >
 				</DataCard>
 			</Grid>
 			<div className={classes.linegraph}>
 				<LineGraph 
-					yValues= {[8,8,8,15,30,30,28,25,33,18,10,10,5]}
-					startTime = {8}
+					yValues= {storeTraffic}
+					startTime = {storeOpenTime}
 				/>
 			</div>
 		</Frame>

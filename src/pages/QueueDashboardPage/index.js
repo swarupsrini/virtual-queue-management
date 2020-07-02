@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import StoreHeader from "../../components/StoreHeader";
 import LineGraph from "../../components/LineGraph";
@@ -68,7 +68,6 @@ export default function QueueDashboard(props) {
   const [queueOpen, setQueueOpen] = useState(true);
   const [storeCount, setStoreCount] = useState(0);
   const [queue, setQueue] = useState([2,1,1,3]);
-  const [queueCount, setQueueCount] = useState(queue.reduce((a, b) => a + b, 0));
   const [storeName] = useState("Walmart");
   const [smallAddress] = useState("300 Borough Dr Unit 3635,");
   const [bigAddress] = useState("Scarborough, ON M1P 4P5");
@@ -92,7 +91,6 @@ export default function QueueDashboard(props) {
 			onClick={() => {
 				if (queue.length > 0){
 					setStoreCount(storeCount+nextGroupSize);
-					setQueueCount(queueCount-nextGroupSize)
 					queue.shift()
 				}
 			}
@@ -133,7 +131,7 @@ export default function QueueDashboard(props) {
 					subtitle="In-Store" >
 				</DataCard>
 				<DataCard
-					title={queueCount} 
+					title={queue.length} 
 					subtitle="In Queue" >
 				</DataCard>
 				<DataCard
@@ -150,7 +148,6 @@ export default function QueueDashboard(props) {
 					text="Clear Queue" 
 					onClick={() => { 
 						setQueue([])
-						setQueueCount(0)
 					}}>
 				</SecondaryButton>
 				<SecondaryButton 
