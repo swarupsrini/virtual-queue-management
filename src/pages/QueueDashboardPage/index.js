@@ -10,13 +10,6 @@ import Grid from "@material-ui/core/Grid";
 import {Container} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-	root: {
-		backgroundColor: theme.palette.primary.main,
-		height: "100vh",
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-	},
   datacard: {
 	marginTop: "20px",
 	marginLeft: "20px"
@@ -61,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 export default function QueueDashboard(props) {
   const classes = useStyles();
   return (
-    <Container maxWidth={false} className={classes.root}>
+    <div>
 		<Frame className={classes.frame} size={300} center width={904} height="auto" background={"#FFFFFF"} shadow="1px 1px 3px 2px grey" radius = {8}>
 			<div className={classes.header}>
 				<StoreHeader
@@ -109,6 +102,6 @@ export default function QueueDashboard(props) {
 			</Grid>
 
 		</Frame>
-	</Container>
+	</div>
   );
 }
