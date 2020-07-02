@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  background: {
+  root: {
     backgroundColor: theme.palette.primary.main,
     height: "100vh",
     display: "flex",
@@ -68,7 +68,7 @@ export default function LoginPage(props) {
   }
 
   return (
-    <Container maxWidth={false} className={classes.background}>
+    <Container maxWidth={false} className={classes.root}>
       <Paper elevation={2} variant="elevation" className={classes.page}>
         <Typography className={classes.title}>Log in</Typography>
         <TextField
