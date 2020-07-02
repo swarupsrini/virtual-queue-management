@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import {
   Popover,
   List,
@@ -7,8 +8,12 @@ import {
   Switch,
   ListItemText,
   Typography,
+  GridList,
+  GridListTile,
+  withWidth,
+  isWidthUp,
 } from "@material-ui/core";
-import StoreCard from "../../components/StoreCard";
+import AdminCard from "../../components/AdminCard";
 import Header from "../../components/Header";
 import Search from "../../components/Search";
 import { makeStyles } from "@material-ui/core/styles";
@@ -53,15 +58,43 @@ function getStores() {
       ID: 4,
       isVerified: false,
     },
+
+    {
+      name: "Grocery Store",
+      address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+      latitude: 43.7763,
+      longitude: -79.25802,
+      wait: 12,
+      ID: 5,
+      isVerified: true,
+    },
+    {
+      name: "Shop Store",
+      address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+      latitude: 43.7763,
+      longitude: -79.25802,
+      wait: 12,
+      ID: 6,
+      isVerified: true,
+    },
   ];
 }
 
 function getUsers() {
+  // Below is mock code for backend call that returns list of users and their info
   return [
     { name: "hemantb3434", ID: 11 },
     { name: "swarupsrini", ID: 12 },
     { name: "jasonconte131", ID: 13 },
   ];
+}
+
+function editStoreData(store) {
+  // Backend call update the admin's currently editing state
+}
+
+function editUserData(user) {
+  // Backend call update the admin's currently editing state
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -73,25 +106,82 @@ const useStyles = makeStyles((theme) => ({
     width: "260px",
     backgroundColor: "white",
   },
-  titles: {
-    marginLeft: theme.spacing(5),
+  display: {
+    marginLeft: theme.spacing(10),
     marginTop: theme.spacing(3),
+  },
+  gridList: { marginLeft: theme.spacing(5) },
+  tile: {
+    width: "320px",
   },
 }));
 
 export default function AdminPanelPage(props) {
   const [anchor, setAnchor] = useState(null);
-  const [text, setText] = useState("");
+  const [text] = useState("");
   const [showUsers, setShowUsers] = useState(true);
   const [showStores, setShowStores] = useState(true);
 
+  const [users, setUsers] = useState(getUsers());
+  const [stores, setStores] = useState(getStores());
   const classes = useStyles();
 
+  const [redirect, setRedirect] = useState(null);
+
   useEffect(() => {}, [showUsers, showStores]);
-  function searchBarClicked() {}
+
+  function searchBarClicked(query) {
+    if (query === "") {
+      setStores(getStores());
+      setUsers(getUsers());
+    } else {
+      if (!isNaN(query)) {
+        const result = [];
+        const stores = getStores();
+        searchArrayID(stores, query) &&
+          result.push(searchArrayID(stores, query));
+        result.length === 1 && setStores(result);
+        if (result.length === 0) {
+          const users = getUsers();
+          searchArrayID(users, query) &&
+            result.push(searchArrayID(users, query));
+          result.length === 1 && setUsers(result);
+        }
+        result.length === 0 && setUsers([]);
+        result.length === 0 && setStores([]);
+      } else {
+        const storeResult = searchArrayNames(getStores(), query);
+        const userResult = searchArrayNames(getUsers(), query);
+        setStores(storeResult);
+        setUsers(userResult);
+      }
+    }
+  }
+
+  function searchArrayNames(listToSearchFrom, query) {
+    const result = [];
+    for (let i = 0; i < listToSearchFrom.length; i++) {
+      if (
+        listToSearchFrom[i].name.toLowerCase().includes(query.toLowerCase())
+      ) {
+        result.push(listToSearchFrom[i]);
+      }
+    }
+    return result;
+  }
+
+  function searchArrayID(listToSearchFrom, query) {
+    for (let i = 0; i < listToSearchFrom.length; i++) {
+      if (parseInt(query) === listToSearchFrom[i].ID) {
+        return listToSearchFrom[i];
+      }
+    }
+    return;
+  }
 
   return (
     <div>
+      {redirect && <Redirect to={redirect} />}
       <Header></Header>
       <div className={classes.search}>
         <Search
@@ -104,15 +194,57 @@ export default function AdminPanelPage(props) {
       </div>
 
       {showStores && (
-        <Typography variant="h4" className={classes.titles}>
-          Stores
-        </Typography>
+        <div className={classes.display}>
+          <Typography variant="h4">Stores</Typography>
+          <br></br>
+          <GridList
+            cellHeight={210}
+            className={classes.gridList}
+            cols={0}
+            spacing={15}
+          >
+            {stores.map((store) => (
+              <GridListTile key={store.ID} className={classes.tile}>
+                <AdminCard
+                  title={store.name}
+                  subtitle={"Store ID: " + store.ID}
+                  editClick={() => {
+                    editStoreData(store);
+                    setRedirect("/settings");
+                  }}
+                  address={store.address}
+                ></AdminCard>
+              </GridListTile>
+            ))}
+          </GridList>
+        </div>
       )}
 
       {showUsers && (
-        <Typography variant="h4" className={classes.titles}>
-          Users
-        </Typography>
+        <div className={classes.display}>
+          <Typography variant="h4">Users</Typography>
+          <br></br>
+          <GridList
+            cellHeight={210}
+            className={classes.gridList}
+            cols={0}
+            spacing={15}
+          >
+            {users.map((user) => (
+              <GridListTile key={user.ID} className={classes.tile}>
+                <AdminCard
+                  title={user.name}
+                  subtitle={"User ID: " + user.ID}
+                  editClick={() => {
+                    editUserData(user);
+                    setRedirect("/settings");
+                  }}
+                  address=""
+                ></AdminCard>
+              </GridListTile>
+            ))}
+          </GridList>
+        </div>
       )}
 
       <Popover

@@ -33,13 +33,10 @@ const useStyles = makeStyles((theme) => ({
 
 function joinedQueue(storeInfo) {
   // there will be a backend call to update user's queue status
-  console.log(storeInfo);
 }
 
 function updateUserFavStores(storeID, value) {
   // there will be a backend call to update user's favourited stores
-  console.log(storeID);
-  console.log(value);
 }
 
 function getDistance(storeName) {
