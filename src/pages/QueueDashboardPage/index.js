@@ -96,6 +96,9 @@ export default function QueueDashboard(props) {
 					onClick={() => { console.log("clear") }}>
 				</PrimaryButton>
 			</Grid>
+			<Grid container>
+				<button className={classes.inOutButtons} onclick="myFunction()">Click me</button>
+			</Grid>
 
 		</Frame>
     </div>

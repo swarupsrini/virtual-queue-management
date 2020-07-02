@@ -7,6 +7,9 @@ import SignupPage from "./pages/SignupPage";
 import StoreSearchPage from "./pages/StoreSearchPage";
 import SettingsPage from "./pages/SettingsPage";
 import AdminPanelPage from "./pages/AdminPanelPage";
+import StoreAnalytics from "./pages/StoreAnalyticsPage";
+import QueueDashboard from "./pages/QueueDashboardPage";
+import QueueStatus from "./pages/QueueStatusPage";
 import "./App.css";
 
 export default function App() {
@@ -27,6 +30,9 @@ export default function App() {
             path="/"
             render={() => <LoginPage redirect="/store-search" />}
           />
+          <Route path="/store-analytics" render={() => <StoreAnalytics />} />
+          <Route path="/queue-dashboard" render={() => <QueueDashboard />} />
+          <Route path="/queue-status" render={() => <QueueStatus />} />
         </Switch>
       </BrowserRouter>
     </div>
