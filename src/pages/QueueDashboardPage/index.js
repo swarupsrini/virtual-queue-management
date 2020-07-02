@@ -72,37 +72,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-//<Grid container spacing={4}>
-//<Grid item xl={3} lg={3} md={4} s={12} xs={12}>
-
-/*
-function getInOutButtons(){
-	if(true){
-		return (
-			<Grid className={classes.inOutButtons} container>
-				<Button className={classes.inButton} variant="contained" onClick={() => { console.log("in") }}>
-					IN
-				</Button>
-				<Button className={classes.outButton} variant="contained" onClick={() => { console.log("out") }}>
-					OUT
-				</Button>
-			</Grid>
-		)
-	}
-}*/
-
 export default function QueueDashboard(props) {
   const classes = useStyles();
-  const [queueOpen, setQueueOpen] = useState(false);
+  const [queueOpen, setQueueOpen] = useState(true);
+  const [storeCount, setStoreCount] = useState(25);
+  const [queueCount, setQueueCount] = useState(20);
+  const [nextGroupSize, setNextGroupSize] = useState(2);
+
   let closeOpenQueueText
   let inOutButtons
   if (queueOpen) {
 	closeOpenQueueText = "Close Queue"
 	inOutButtons = <Grid className={classes.inOutButtons} container>
-		<Button className={classes.inButton} variant="contained" onClick={() => { console.log("in") }}>
+		<Button 
+			className={classes.inButton}
+			variant="contained"
+			onClick={() => {
+				if (queueCount >= nextGroupSize){
+					setStoreCount(storeCount+nextGroupSize);
+					setQueueCount(queueCount-nextGroupSize)
+				}
+			}
+		}>
 			IN
 		</Button>
-		<Button className={classes.outButton} variant="contained" onClick={() => { console.log("out") }}>
+		<Button 
+			className={classes.outButton} 
+			variant="contained" 
+			onClick={() => { 
+				if (storeCount > 0){
+					setStoreCount(storeCount-1) 
+				}
+			}
+		}>
 			OUT
 		</Button>
 	</Grid>
@@ -124,15 +126,15 @@ export default function QueueDashboard(props) {
 			</div>
 			<Grid className={classes.datacards} container>
 				<DataCard
-					title="25" 
+					title={storeCount}
 					subtitle="In-Store" >
 				</DataCard>
 				<DataCard
-					title="20" 
+					title={queueCount} 
 					subtitle="In Queue" >
 				</DataCard>
 				<DataCard
-					title="2" 
+					title={nextGroupSize} 
 					subtitle="Next" >
 				</DataCard>
 			</Grid>
@@ -143,7 +145,7 @@ export default function QueueDashboard(props) {
 				</SecondaryButton>
 				<SecondaryButton 
 					text="Clear Queue" 
-					onClick={() => { console.log("clear") }}>
+					onClick={() => { setQueueCount(0) }}>
 				</SecondaryButton>
 				<SecondaryButton 
 					text="Scan QR" 
@@ -151,7 +153,6 @@ export default function QueueDashboard(props) {
 				</SecondaryButton>
 			</Grid>
 			{inOutButtons}
-			
 
 		</Frame>
 	</div>
