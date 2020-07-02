@@ -7,7 +7,7 @@ search(query): search call-back function. Takes contents of search bar as parame
 Example: <Search filterClick= {filterClick}, searchClick = {searchClick}/>
 */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
@@ -21,11 +21,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Search(props) {
-  const [text, setText] = useState();
+  const [text, setText] = useState("");
   const classes = useStyles();
-  function searchClick(e) {
-    props.search(text);
-  }
+
+  useEffect(() => {
+    setText(props.text);
+  }, [props.text]);
 
   return (
     <div>
@@ -37,10 +38,10 @@ export default function Search(props) {
         size="small"
         onChange={(e) => setText(e.target.value)}
       ></TextField>
-      <IconButton onClick={searchClick}>
+      <IconButton onClick={() => props.searchClick(text)}>
         <SearchIcon size="medium"></SearchIcon>
       </IconButton>
-      <IconButton onClick={props.filterClick}>
+      <IconButton onClick={(e) => props.filterClick(e)}>
         <FilterList size="medium"></FilterList>
       </IconButton>
     </div>
