@@ -38,11 +38,6 @@ const useStyles = makeStyles((theme) => ({
 	marginBottom: "20px",
 	justifyContent: "space-around"
   },
-  closeQueue:{
-	  width:"200px"
-  },
-  clearQueue:{
-  },
   inOutButtons:{
 	marginTop: "20px",
 	marginBottom: "20px",
@@ -66,19 +61,26 @@ const useStyles = makeStyles((theme) => ({
 	float: "right",
 	marginLeft: "20px",
   },
-  popup: {
-    width: "260px",
-    backgroundColor: "white",
-  },
 }));
 
 export default function QueueDashboard(props) {
   const classes = useStyles();
   const [queueOpen, setQueueOpen] = useState(true);
-  const [storeCount, setStoreCount] = useState(25);
-  const [queueCount, setQueueCount] = useState(20);
-  const [nextGroupSize, setNextGroupSize] = useState(2);
+  const [storeCount, setStoreCount] = useState(0);
+  const [queue, setQueue] = useState([2,1,1,3]);
+  const [queueCount, setQueueCount] = useState(queue.reduce((a, b) => a + b, 0));
+  const [storeName] = useState("Walmart");
+  const [smallAddress] = useState("300 Borough Dr Unit 3635,");
+  const [bigAddress] = useState("Scarborough, ON M1P 4P5");
 
+  let nextGroupSize
+  if (queue.length > 0) {
+	nextGroupSize = queue[0]
+  }
+  else {
+	nextGroupSize = 0
+  }
+  
   let closeOpenQueueText
   let inOutButtons
   if (queueOpen) {
@@ -88,9 +90,10 @@ export default function QueueDashboard(props) {
 			className={classes.inButton}
 			variant="contained"
 			onClick={() => {
-				if (queueCount >= nextGroupSize){
+				if (queue.length > 0){
 					setStoreCount(storeCount+nextGroupSize);
 					setQueueCount(queueCount-nextGroupSize)
+					queue.shift()
 				}
 			}
 		}>
@@ -119,9 +122,9 @@ export default function QueueDashboard(props) {
 		<Frame className={classes.frame} size={300} center width={904} height="auto" background={"#FFFFFF"} shadow="1px 1px 3px 2px grey" radius = {8}>
 			<div className={classes.header}>
 				<StoreHeader
-					title="Walmart"
-					subtitle1="300 Borough Dr Unit 3635,"
-					subtitle2="Scarborough, ON M1P 4P5"
+					title={storeName}
+					subtitle1={smallAddress}
+					subtitle2={bigAddress}
 					/>
 			</div>
 			<Grid className={classes.datacards} container>
@@ -145,7 +148,10 @@ export default function QueueDashboard(props) {
 				</SecondaryButton>
 				<SecondaryButton 
 					text="Clear Queue" 
-					onClick={() => { setQueueCount(0) }}>
+					onClick={() => { 
+						setQueue([])
+						setQueueCount(0)
+					}}>
 				</SecondaryButton>
 				<SecondaryButton 
 					text="Scan QR" 
