@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import StoreHeader from "../../components/StoreHeader";
 import LineGraph from "../../components/LineGraph";
 import DataCard from "../../components/DataCard";
+import PrimaryButton from "../../components/PrimaryButton";
+import SecondaryButton from "../../components/SecondaryButton";
 import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
 
@@ -28,13 +30,27 @@ const useStyles = makeStyles({
   header:{
 	  marginTop:"20px",
 	  marginBottom:"30px"
+  },
+  queueButtons:{
+	marginTop: "20px",
+	justifyContent: "space-around"
+  },
+  inOutButtons:{
+	marginTop: "20px",
+	justifyContent: "space-around",
+	textAlign: "center",
+  },
+  inOutButtons2:{
+	marginTop: "20px",
+	justifyContent: "space-around",
+	textAlign: "center",
   }
 });
 
 //<Grid container spacing={4}>
 //<Grid item xl={3} lg={3} md={4} s={12} xs={12}>
 
-export default function StoreAnalytics(props) {
+export default function QueueDashboard(props) {
   const classes = useStyles();
   return (
     <div>
@@ -48,24 +64,39 @@ export default function StoreAnalytics(props) {
 			</div>
 			<Grid className={classes.datacards} container>
 				<DataCard
-					title="20" 
-					subtitle="In queue" >
-				</DataCard>
-				<DataCard
-					title="20 min" 
-					subtitle="Estimated Wait Time" >
-				</DataCard>
-				<DataCard
-					title="45" 
+					title="25" 
 					subtitle="In-Store" >
 				</DataCard>
+				<DataCard
+					title="20" 
+					subtitle="In Queue" >
+				</DataCard>
+				<DataCard
+					title="2" 
+					subtitle="Next" >
+				</DataCard>
 			</Grid>
-			<div className={classes.linegraph}>
-				<LineGraph 
-					yValues= {[8,8,8,15,30,30,28,25,33,18,10,10,5]}
-					startTime = {8}
-				/>
-			</div>
+			<Grid className={classes.queueButtons} container>
+				<SecondaryButton 
+					text="Close Queue" 
+					onClick={() => { console.log("close") }}>
+				</SecondaryButton>
+				<SecondaryButton 
+					text="Clear Queue" 
+					onClick={() => { console.log("clear") }}>
+				</SecondaryButton>
+			</Grid>
+			<Grid className={classes.inOutButtons} container>
+				<PrimaryButton 
+					text="In" 
+					onClick={() => { console.log("close") }}>
+				</PrimaryButton>
+				<PrimaryButton 
+					text="Out" 
+					onClick={() => { console.log("clear") }}>
+				</PrimaryButton>
+			</Grid>
+
 		</Frame>
     </div>
   );
