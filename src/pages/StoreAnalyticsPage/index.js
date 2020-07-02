@@ -5,6 +5,7 @@ import LineGraph from "../../components/LineGraph";
 import DataCard from "../../components/DataCard";
 import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
+import Header from "../../components/Header";
 
 const useStyles = makeStyles({
   datacard: {
@@ -38,6 +39,7 @@ export default function StoreAnalytics(props) {
   const classes = useStyles();
   return (
     <div>
+		<Header></Header>
 		<Frame className={classes.frame} size={300} center width={904} height="auto" background={"#FFFFFF"} shadow="1px 1px 3px 2px grey" radius = {8}>
 			<div className={classes.header}>
 				<StoreHeader

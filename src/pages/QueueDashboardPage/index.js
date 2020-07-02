@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import StoreHeader from "../../components/StoreHeader";
 import LineGraph from "../../components/LineGraph";
@@ -7,7 +7,8 @@ import PrimaryButton from "../../components/PrimaryButton";
 import SecondaryButton from "../../components/SecondaryButton";
 import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
-import {Container} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Header from "../../components/Header";
 
 const useStyles = makeStyles((theme) => ({
   datacard: {
@@ -36,16 +37,37 @@ const useStyles = makeStyles((theme) => ({
 	marginTop: "20px",
 	justifyContent: "space-around"
   },
+  closeQueue:{
+  },
+  clearQueue:{
+  },
   inOutButtons:{
 	marginTop: "20px",
-	justifyContent: "space-around",
-	textAlign: "center",
+	marginBottom: "20px",
+	justifyContent: "center",
   },
-  inOutButtons2:{
-	marginTop: "20px",
-	justifyContent: "space-around",
-	textAlign: "center",
-  }
+  inButton:{
+	backgroundColor: "#A8E071",
+	width: theme.spacing(180 / 8),
+	height: theme.spacing(102 / 8),
+	borderRadius: 10,
+	fontSize: 24,
+	float: "right",
+	marginRight: "20px",
+  },
+  outButton:{
+	backgroundColor: "#EE7A44",
+	width: theme.spacing(180 / 8),
+	height: theme.spacing(102 / 8),
+	borderRadius: 10,
+	fontSize: 24,
+	float: "right",
+	marginLeft: "20px",
+  },
+  popup: {
+    width: "260px",
+    backgroundColor: "white",
+  },
 }));
 
 //<Grid container spacing={4}>
@@ -53,8 +75,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function QueueDashboard(props) {
   const classes = useStyles();
+  const [anchor, setAnchor] = useState(null);
   return (
     <div>
+		<Header></Header>
 		<Frame className={classes.frame} size={300} center width={904} height="auto" background={"#FFFFFF"} shadow="1px 1px 3px 2px grey" radius = {8}>
 			<div className={classes.header}>
 				<StoreHeader
@@ -80,25 +104,24 @@ export default function QueueDashboard(props) {
 			<Grid className={classes.queueButtons} container>
 				<SecondaryButton 
 					text="Close Queue" 
-					onClick={() => { console.log("close") }}>
+					onClick={props.closeQueueClick}>
 				</SecondaryButton>
 				<SecondaryButton 
 					text="Clear Queue" 
 					onClick={() => { console.log("clear") }}>
 				</SecondaryButton>
+				<SecondaryButton 
+					text="Scan QR" 
+					onClick={(e) => {setAnchor(e.currentTarget);}}>
+				</SecondaryButton>
 			</Grid>
 			<Grid className={classes.inOutButtons} container>
-				<PrimaryButton 
-					text="In" 
-					onClick={() => { console.log("close") }}>
-				</PrimaryButton>
-				<PrimaryButton 
-					text="Out" 
-					onClick={() => { console.log("clear") }}>
-				</PrimaryButton>
-			</Grid>
-			<Grid container>
-				<button className={classes.inOutButtons} onclick="myFunction()">Click me</button>
+				<Button className={classes.inButton} variant="contained" onClick={props.onClick}>
+					IN
+				</Button>
+				<Button className={classes.outButton} variant="contained" onClick={props.onClick}>
+					OUT
+				</Button>
 			</Grid>
 
 		</Frame>
