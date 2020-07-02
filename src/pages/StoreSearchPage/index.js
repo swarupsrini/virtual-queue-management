@@ -14,6 +14,7 @@ import Search from "../../components/Search";
 import Popover from "@material-ui/core/Popover";
 
 import "./index.css";
+import Header from "../../components/Header";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -205,6 +206,7 @@ export default function StoreSearchPage(props) {
 
   return (
     <div className={classes.root}>
+      <Header></Header>
       <Map center={[43.7763, -79.25802]} zoom={12} zoomControl={false}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

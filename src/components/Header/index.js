@@ -1,11 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  AppBar,
-  Toolbar,
-  Button,
-  Typography,
-} from "@material-ui/core";
+import { AppBar, Toolbar, Button, Typography } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { Link, useLocation } from "react-router-dom";
 
@@ -30,7 +25,7 @@ const useStyles = makeStyles(() => ({
   },
   spacerDiv: {
     marginTop: "48px",
-  }
+  },
 }));
 
 function getPageTitle(location) {
@@ -56,7 +51,7 @@ export default function Header(props) {
           </Typography>
 
           <Typography variant="h4" className={classes.linkTypo}>
-            <Link to="/search" className={classes.Link}>
+            <Link to="/store-search" className={classes.Link}>
               <Button color="inherit">Store Search</Button>
             </Link>
             <Link to="/admin-panel" className={classes.Link}>

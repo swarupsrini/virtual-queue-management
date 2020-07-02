@@ -1,7 +1,10 @@
-import React from 'react';
+import React from "react";
+import Header from "../../components/Header";
 
 export default function AdminPanelPage(props) {
   return (
-    <div><h1>Admin panel page</h1></div>
+    <div>
+      <Header></Header>
+    </div>
   );
 }

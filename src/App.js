@@ -6,7 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import StoreSearchPage from "./pages/StoreSearchPage";
 import SettingsPage from "./pages/SettingsPage";
-
+import AdminPanelPage from "./pages/AdminPanelPage";
 import "./App.css";
 
 export default function App() {
@@ -15,16 +15,17 @@ export default function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/settings" render={() => <SettingsPage />} />
-          <Route path="/search" render={() => <StoreSearchPage />} />
+          <Route path="/store-search" render={() => <StoreSearchPage />} />
+          <Route path="/admin-panel" render={() => <AdminPanelPage />} />
           <Route
             exact
             path="/signup"
-            render={() => <SignupPage redirect="/search" />}
+            render={() => <SignupPage redirect="/store-search" />}
           />
           <Route
             exact
             path="/"
-            render={() => <LoginPage redirect="/search" />}
+            render={() => <LoginPage redirect="/store-search" />}
           />
         </Switch>
       </BrowserRouter>
