@@ -73,19 +73,19 @@ export default function SignupPage(props) {
   const [showConfirmPass, setShowConfirmPass] = useState("");
 
   function postSignup() {
-    if (userName == "") setUserError(true);
-    if (phone == "") setPhoneError(true);
-    if (email == "") setEmailError(true);
-    if (password == "") setPassError(true);
+    if (userName === "") setUserError(true);
+    if (phone === "") setPhoneError(true);
+    if (email === "") setEmailError(true);
+    if (password === "") setPassError(true);
     if (
       !userError &&
       !phoneError &&
       !emailError &&
       !passError &&
-      userName != "" &&
-      phone != "" &&
-      email != "" &&
-      password != ""
+      userName !== "" &&
+      phone !== "" &&
+      email !== "" &&
+      password !== ""
     ) {
       setLoggedIn(true);
     }
@@ -131,7 +131,7 @@ export default function SignupPage(props) {
           onChange={(e) => {
             setEmail(e.target.value);
             const reg = /\S+@\S+\.\S+/;
-            if (e.target.value != "" && !reg.test(e.target.value)) {
+            if (e.target.value !== "" && !reg.test(e.target.value)) {
               setEmailError(true);
             } else {
               setEmailError(false);
@@ -166,7 +166,7 @@ export default function SignupPage(props) {
         ></TextField>
         <TextField
           onChange={(e) => {
-            if (e.target.value != password) {
+            if (e.target.value !== password) {
               setPassError(true);
             } else {
               setPassError(false);

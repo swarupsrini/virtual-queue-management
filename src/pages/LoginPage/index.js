@@ -56,7 +56,7 @@ export default function LoginPage(props) {
   const [showPassword, setShowPassword] = useState("");
 
   function postLogin() {
-    if (userName == "test" && password == "test") {
+    if (userName === "user" && password === "user") {
       setLoggedIn(true);
     } else {
       setIsError(true);
