@@ -13,9 +13,9 @@ Example: <StoreHeader
 */
 import React from 'react';
 import { makeStyles } from "@material-ui/core/styles";
-import StoreHeader from "../react-components/StoreHeader";
-import LineGraph from "../react-components/LineGraph";
-import DataCard from "../react-components/DataCard";
+import StoreHeader from "../components/StoreHeader";
+import LineGraph from "../components/LineGraph";
+import DataCard from "../components/DataCard";
 import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
 
