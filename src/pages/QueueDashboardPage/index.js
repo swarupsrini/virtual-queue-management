@@ -35,9 +35,11 @@ const useStyles = makeStyles((theme) => ({
   },
   queueButtons:{
 	marginTop: "20px",
+	marginBottom: "20px",
 	justifyContent: "space-around"
   },
   closeQueue:{
+	  width:"200px"
   },
   clearQueue:{
   },
@@ -73,9 +75,42 @@ const useStyles = makeStyles((theme) => ({
 //<Grid container spacing={4}>
 //<Grid item xl={3} lg={3} md={4} s={12} xs={12}>
 
+/*
+function getInOutButtons(){
+	if(true){
+		return (
+			<Grid className={classes.inOutButtons} container>
+				<Button className={classes.inButton} variant="contained" onClick={() => { console.log("in") }}>
+					IN
+				</Button>
+				<Button className={classes.outButton} variant="contained" onClick={() => { console.log("out") }}>
+					OUT
+				</Button>
+			</Grid>
+		)
+	}
+}*/
+
 export default function QueueDashboard(props) {
   const classes = useStyles();
-  const [anchor, setAnchor] = useState(null);
+  const [queueOpen, setQueueOpen] = useState(false);
+  let closeOpenQueueText
+  let inOutButtons
+  if (queueOpen) {
+	closeOpenQueueText = "Close Queue"
+	inOutButtons = <Grid className={classes.inOutButtons} container>
+		<Button className={classes.inButton} variant="contained" onClick={() => { console.log("in") }}>
+			IN
+		</Button>
+		<Button className={classes.outButton} variant="contained" onClick={() => { console.log("out") }}>
+			OUT
+		</Button>
+	</Grid>
+  }
+  else{
+	closeOpenQueueText = "Open Queue"
+  }
+
   return (
     <div>
 		<Header></Header>
@@ -103,8 +138,8 @@ export default function QueueDashboard(props) {
 			</Grid>
 			<Grid className={classes.queueButtons} container>
 				<SecondaryButton 
-					text="Close Queue" 
-					onClick={props.closeQueueClick}>
+					text={closeOpenQueueText}
+					onClick={(e) => {setQueueOpen(!queueOpen)}}>
 				</SecondaryButton>
 				<SecondaryButton 
 					text="Clear Queue" 
@@ -112,17 +147,11 @@ export default function QueueDashboard(props) {
 				</SecondaryButton>
 				<SecondaryButton 
 					text="Scan QR" 
-					onClick={(e) => {setAnchor(e.currentTarget);}}>
+					onClick={() => { console.log("scan") }}>
 				</SecondaryButton>
 			</Grid>
-			<Grid className={classes.inOutButtons} container>
-				<Button className={classes.inButton} variant="contained" onClick={props.onClick}>
-					IN
-				</Button>
-				<Button className={classes.outButton} variant="contained" onClick={props.onClick}>
-					OUT
-				</Button>
-			</Grid>
+			{inOutButtons}
+			
 
 		</Frame>
 	</div>
