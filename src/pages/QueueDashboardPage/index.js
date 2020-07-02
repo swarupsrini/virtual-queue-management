@@ -7,8 +7,16 @@ import PrimaryButton from "../../components/PrimaryButton";
 import SecondaryButton from "../../components/SecondaryButton";
 import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
+import {Container} from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+	root: {
+		backgroundColor: theme.palette.primary.main,
+		height: "100vh",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+	},
   datacard: {
 	marginTop: "20px",
 	marginLeft: "20px"
@@ -45,7 +53,7 @@ const useStyles = makeStyles({
 	justifyContent: "space-around",
 	textAlign: "center",
   }
-});
+}));
 
 //<Grid container spacing={4}>
 //<Grid item xl={3} lg={3} md={4} s={12} xs={12}>
@@ -53,7 +61,7 @@ const useStyles = makeStyles({
 export default function QueueDashboard(props) {
   const classes = useStyles();
   return (
-    <div>
+    <Container maxWidth={false} className={classes.root}>
 		<Frame className={classes.frame} size={300} center width={904} height="auto" background={"#FFFFFF"} shadow="1px 1px 3px 2px grey" radius = {8}>
 			<div className={classes.header}>
 				<StoreHeader
@@ -101,6 +109,6 @@ export default function QueueDashboard(props) {
 			</Grid>
 
 		</Frame>
-    </div>
+	</Container>
   );
 }
