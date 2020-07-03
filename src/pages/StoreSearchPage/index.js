@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import { makeStyles } from "@material-ui/core/styles";
 import StoreCard from "../../components/StoreCard";
+import { Redirect } from "react-router-dom";
 import {
   List,
   ListItem,
@@ -113,6 +114,9 @@ export default function StoreSearchPage(props) {
 
   const [text, setText] = useState("");
 
+  const [viewPage, setViewPage] = useState(null);
+  const [analyticsPage, setAnalyticsPage] = useState(null);
+
   useEffect(() => {
     sort(getStores());
     if (fav) setStores(displayFav(stores));
@@ -203,6 +207,8 @@ export default function StoreSearchPage(props) {
 
   return (
     <div className={classes.root}>
+      {analyticsPage && <Redirect to={analyticsPage} />}
+      {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
       <Map center={[43.7763, -79.25802]} zoom={12} zoomControl={false}>
         <TileLayer
@@ -237,8 +243,13 @@ export default function StoreSearchPage(props) {
               min={store.wait}
               verified={store.isVerified}
               favorited={Boolean(getUserInfo().fav.includes(store.ID))}
-              joinClick={() => joinedQueue(store)}
-              viewClick={null}
+              joinClick={() => {
+                joinedQueue(store);
+                setViewPage("/queue-status");
+              }}
+              viewClick={() => {
+                setAnalyticsPage("/store-analytics");
+              }}
               updateUserFav={(fav) => updateUserFavStores(store.ID, fav)}
               address={store.address}
             ></StoreCard>
