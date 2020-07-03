@@ -63,14 +63,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function getStoreName(storeId) {
+	return "Walmart"
+}
+function getStoreSmallAdd(storeId) {
+	return "300 Borough Dr Unit 3635"
+}
+function getStoreBigAdd(storeId) {
+	return "Scarborough, ON M1P 4P5"
+}
+
 export default function QueueDashboard(props) {
   const classes = useStyles();
+
   const [queueOpen, setQueueOpen] = useState(true);
   const [storeCount, setStoreCount] = useState(0);
   const [queue, setQueue] = useState([2,1,1,3]);
+  /*
+  
   const [storeName] = useState("Walmart");
   const [smallAddress] = useState("300 Borough Dr Unit 3635,");
   const [bigAddress] = useState("Scarborough, ON M1P 4P5");
+  */
+
+  const storeId = 0
+  const storeName = getStoreName(storeId)
+  const smallAddress = getStoreSmallAdd(storeId)
+  const bigAddress = getStoreBigAdd(storeId)
 
   let nextGroupSize
   if (queue.length > 0) {

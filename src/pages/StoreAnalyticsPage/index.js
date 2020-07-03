@@ -32,13 +32,39 @@ const useStyles = makeStyles({
   },
 });
 
-//<Grid container spacing={4}>
-//<Grid item xl={3} lg={3} md={4} s={12} xs={12}>
+function getQueue(storeId) {
+  return [2,1,1,3]
+}
+function getStoreCount(storeId) {
+  return 0
+}
+function getAvgShoppingLength(storeId) {
+  return 10
+}
+function getStoreCapacity(storeId) {
+  return 30
+}
+function getStoreOpenTime(storeId) {
+  return 8
+}
+function getStoreTraffic(storeId) {
+  return [8,8,8,15,30,30,28,25,33,18,10,10,5]
+}
+function getStoreName(storeId) {
+  return "Walmart"
+}
+function getStoreSmallAdd(storeId) {
+  return "300 Borough Dr Unit 3635"
+}
+function getStoreBigAdd(storeId) {
+  return "Scarborough, ON M1P 4P5"
+}
 
 export default function StoreAnalytics(props) {
   const classes = useStyles();
+
+  /*
   const [storeCount] = useState(0);
-  const [queue] = useState([2, 1, 1, 3]);
   const [avgShoppingLength] = useState(10);
   const [storeCapacity] = useState(30);
   const [storeOpenTime] = useState(8);
@@ -59,7 +85,18 @@ export default function StoreAnalytics(props) {
   ]);
   const [storeName] = useState("Walmart");
   const [smallAddress] = useState("300 Borough Dr Unit 3635,");
-  const [bigAddress] = useState("Scarborough, ON M1P 4P5");
+  const [bigAddress] = useState("Scarborough, ON M1P 4P5");*/
+
+  const storeId = 0
+  const queue = getQueue(storeId)
+  const storeCount = getStoreCount(storeId)
+  const avgShoppingLength = getAvgShoppingLength(storeId)
+  const storeCapacity = getStoreCapacity(storeId)
+  const storeOpenTime = getStoreOpenTime(storeId)
+  const storeTraffic = getStoreTraffic(storeId)
+  const storeName = getStoreName(storeId)
+  const smallAddress = getStoreSmallAdd(storeId)
+  const bigAddress = getStoreBigAdd(storeId)
 
   return (
     <div>

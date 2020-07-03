@@ -56,15 +56,48 @@ const useStyles = makeStyles({
   },
 });
 
+function getQueue(storeId) {
+	return [2,1,1,3]
+}
+function getCurPosition(userId) {
+	return 2
+}
+function getCurId(userId) {
+	return 45
+}
+function getQRCode(userId) {
+	return defaultQRCode
+}
+function getStoreName(storeId) {
+	return "Walmart"
+}
+function getStoreSmallAdd(storeId) {
+	return "300 Borough Dr Unit 3635"
+}
+function getStoreBigAdd(storeId) {
+	return "Scarborough, ON M1P 4P5"
+}
+
 export default function QueueStatus(props) {
   const classes = useStyles();
+  /*
   const [queue] = useState([2,1,1,3]);
   const [curPosition] = useState(2);
   const [curID] = useState(45);
   const [storeName] = useState("Walmart");
   const [smallAddress] = useState("300 Borough Dr Unit 3635,");
   const [bigAddress] = useState("Scarborough, ON M1P 4P5");
-  const [qrCode] = useState(defaultQRCode);
+  const [qrCode] = useState(defaultQRCode);*/
+
+  const storeId = 0
+  const userId = 0
+  const queue = getQueue(storeId)
+  const curPosition = getCurPosition(userId)
+  const curID = getCurId(userId)
+  const storeName = getStoreName(storeId)
+  const smallAddress = getStoreSmallAdd(storeId)
+  const bigAddress = getStoreBigAdd(storeId)
+  const qrCode = getQRCode(userId)
 
   return (
     <div>
