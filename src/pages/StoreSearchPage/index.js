@@ -210,9 +210,7 @@ export default function StoreSearchPage(props) {
 
   return (
     <div className={classes.root}>
-      {analyticsPage && (
-        <Redirect to={{ pathName: analyticsPage, state: analyticsStore }} />
-      )}
+      {analyticsPage && <Redirect to={analyticsPage} />}
       {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
       <Map center={[43.7763, -79.25802]} zoom={12} zoomControl={false}>
