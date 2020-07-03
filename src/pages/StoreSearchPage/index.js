@@ -116,7 +116,9 @@ export default function StoreSearchPage(props) {
   const [text, setText] = useState("");
 
   const [viewPage, setViewPage] = useState(null);
+
   const [analyticsPage, setAnalyticsPage] = useState(null);
+  const [analyticsStore, setAnalyticsStore] = useState(null);
 
   useEffect(() => {
     sort(getStores());
@@ -208,7 +210,9 @@ export default function StoreSearchPage(props) {
 
   return (
     <div className={classes.root}>
-      {analyticsPage && <Redirect to={analyticsPage} />}
+      {analyticsPage && (
+        <Redirect to={{ pathName: analyticsPage, state: analyticsStore }} />
+      )}
       {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
       <Map center={[43.7763, -79.25802]} zoom={12} zoomControl={false}>
@@ -247,6 +251,7 @@ export default function StoreSearchPage(props) {
               joinClick={() => {
                 joinedQueue(store);
                 setViewPage("/queue-status");
+                setAnalyticsStore(store);
               }}
               viewClick={() => {
                 setAnalyticsPage("/store-analytics");
