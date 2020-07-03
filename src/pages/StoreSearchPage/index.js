@@ -36,7 +36,9 @@ const useStyles = makeStyles((theme) => ({
 function joinedQueue(storeInfo) {
   // there will be a backend call to update user's queue status
 }
-
+function viewData(storeInfo) {
+  // there will be a backend call to update user's currrently "viewing" store
+}
 function updateUserFavStores(storeID, value) {
   // there will be a backend call to update user's favourited stores
 }
@@ -118,7 +120,6 @@ export default function StoreSearchPage(props) {
   const [viewPage, setViewPage] = useState(null);
 
   const [analyticsPage, setAnalyticsPage] = useState(null);
-  const [analyticsStore, setAnalyticsStore] = useState(null);
 
   useEffect(() => {
     sort(getStores());
@@ -249,9 +250,9 @@ export default function StoreSearchPage(props) {
               joinClick={() => {
                 joinedQueue(store);
                 setViewPage("/queue-status");
-                setAnalyticsStore(store);
               }}
               viewClick={() => {
+                viewData(store);
                 setAnalyticsPage("/store-analytics");
               }}
               updateUserFav={(fav) => updateUserFavStores(store.ID, fav)}
