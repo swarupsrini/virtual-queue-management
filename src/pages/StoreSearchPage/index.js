@@ -23,8 +23,9 @@ const useStyles = makeStyles((theme) => ({
   },
   leftOverlay: {
     position: "fixed",
-    maxHeight: "calc(100% - 75px)",
+    maxHeight: "calc(100% - 64px)",
     overflow: "auto",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
   popup: {
     width: "260px",

@@ -51,6 +51,9 @@ export default function Header(props) {
           </Typography>
 
           <Typography variant="h4" className={classes.linkTypo}>
+            <Link to="/queue-status" className={classes.Link}>
+              <Button color="inherit">View Queue</Button>
+            </Link>
             <Link to="/store-search" className={classes.Link}>
               <Button color="inherit">Store Search</Button>
             </Link>
