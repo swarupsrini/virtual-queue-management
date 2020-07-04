@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import StoreHeader from "../../components/StoreHeader";
 import DataCard from "../../components/DataCard";
 import { Frame } from "framer";
@@ -33,15 +33,6 @@ function getStoreBigAdd(storeId) {
 
 export default function QueueStatus(props) {
   const classes = useStyles();
-  /*
-  const [queue] = useState([2,1,1,3]);
-  const [curPosition] = useState(2);
-  const [curID] = useState(45);
-  const [storeName] = useState("Walmart");
-  const [smallAddress] = useState("300 Borough Dr Unit 3635,");
-  const [bigAddress] = useState("Scarborough, ON M1P 4P5");
-  const [qrCode] = useState(defaultQRCode);*/
-
   const storeId = 0;
   const userId = 0;
   const queue = getQueue(storeId);
@@ -77,7 +68,7 @@ export default function QueueStatus(props) {
           <DataCard title={curID} subtitle="My ID"></DataCard>
           <DataCard title={curPosition} subtitle="Position"></DataCard>
         </Grid>
-        <img src={qrCode} className={classes.qrcode}></img>
+        <img src={qrCode} className={classes.qrcode} alt=""></img>
         <div className={classes.exitQueue}>
           <Link to="/store-search">
             <Button
