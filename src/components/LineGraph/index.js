@@ -17,10 +17,7 @@ import React from 'react';
 import CanvasJSReact from './CanvasJS/canvasjs.react';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-// import { CanvasJS } from 'canvasjs';
-// let CanvasJSChart = CanvasJS.Chart;
 
-//class LineGraph extends React.Component {
 export default function LineGraph(props) {
 	var i;
 	let dataPoints = []
