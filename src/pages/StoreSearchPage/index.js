@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Map, TileLayer, Marker } from "react-leaflet";
-import { makeStyles } from "@material-ui/core/styles";
 import StoreCard from "../../components/StoreCard";
 import { Redirect } from "react-router-dom";
 import {
@@ -13,25 +12,9 @@ import {
 } from "@material-ui/core";
 import Search from "../../components/Search";
 import Popover from "@material-ui/core/Popover";
-
-import "./index.css";
 import Header from "../../components/Header";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: "fixed",
-  },
-  leftOverlay: {
-    position: "fixed",
-    maxHeight: "calc(100% - 64px)",
-    overflow: "auto",
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-  },
-  popup: {
-    width: "260px",
-    backgroundColor: "white",
-  },
-}));
+import { useStyles } from "./styles.js";
+import "./index.css";
 
 function joinedQueue(storeInfo) {
   // there will be a backend call to update user's queue status

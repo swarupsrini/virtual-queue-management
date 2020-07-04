@@ -10,13 +10,11 @@ import {
   Typography,
   GridList,
   GridListTile,
-  withWidth,
-  isWidthUp,
 } from "@material-ui/core";
 import AdminCard from "../../components/AdminCard";
 import Header from "../../components/Header";
 import Search from "../../components/Search";
-import { makeStyles } from "@material-ui/core/styles";
+import { useStyles } from "./styles";
 
 function getStores() {
   // Get stores from server
@@ -96,25 +94,6 @@ function editStoreData(store) {
 function editUserData(user) {
   // Backend call update the admin's currently editing state
 }
-
-const useStyles = makeStyles((theme) => ({
-  search: {
-    marginLeft: theme.spacing(5),
-    marginTop: theme.spacing(10),
-  },
-  popup: {
-    width: "260px",
-    backgroundColor: "white",
-  },
-  display: {
-    marginLeft: theme.spacing(10),
-    marginTop: theme.spacing(3),
-  },
-  gridList: { marginLeft: theme.spacing(5) },
-  tile: {
-    width: "320px",
-  },
-}));
 
 export default function AdminPanelPage(props) {
   const [anchor, setAnchor] = useState(null);
