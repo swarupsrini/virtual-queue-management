@@ -1,68 +1,32 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Note: The commit for this `README` document including instructions has been submitted half an hour late, although the app itself has been completed on time. All the commits for the code have been made on time. Apologies for the inconvenience caused.
 
-## Available Scripts
+## Running the app
 
-In the project directory, you can run:
+### `npm i`
+Installs dependencies.
 
 ### `npm start`
+Runs the app in development mode.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Usage Instructions
+Note that both types of users have access to all pages as of now. The normal user is not restricted from any pages. This is because we've omitted the use of a global state or a backend to retreive information about the user in each component of the app. In addition, the "Scan QR" functionality has not yet been implemented because it requires access to the backend database.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Normal User
+Username: `user`
+Password: `user`
 
-### `npm test`
+There are two types of normal users, a regular user and a store manager. Both have the same level of permissions to access functionality in the app.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### Regular User
+Once you have logged in, you will be taken to the store search page. Here you can view the complete list of stores available, search through them using available filters such as wait time and favorited only stores. The filters and sort options are available as a popup from a button to the right of the search bar. You can also navigate the map to view a list of stores currently meeting the search criteria. You can also mark a store as "favorited" and view whether or not the store has been verified by the admins, by a check mark. Once a store has been decided on, you can click on either "Join Queue" or "View Data" of that store card. "Join Queue" takes you to the queue status page where you can view the live status of your position in the queue, a unique ID assigned to you and a QR code to verify your status. "View Data" will take you to the store analytics page where you can view information about the store. Independent of all this, you may view your personal settings by clicking the "Settings" button on the top right. Here, you may edit your credentials, deactivate your account. You may save your changes by clicking on the green "Save" button.
 
-### `npm run build`
+#### Store manager
+If you are a store manager, you may create your own store by clicking on the button in the settings page. If you create a store, you may edit the settings for the store, i.e. the name, address and modify the list of employees by their username. At any point, you may save either the user settings or the store settings by clicking on the green "Save" button on the top right of the section. Once you have created your store, you may go to the "Queue Dashboard" page by using the header navigation. This allows you to record any users exiting/entering the store. "In" records users entering the store, and "Out" records users exiting the store. You may view details about the current status of the store and users in queue live. You may also close or clear the queue. Scanning the QR code will allow you to verify a user's position in the queue.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Admin user
+Username: `admin`
+Password: `admin`
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+The admin user has one core functionality that can be accessed by clicking the "Admin Panel" button on the header. This takes you to a page where you view all the list of stores and users that have been created. A search functionality similar to the store search functionality has been implemented for convenience. This can be thought of as a visual representation of our database. Here, you may click "Edit" on any card to edit the store/user information. This takes you to a page similar to the settings page where you may edit the specific details of the user/store. This is to be used for administration purposes. In addition, an admin user can perform the full range of functionality that any regular user can perform.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Thank you for using our app.
