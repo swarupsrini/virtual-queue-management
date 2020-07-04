@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
 import StoreHeader from "../../components/StoreHeader";
 import DataCard from "../../components/DataCard";
 import { Frame } from "framer";
@@ -8,43 +7,7 @@ import defaultQRCode from "../../images/qrcode.png";
 import Header from "../../components/Header";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
-
-const useStyles = makeStyles({
-  datacard: {
-    marginTop: "20px",
-    marginLeft: "20px",
-  },
-  datacards: {
-    marginTop: "20px",
-    justifyContent: "space-around",
-  },
-  frame: {
-    marginBottom: "60px",
-  },
-  header: {
-    marginTop: "20px",
-    marginBottom: "30px",
-  },
-  queueButtons: {
-    marginTop: "20px",
-    justifyContent: "space-around",
-  },
-  inOutButtons: {
-    marginTop: "20px",
-    justifyContent: "space-around",
-  },
-  qrcode: {
-    marginTop: "20px",
-    display: "block",
-    marginLeft: "auto",
-    marginRight: "auto",
-    width: "200px",
-  },
-  exitQueue: {
-    marginBottom: "20px",
-    textAlign: "center",
-  },
-});
+import useStyles from "./styles";
 
 function getQueue(storeId) {
   return [2, 1, 1, 3];
@@ -70,15 +33,6 @@ function getStoreBigAdd(storeId) {
 
 export default function QueueStatus(props) {
   const classes = useStyles();
-  /*
-  const [queue] = useState([2,1,1,3]);
-  const [curPosition] = useState(2);
-  const [curID] = useState(45);
-  const [storeName] = useState("Walmart");
-  const [smallAddress] = useState("300 Borough Dr Unit 3635,");
-  const [bigAddress] = useState("Scarborough, ON M1P 4P5");
-  const [qrCode] = useState(defaultQRCode);*/
-
   const storeId = 0;
   const userId = 0;
   const queue = getQueue(storeId);
@@ -114,7 +68,7 @@ export default function QueueStatus(props) {
           <DataCard title={curID} subtitle="My ID"></DataCard>
           <DataCard title={curPosition} subtitle="Position"></DataCard>
         </Grid>
-        <img src={qrCode} className={classes.qrcode}></img>
+        <img src={qrCode} className={classes.qrcode} alt=""></img>
         <div className={classes.exitQueue}>
           <Link to="/store-search">
             <Button
