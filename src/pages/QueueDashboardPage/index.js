@@ -1,10 +1,7 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import StoreHeader from "../../components/StoreHeader";
-import LineGraph from "../../components/LineGraph";
 import DataCard from "../../components/DataCard";
-import PrimaryButton from "../../components/PrimaryButton";
-import SecondaryButton from "../../components/SecondaryButton";
 import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -12,65 +9,65 @@ import Header from "../../components/Header";
 
 const useStyles = makeStyles((theme) => ({
   datacard: {
-	marginTop: "20px",
-	marginLeft: "20px"
+    marginTop: "20px",
+    marginLeft: "20px",
   },
-  datacards:{
-	marginTop: "20px",
-	justifyContent: "space-around"
+  datacards: {
+    marginTop: "20px",
+    justifyContent: "space-around",
   },
-  linegraph:{
-	  marginTop: "30px",
-	  marginBottom: "30px",
-	  marginLeft: "auto",
-	  marginRight: "auto",
-	  width:"600px",
+  linegraph: {
+    marginTop: "30px",
+    marginBottom: "30px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "600px",
   },
   frame: {
-	marginBottom:"60px"
+    marginBottom: "60px",
   },
-  header:{
-	  marginTop:"20px",
-	  marginBottom:"30px"
+  header: {
+    marginTop: "20px",
+    marginBottom: "30px",
   },
-  queueButtons:{
-	marginTop: "20px",
-	marginBottom: "20px",
-	justifyContent: "space-around"
+  queueButtons: {
+    marginTop: "20px",
+    marginBottom: "20px",
+    justifyContent: "space-around",
   },
-  inOutButtons:{
-	marginTop: "20px",
-	marginBottom: "20px",
-	justifyContent: "center",
+  inOutButtons: {
+    marginTop: "20px",
+    marginBottom: "20px",
+    justifyContent: "center",
   },
-  inButton:{
-	backgroundColor: "#A8E071",
-	width: theme.spacing(180 / 8),
-	height: theme.spacing(102 / 8),
-	borderRadius: 10,
-	fontSize: 24,
-	float: "right",
-	marginRight: "20px",
+  inButton: {
+    backgroundColor: "#A8E071",
+    width: theme.spacing(180 / 8),
+    height: theme.spacing(102 / 8),
+    borderRadius: 10,
+    fontSize: 24,
+    float: "right",
+    marginRight: "20px",
   },
-  outButton:{
-	backgroundColor: "#EE7A44",
-	width: theme.spacing(180 / 8),
-	height: theme.spacing(102 / 8),
-	borderRadius: 10,
-	fontSize: 24,
-	float: "right",
-	marginLeft: "20px",
+  outButton: {
+    backgroundColor: "#EE7A44",
+    width: theme.spacing(180 / 8),
+    height: theme.spacing(102 / 8),
+    borderRadius: 10,
+    fontSize: 24,
+    float: "right",
+    marginLeft: "20px",
   },
 }));
 
 function getStoreName(storeId) {
-	return "Walmart"
+  return "Walmart";
 }
 function getStoreSmallAdd(storeId) {
-	return "300 Borough Dr Unit 3635"
+  return "300 Borough Dr Unit 3635";
 }
 function getStoreBigAdd(storeId) {
-	return "Scarborough, ON M1P 4P5"
+  return "Scarborough, ON M1P 4P5";
 }
 
 export default function QueueDashboard(props) {
@@ -78,7 +75,7 @@ export default function QueueDashboard(props) {
 
   const [queueOpen, setQueueOpen] = useState(true);
   const [storeCount, setStoreCount] = useState(0);
-  const [queue, setQueue] = useState([2,1,1,3]);
+  const [queue, setQueue] = useState([2, 1, 1, 3]);
   /*
   
   const [storeName] = useState("Walmart");
@@ -86,97 +83,109 @@ export default function QueueDashboard(props) {
   const [bigAddress] = useState("Scarborough, ON M1P 4P5");
   */
 
-  const storeId = 0
-  const storeName = getStoreName(storeId)
-  const smallAddress = getStoreSmallAdd(storeId)
-  const bigAddress = getStoreBigAdd(storeId)
+  const storeId = 0;
+  const storeName = getStoreName(storeId);
+  const smallAddress = getStoreSmallAdd(storeId);
+  const bigAddress = getStoreBigAdd(storeId);
 
-  let nextGroupSize
+  let nextGroupSize;
   if (queue.length > 0) {
-	nextGroupSize = queue[0]
+    nextGroupSize = queue[0];
+  } else {
+    nextGroupSize = 0;
   }
-  else {
-	nextGroupSize = 0
-  }
-  
-  let closeOpenQueueText
-  let inOutButtons
+
+  let closeOpenQueueText;
+  let inOutButtons;
   if (queueOpen) {
-	closeOpenQueueText = "Close Queue"
-	inOutButtons = <Grid className={classes.inOutButtons} container>
-		<Button 
-			className={classes.inButton}
-			variant="contained"
-			onClick={() => {
-				if (queue.length > 0){
-					setStoreCount(storeCount+nextGroupSize);
-					queue.shift()
-				}
-			}
-		}>
-			IN
-		</Button>
-		<Button 
-			className={classes.outButton} 
-			variant="contained" 
-			onClick={() => { 
-				if (storeCount > 0){
-					setStoreCount(storeCount-1) 
-				}
-			}
-		}>
-			OUT
-		</Button>
-	</Grid>
-  }
-  else{
-	closeOpenQueueText = "Open Queue"
+    closeOpenQueueText = "Close Queue";
+    inOutButtons = (
+      <Grid className={classes.inOutButtons} container>
+        <Button
+          className={classes.inButton}
+          variant="contained"
+          onClick={() => {
+            if (queue.length > 0) {
+              setStoreCount(storeCount + nextGroupSize);
+              queue.shift();
+            }
+          }}
+        >
+          IN
+        </Button>
+        <Button
+          className={classes.outButton}
+          variant="contained"
+          onClick={() => {
+            if (storeCount > 0) {
+              setStoreCount(storeCount - 1);
+            }
+          }}
+        >
+          OUT
+        </Button>
+      </Grid>
+    );
+  } else {
+    closeOpenQueueText = "Open Queue";
   }
 
   return (
     <div>
-		<Header></Header>
-		<Frame className={classes.frame} size={300} center width={904} height="auto" background={"#FFFFFF"} shadow="1px 1px 3px 2px grey" radius = {8}>
-			<div className={classes.header}>
-				<StoreHeader
-					title={storeName}
-					subtitle1={smallAddress}
-					subtitle2={bigAddress}
-					/>
-			</div>
-			<Grid className={classes.datacards} container>
-				<DataCard
-					title={storeCount}
-					subtitle="In-Store" >
-				</DataCard>
-				<DataCard
-					title={queue.length} 
-					subtitle="In Queue" >
-				</DataCard>
-				<DataCard
-					title={nextGroupSize} 
-					subtitle="Next" >
-				</DataCard>
-			</Grid>
-			<Grid className={classes.queueButtons} container>
-				<SecondaryButton 
-					text={closeOpenQueueText}
-					onClick={(e) => {setQueueOpen(!queueOpen)}}>
-				</SecondaryButton>
-				<SecondaryButton 
-					text="Clear Queue" 
-					onClick={() => { 
-						setQueue([])
-					}}>
-				</SecondaryButton>
-				<SecondaryButton 
-					text="Scan QR" 
-					onClick={() => { console.log("scan") }}>
-				</SecondaryButton>
-			</Grid>
-			{inOutButtons}
-
-		</Frame>
-	</div>
+      <Header></Header>
+      <Frame
+        className={classes.frame}
+        size={300}
+        center
+        width={904}
+        height="auto"
+        background={"#FFFFFF"}
+        shadow="1px 1px 3px 2px grey"
+        radius={8}
+      >
+        <div className={classes.header}>
+          <StoreHeader
+            title={storeName}
+            subtitle1={smallAddress}
+            subtitle2={bigAddress}
+          />
+        </div>
+        <Grid className={classes.datacards} container>
+          <DataCard title={storeCount} subtitle="In-Store"></DataCard>
+          <DataCard title={queue.length} subtitle="In Queue"></DataCard>
+          <DataCard title={nextGroupSize} subtitle="Next"></DataCard>
+        </Grid>
+        <Grid className={classes.queueButtons} container>
+          <Button
+            color="default"
+            variant="contained"
+            onClick={(e) => {
+              setQueueOpen(!queueOpen);
+            }}
+          >
+            {closeOpenQueueText}
+          </Button>
+          <Button
+            color="default"
+            variant="contained"
+            onClick={() => {
+              setQueue([]);
+            }}
+          >
+            Clear Queue
+          </Button>
+          <Button
+            color="default"
+            variant="contained"
+            onClick={() => {
+              console.log("scan");
+            }}
+          >
+            Scan QR
+          </Button>
+        </Grid>
+        {inOutButtons}
+      </Frame>
+    </div>
   );
 }

@@ -107,7 +107,7 @@ export default function StoreSearchPage(props) {
   useEffect(() => {
     sort(getStores());
     if (fav) setStores(displayFav(stores));
-  }, [waitTime, fav, stores]);
+  }, [waitTime, fav]);
 
   function toggleWait() {
     setWait((prev) => !prev);
