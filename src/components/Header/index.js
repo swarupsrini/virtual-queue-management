@@ -1,32 +1,8 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, Button, Typography } from "@material-ui/core";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import { Link, useLocation } from "react-router-dom";
 
-const useStyles = makeStyles(() => ({
-  root: {
-    flexGrow: 1,
-  },
-  accountIcon: {
-    float: "left",
-  },
-  title: {
-    flexGrow: 1,
-    fontSize: "25px",
-  },
-  linkTypo: {
-    fontSize: "15px",
-  },
-  Link: {
-    textDecoration: "none",
-    paddingLeft: "15px",
-    color: "white",
-  },
-  spacerDiv: {
-    marginTop: "48px",
-  },
-}));
+import useStyles from "./styles";
 
 function getPageTitle(location) {
   const temp = location.substring(1, location.length).split("-");

@@ -8,17 +8,12 @@ Example: <Search filterClick= {filterClick}, searchClick = {searchClick}/>
 */
 
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import FilterList from "@material-ui/icons/FilterList";
 
-const useStyles = makeStyles(() => ({
-  input: {
-    backgroundColor: "white",
-  },
-}));
+import useStyles from "./styles";
 
 export default function Search(props) {
   const [text, setText] = useState("");
