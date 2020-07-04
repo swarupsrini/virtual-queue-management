@@ -23,7 +23,6 @@ Example:
 */
 
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
   CardActions,
@@ -35,27 +34,7 @@ import {
 import CheckIcon from "@material-ui/icons/Check";
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
-
-const useStyles = makeStyles({
-  root: {
-    width: 300,
-    height: 200,
-  },
-  content: {
-    position: "relative",
-  },
-  title: {
-    fontSize: 14,
-  },
-  subtitle: {
-    marginBottom: 12,
-  },
-  topIcon: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-  },
-});
+import useStyles from "./styles";
 
 export default function StoreCard(props) {
   const classes = useStyles();

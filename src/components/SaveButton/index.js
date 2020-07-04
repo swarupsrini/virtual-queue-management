@@ -11,18 +11,8 @@ Example: <SaveButton
 
 import React from "react";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: "#A8E071",
-    width: theme.spacing(160 / 8),
-    height: theme.spacing(52 / 8),
-    borderRadius: 10,
-    fontSize: 24,
-    float: "right",
-  },
-}));
+import useStyles from "./styles";
 
 export default function SaveButton(props) {
   const classes = useStyles();

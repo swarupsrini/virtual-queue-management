@@ -4,7 +4,6 @@ import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Paper,
   Container,
@@ -15,43 +14,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  background: {
-    backgroundColor: theme.palette.primary.main,
-    height: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  page: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    width: theme.spacing(572 / 8),
-    height: theme.spacing(481 / 8),
-  },
-  title: {
-    fontSize: 48,
-  },
-  textField: {
-    marginTop: theme.spacing(16 / 8),
-    width: theme.spacing(300 / 8),
-  },
-  halfWidth: {
-    width: theme.spacing(146 / 8),
-  },
-  rightMargin: {
-    marginRight: theme.spacing(8 / 8),
-  },
-  loginButton: {
-    marginTop: theme.spacing(40 / 8),
-  },
-  linkButton: {
-    marginTop: theme.spacing(10 / 8),
-    textDecoration: "none",
-  },
-}));
+import useStyles from "./styles";
 
 export default function SignupPage(props) {
   const classes = useStyles();

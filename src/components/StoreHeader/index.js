@@ -12,20 +12,8 @@ Example: <StoreHeader
         />
 */
 import React from 'react';
-import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
-  title: {
-    marginTop: "40px",
-    textAlign: "center",
-    fontSize: "50pt",
-    color: "#4455BB"
-  },
-  subtitle: {
-    textAlign: "center",
-    fontSize: "16pt"
-  }
-});
+import useStyles from "./styles";
 
 export default function StoreHeader(props) {
   const classes = useStyles();

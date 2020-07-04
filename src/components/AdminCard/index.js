@@ -15,25 +15,9 @@ Example:
 </AdminCard>
 */
 
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Card, CardActions, CardContent, Button, Typography, IconButton } from "@material-ui/core";
-
-const useStyles = makeStyles({
-  root: {
-		width: 300,
-		height: 200,
-  },
-  content: {
-    position: "relative",
-  },
-  title: {
-    fontSize: 14,
-  },
-  subtitle: {
-    marginBottom: 12,
-  },
-});
+import React from "react";
+import { Card, CardActions, CardContent, Button, Typography } from "@material-ui/core";
+import useStyles from "./styles";
 
 export default function AdminCard(props) {
   const classes = useStyles();
