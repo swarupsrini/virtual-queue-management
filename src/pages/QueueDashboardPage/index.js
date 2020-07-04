@@ -1,64 +1,11 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import StoreHeader from "../../components/StoreHeader";
 import DataCard from "../../components/DataCard";
 import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Header from "../../components/Header";
-
-const useStyles = makeStyles((theme) => ({
-  datacard: {
-    marginTop: "20px",
-    marginLeft: "20px",
-  },
-  datacards: {
-    marginTop: "20px",
-    justifyContent: "space-around",
-  },
-  linegraph: {
-    marginTop: "30px",
-    marginBottom: "30px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    width: "600px",
-  },
-  frame: {
-    marginBottom: "60px",
-  },
-  header: {
-    marginTop: "20px",
-    marginBottom: "30px",
-  },
-  queueButtons: {
-    marginTop: "20px",
-    marginBottom: "20px",
-    justifyContent: "space-around",
-  },
-  inOutButtons: {
-    marginTop: "20px",
-    marginBottom: "20px",
-    justifyContent: "center",
-  },
-  inButton: {
-    backgroundColor: "#A8E071",
-    width: theme.spacing(180 / 8),
-    height: theme.spacing(102 / 8),
-    borderRadius: 10,
-    fontSize: 24,
-    float: "right",
-    marginRight: "20px",
-  },
-  outButton: {
-    backgroundColor: "#EE7A44",
-    width: theme.spacing(180 / 8),
-    height: theme.spacing(102 / 8),
-    borderRadius: 10,
-    fontSize: 24,
-    float: "right",
-    marginLeft: "20px",
-  },
-}));
+import useStyles from "./styles";
 
 function getStoreName(storeId) {
   return "Walmart";
@@ -76,12 +23,6 @@ export default function QueueDashboard(props) {
   const [queueOpen, setQueueOpen] = useState(true);
   const [storeCount, setStoreCount] = useState(0);
   const [queue, setQueue] = useState([2, 1, 1, 3]);
-  /*
-  
-  const [storeName] = useState("Walmart");
-  const [smallAddress] = useState("300 Borough Dr Unit 3635,");
-  const [bigAddress] = useState("Scarborough, ON M1P 4P5");
-  */
 
   const storeId = 0;
   const storeName = getStoreName(storeId);
