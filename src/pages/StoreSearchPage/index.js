@@ -13,7 +13,7 @@ import {
 import Search from "../../components/Search";
 import Popover from "@material-ui/core/Popover";
 import Header from "../../components/Header";
-import { useStyles } from "./styles.js";
+import useStyles from "./styles";
 import "./index.css";
 
 function joinedQueue(storeInfo) {
@@ -80,9 +80,9 @@ function getStores() {
     },
     {
       name: "Walmart",
-      address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-      latitude: 43.7763,
-      longitude: -79.25802,
+      address: "3850 Sheppard Ave E, Scarborough, ON M1T 3L3",
+      latitude: 43.7843507,
+      longitude: -79.2933375,
       wait: 100,
       ID: 4,
       isVerified: false,
