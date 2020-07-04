@@ -231,14 +231,6 @@ export default function AdminPanelPage(props) {
         open={Boolean(anchor)}
         anchorEl={anchor}
         onClose={() => setAnchor(null)}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
       >
         <List className={classes.popup}>
           <ListItem>
