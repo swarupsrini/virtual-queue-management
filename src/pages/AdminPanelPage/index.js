@@ -14,7 +14,7 @@ import {
 import AdminCard from "../../components/AdminCard";
 import Header from "../../components/Header";
 import Search from "../../components/Search";
-import { useStyles } from "./styles";
+import useStyles from "./styles";
 
 function getStores() {
   // Get stores from server
@@ -49,17 +49,16 @@ function getStores() {
     },
     {
       name: "Walmart",
-      address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-      latitude: 43.7763,
-      longitude: -79.25802,
+      address: "3850 Sheppard Ave E, Scarborough, ON M1T 3L3",
+      latitude: 43.7843507,
+      longitude: -79.2933375,
       wait: 100,
       ID: 4,
       isVerified: false,
     },
-
     {
       name: "Grocery Store",
-      address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+      address: "380 Borough Dr Unit 363125, Scarborough, ON M1P 212",
       latitude: 43.7763,
       longitude: -79.25802,
       wait: 12,
@@ -68,7 +67,7 @@ function getStores() {
     },
     {
       name: "Shop Store",
-      address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+      address: "222 Borough Dr Unit 12, Scarborough, ON M1P 654",
       latitude: 43.7763,
       longitude: -79.25802,
       wait: 12,

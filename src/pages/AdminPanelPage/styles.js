@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-export const useStyles = makeStyles((theme) => ({
+export default makeStyles((theme) => ({
   search: {
     marginLeft: theme.spacing(5),
     marginTop: theme.spacing(10),
