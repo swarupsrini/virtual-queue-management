@@ -65,8 +65,7 @@ export default function StoreAnalytics(props) {
         <div className={classes.header}>
           <StoreHeader
             title={storeName}
-            subtitle1={smallAddress}
-            subtitle2={bigAddress}
+            subtitle1={smallAddress + ", " + bigAddress}
           />
         </div>
         <Grid className={classes.datacards} container>
