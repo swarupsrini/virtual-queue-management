@@ -1,17 +1,17 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles({
-  root: {
-		width: 200,
-		height: 100,
+  datacardSuffix:{
   },
-  content: {
-    position: "relative",
+  datacardNumber:{
+    fontSize:"xx-large"
   },
-  title: {
-    fontSize: 14,
-  },
-  subtitle: {
-    marginBottom: 12,
+  datacard: {
+    marginLeft:"20px",
+    marginRight:"20px",
+    textAlign:"center",
+    font:"Inter",
+    fontStyle:"regular",
+    color:"black",
   },
 });
