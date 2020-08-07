@@ -53,25 +53,38 @@ export default function StoreAnalytics(props) {
   return (
     <div>
       <Header></Header>
-      <div className={classes.header}>
-        <StoreHeader
+      <StoreHeader
           title={storeName}
           subtitle1={smallAddress + ", " + bigAddress}
         />
-      </div>
+      <Grid className={classes.datacards} container></Grid>
       <div className={classes.frame}>
-        <Grid className={classes.datacards} container>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+        <Grid className={classes.datacards} container spacing={6} >
+          <div style={{width:"4px"}}></div>
+          <Grid item>
+            <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          </Grid>
           <div className={classes.line}></div>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <Grid item>
+            <DataCard title="In queue" number="45" suffix=""></DataCard>
+          </Grid>
           <div className={classes.line}></div>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <Grid item>
+            <DataCard title="In store" number="20" suffix=""></DataCard>
+          </Grid>
           <div className={classes.line}></div>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <Grid item>
+            <DataCard title="Visits today" number="104" suffix="min"></DataCard>
+          </Grid>
           <div className={classes.line}></div>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <Grid item>
+            <DataCard title="Best time" number="10" suffix="am"></DataCard>
+          </Grid>
           <div className={classes.line}></div>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <Grid item>
+            <DataCard title="Worst time" number="10" suffix="am"></DataCard>
+          </Grid>
+          <div style={{width:"4px"}}></div>
         </Grid>
       </div>
       <div className={classes.linegraph}>
