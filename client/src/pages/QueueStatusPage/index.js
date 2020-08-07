@@ -21,6 +21,7 @@ export default function QueueStatus(props) {
         subtitle1={"300 Borough Dr Unit 3635,  Scarborough, ON M1P 4P5"}
       />
       <Button
+        size="large"
         className={classes.displayQR}
         color="primary"
         variant="contained"
@@ -29,6 +30,7 @@ export default function QueueStatus(props) {
         Display QR
       </Button>
       <Button
+        size="large"
         className={classes.exitQueue}
         variant="contained"
         onClick={() => {}}

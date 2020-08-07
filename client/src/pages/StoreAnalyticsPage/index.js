@@ -63,12 +63,12 @@ export default function StoreAnalytics(props) {
         className={classes.frame}
         size={300}
         center
-        width={904}
         height="auto"
         background={"#FFFFFF"}
         shadow="1px 1px 3px 2px grey"
         radius={8}
         position="relative"
+        top={100}
       >
         <Grid className={classes.datacards} container>
           <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
