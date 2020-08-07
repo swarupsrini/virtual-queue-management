@@ -240,13 +240,14 @@ export default function StoreSearchPage() {
             }}
           ></Marker>
         ))}
-        {typeof userLoc.lat !== "undefined" && userLoc.long !== "undefined" && (
-          <Marker
-            key={122121212}
-            icon={blueDot}
-            position={[userLoc.lat, userLoc.long]}
-          ></Marker>
-        )}
+        {typeof userLoc.lat !== "undefined" &&
+          typeof userLoc.long !== "undefined" && (
+            <Marker
+              key={122121212}
+              icon={blueDot}
+              position={[userLoc.lat, userLoc.long]}
+            ></Marker>
+          )}
       </Map>
       <List className={classes.leftOverlay}>
         <ListItem>
