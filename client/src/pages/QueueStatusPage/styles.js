@@ -6,16 +6,16 @@ export default makeStyles({
     color: "white",
     position: "absolute",
     top: "68px",
-    right: "3vw",
+    right: "68px",
   },
   displayQR: {
     position: "absolute",
     top: "68px",
-    right: "14vw",
+    right: "230px",
   },
   paper: {
     marginLeft: "30px",
-    marginTop: "20px",
+    // marginTop: "20px",
     marginRight: "30px",
     height: "135px",
   },
@@ -40,5 +40,11 @@ export default makeStyles({
   },
   message: {
     marginLeft: "10px",
+    display: "inline-block",
+    marginTop: "20px",
+  },
+  storeMsg: {
+    marginLeft: "10px",
+    display: "inline-block",
   },
 });
