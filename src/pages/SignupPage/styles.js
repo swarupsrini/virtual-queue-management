@@ -23,6 +23,15 @@ export default makeStyles((theme) => ({
     marginTop: theme.spacing(16 / 8),
     width: theme.spacing(300 / 8),
   },
+  selectField: {
+    marginTop: theme.spacing(16 / 8),
+    width: theme.spacing(300 / 8),
+    height: "40px",
+  },
+  selectLabel: {
+    marginTop: theme.spacing(4 / 8),
+    marginLeft: theme.spacing(13 / 8),
+  },
   halfWidth: {
     width: theme.spacing(146 / 8),
   },

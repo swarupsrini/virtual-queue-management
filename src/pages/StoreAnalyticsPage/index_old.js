@@ -6,7 +6,6 @@ import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
 import Header from "../../components/Header";
 import useStyles from "./styles";
-import { Card, CardContent, Typography, Paper } from "@material-ui/core";
 
 function getQueue(storeId) {
   return [2, 1, 1, 3];
@@ -53,12 +52,6 @@ export default function StoreAnalytics(props) {
   return (
     <div>
       <Header></Header>
-      <div className={classes.header}>
-        <StoreHeader
-          title={storeName}
-          subtitle1={smallAddress + ", " + bigAddress}
-        />
-      </div>
       <Frame
         className={classes.frame}
         size={300}
@@ -68,20 +61,29 @@ export default function StoreAnalytics(props) {
         background={"#FFFFFF"}
         shadow="1px 1px 3px 2px grey"
         radius={8}
-        position="relative"
       >
+        <div className={classes.header}>
+          <StoreHeader
+            title={storeName}
+            subtitle1={smallAddress}
+            subtitle2={bigAddress}
+          />
+        </div>
         <Grid className={classes.datacards} container>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
-          <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <DataCard title={queue.length} subtitle="In queue"></DataCard>
+          <DataCard
+            title={
+              Math.round((avgShoppingLength * queue.length) / storeCapacity) +
+              " min"
+            }
+            subtitle="Estimated Wait Time"
+          ></DataCard>
+          <DataCard title={storeCount} subtitle="In-Store"></DataCard>
         </Grid>
+        <div className={classes.linegraph}>
+          <LineGraph yValues={storeTraffic} startTime={storeOpenTime} />
+        </div>
       </Frame>
-      <div className={classes.linegraph}>
-        <LineGraph yValues={storeTraffic} startTime={storeOpenTime} />
-      </div>
     </div>
   );
 }

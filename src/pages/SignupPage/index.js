@@ -12,12 +12,19 @@ import {
   Button,
   InputAdornment,
   IconButton,
+  Select,
+  InputLabel,
+  MenuItem,
+  FormControl,
 } from "@material-ui/core";
 
 import useStyles from "./styles";
 
 export default function SignupPage(props) {
   const classes = useStyles();
+
+  const [user, setUser] = useState({});
+
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   const [userName, setUserName] = useState("");
@@ -35,27 +42,34 @@ export default function SignupPage(props) {
   const [showPassword, setShowPassword] = useState("");
   const [showConfirmPass, setShowConfirmPass] = useState("");
 
+  const [type, setType] = useState("");
+  const [typeError, setTypeError] = useState(false);
+
   function postSignup() {
     if (userName === "") setUserError(true);
     if (phone === "") setPhoneError(true);
     if (email === "") setEmailError(true);
     if (password === "") setPassError(true);
+    if (type === "") setTypeError(true);
     if (
       !userError &&
       !phoneError &&
       !emailError &&
       !passError &&
+      !typeError &&
       userName !== "" &&
       phone !== "" &&
       email !== "" &&
       password !== ""
     ) {
+      // call backend to sign up, get the user (if valid) and pass it in below
+      setUser({});
       setLoggedIn(true);
     }
   }
 
   if (isLoggedIn) {
-    return <Redirect to={props.redirect} />;
+    props.onSubmit(user);
   }
 
   return (
@@ -106,53 +120,71 @@ export default function SignupPage(props) {
           error={emailError}
           className={classes.textField}
         ></TextField>
-        <TextField
-          onChange={(e) => {
-            setPassword(e.target.value);
-            setPassError(false);
-          }}
-          variant="outlined"
-          size="small"
-          type={showPassword ? "text" : "password"}
-          label="Password"
-          error={passError}
-          className={classes.textField}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        ></TextField>
-        <TextField
-          onChange={(e) => {
-            if (e.target.value !== password) {
-              setPassError(true);
-            } else {
+        <div>
+          <TextField
+            onChange={(e) => {
+              setPassword(e.target.value);
               setPassError(false);
-            }
+            }}
+            variant="outlined"
+            size="small"
+            type={showPassword ? "text" : "password"}
+            label="Password"
+            error={passError}
+            className={`${classes.textField} ${classes.rightMargin} ${classes.halfWidth}`}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          ></TextField>
+          <TextField
+            onChange={(e) => {
+              if (e.target.value !== password) {
+                setPassError(true);
+              } else {
+                setPassError(false);
+              }
+            }}
+            variant="outlined"
+            size="small"
+            type={showConfirmPass ? "text" : "password"}
+            label="Confirm"
+            error={passError}
+            className={`${classes.textField} ${classes.halfWidth}`}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowConfirmPass(!showConfirmPass)}
+                  >
+                    {showConfirmPass ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          ></TextField>
+        </div>
+        <TextField
+          onChange={(e) => {
+            setType(e.target.value);
+            setTypeError(false);
           }}
           variant="outlined"
           size="small"
-          type={showConfirmPass ? "text" : "password"}
-          label="Confirm Password"
-          error={passError}
+          label="User Type"
+          error={typeError}
           className={classes.textField}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowConfirmPass(!showConfirmPass)}
-                >
-                  {showConfirmPass ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        ></TextField>
+          select
+        >
+          <MenuItem value="owner">Store owner</MenuItem>
+          <MenuItem value="employee">Store employee</MenuItem>
+          <MenuItem value="visitor">Store visitor</MenuItem>
+        </TextField>
         <Button
           color="primary"
           variant="contained"
