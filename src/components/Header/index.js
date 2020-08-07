@@ -27,18 +27,6 @@ export default function Header(props) {
           </Typography>
 
           <Typography variant="h4" className={classes.linkTypo}>
-            <Link to="/queue-dashboard" className={classes.Link}>
-              <Button color="inherit">Queue Dashboard</Button>
-            </Link>
-            <Link to="/queue-status" className={classes.Link}>
-              <Button color="inherit">View Queue</Button>
-            </Link>
-            <Link to="/store-search" className={classes.Link}>
-              <Button color="inherit">Store Search</Button>
-            </Link>
-            <Link to="/admin-panel" className={classes.Link}>
-              <Button color="inherit">Admin Panel</Button>
-            </Link>
             <Link to="/settings" className={classes.Link}>
               <Button color="inherit">Settings</Button>
             </Link>

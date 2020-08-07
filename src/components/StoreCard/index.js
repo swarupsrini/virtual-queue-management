@@ -54,8 +54,11 @@ export default function StoreCard(props) {
         <Typography variant="h5" component="h2">
           {props.title}
         </Typography>
+        <Typography color="textSecondary">
+          Wait Time: {props.min} min
+        </Typography>
         <Typography className={classes.subtitle} color="textSecondary">
-          {props.min} minutes left
+          Distance: {props.dist} km
         </Typography>
         <Typography variant="body2" component="p">
           {props.address}

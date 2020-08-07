@@ -9,12 +9,15 @@ import {
   Switch,
   ListItemText,
   Typography,
+  TextField,
 } from "@material-ui/core";
 import Search from "../../components/Search";
 import Popover from "@material-ui/core/Popover";
 import Header from "../../components/Header";
 import useStyles from "./styles";
 import "./index.css";
+
+const STORE_SHOW_LIMIT = 20;
 
 function joinedQueue(storeInfo) {
   // there will be a backend call to update user's queue status
@@ -90,19 +93,38 @@ function getStores() {
   ];
 }
 
-export default function StoreSearchPage(props) {
+function getPosition() {
+  return new Promise((res, rej) => {
+    navigator.geolocation.getCurrentPosition((result) => {
+      res(result.coords);
+    });
+  });
+}
+
+function getCurrentLocation(callback) {
+  return getPosition().then((coords) => {
+    callback({ lat: coords.latitude, long: coords.longitude });
+  });
+}
+export default function StoreSearchPage() {
   const classes = useStyles();
   const [waitTime, setWait] = useState(false);
+  const [userLoc, setUserLoc] = useState({});
+
   const [fav, setFav] = useState(false);
 
   const [anchor, setAnchor] = useState(null);
   const [stores, setStores] = useState(sortByDist(getStores()));
 
   const [text, setText] = useState("");
-
+  const [number, setNumber] = useState(10);
   const [viewPage, setViewPage] = useState(null);
 
   const [analyticsPage, setAnalyticsPage] = useState(null);
+
+  useEffect(() => {
+    getCurrentLocation(setUserLoc);
+  }, []);
 
   useEffect(() => {
     sort(getStores());
@@ -172,6 +194,7 @@ export default function StoreSearchPage(props) {
   function filter(query) {
     let result = [];
     const temp = getStores();
+    console.log(userLoc);
 
     if (query === "") result = temp;
     else {
@@ -197,13 +220,13 @@ export default function StoreSearchPage(props) {
       {analyticsPage && <Redirect to={analyticsPage} />}
       {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
-      <Map center={[43.7763, -79.25802]} zoom={12} zoomControl={false}>
+      <Map center={[userLoc.lat, userLoc.long]} zoom={12} zoomControl={false}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {stores.map((store) => (
+        {stores.slice(0, number).map((store) => (
           <Marker
             key={store.ID}
             position={[store.latitude, store.longitude]}
@@ -220,14 +243,20 @@ export default function StoreSearchPage(props) {
               setAnchor(e.currentTarget);
             }}
             searchClick={searchBarText}
+            clearClick={() => {
+              setText("");
+              searchBarText("");
+            }}
+            onChangedSync={(e) => setText(e)}
             text={text}
           />
         </ListItem>
-        {stores.map((store) => (
+        {stores.slice(0, number).map((store) => (
           <ListItem key={store.ID}>
             <StoreCard
               title={store.name}
               min={store.wait}
+              dist={getDistance(store.name)}
               verified={store.isVerified}
               favorited={Boolean(getUserInfo().fav.includes(store.ID))}
               joinClick={() => {
@@ -277,6 +306,29 @@ export default function StoreSearchPage(props) {
                 onChange={toggleFav}
                 checked={fav}
               />
+            </ListItemSecondaryAction>
+          </ListItem>
+          <ListItem>
+            <Typography variant="h4">Stores to Show</Typography>
+          </ListItem>
+          <ListItem>
+            <ListItemText primary={`Number (max: ${STORE_SHOW_LIMIT})`} />
+            <ListItemSecondaryAction>
+              <TextField
+                className={classes.input}
+                value={number}
+                variant="outlined"
+                size="small"
+                onChange={(e) => {
+                  if (
+                    !isNaN(e.target.value) &&
+                    parseInt(e.target.value) <= STORE_SHOW_LIMIT &&
+                    parseInt(e.target.value) > 0
+                  ) {
+                    setNumber(e.target.value);
+                  }
+                }}
+              ></TextField>
             </ListItemSecondaryAction>
           </ListItem>
         </List>

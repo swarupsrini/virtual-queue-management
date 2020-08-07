@@ -12,7 +12,10 @@ export default makeStyles((theme) => ({
     backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
   popup: {
-    width: "260px",
+    width: "290px",
     backgroundColor: "white",
+  },
+  input: {
+    width: "100px",
   },
 }));

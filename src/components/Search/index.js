@@ -11,7 +11,8 @@ import React, { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
-import FilterList from "@material-ui/icons/FilterList";
+import { FilterList, Clear } from "@material-ui/icons";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 import useStyles from "./styles";
 
@@ -31,7 +32,29 @@ export default function Search(props) {
         label="Search"
         variant="outlined"
         size="small"
-        onChange={(e) => setText(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            props.searchClick(text);
+            e.preventDefault();
+          }
+        }}
+        onChange={(e) => {
+          setText(e.target.value);
+          props.onChangedSync(e.target.value);
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                className={classes.button}
+                disableRipple={true}
+                onClick={props.clearClick}
+              >
+                <Clear size="small"></Clear>
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       ></TextField>
       <IconButton onClick={() => props.searchClick(text)}>
         <SearchIcon size="medium"></SearchIcon>
