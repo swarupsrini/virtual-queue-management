@@ -1,0 +1,15 @@
+.leaflet-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: calc(100% - 30px);
+  height: 200px;
+  position: absolute;
+}
+
+.miniMap {
+  position: absolute;
+  margin-left: 30px;
+  width: calc(100% - 30px);
+  margin-right: 30px;
+  height: 200px;
+}
