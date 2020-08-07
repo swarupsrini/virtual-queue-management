@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
 import {
   Popover,
   List,
@@ -96,15 +95,13 @@ function editUserData(user) {
 
 export default function AdminPanelPage(props) {
   const [anchor, setAnchor] = useState(null);
-  const [text] = useState("");
+  const [text, setText] = useState("");
   const [showUsers, setShowUsers] = useState(true);
   const [showStores, setShowStores] = useState(true);
 
   const [users, setUsers] = useState(getUsers());
   const [stores, setStores] = useState(getStores());
   const classes = useStyles();
-
-  const [redirect, setRedirect] = useState(null);
 
   useEffect(() => {}, [showUsers, showStores]);
 
@@ -159,7 +156,6 @@ export default function AdminPanelPage(props) {
 
   return (
     <div>
-      {redirect && <Redirect to={redirect} />}
       <Header></Header>
       <div className={classes.search}>
         <Search
@@ -167,6 +163,11 @@ export default function AdminPanelPage(props) {
             setAnchor(e.currentTarget);
           }}
           searchClick={searchBarClicked}
+          clearClick={() => {
+            setText("");
+            searchBarClicked("");
+          }}
+          onChangedSync={(e) => setText(e)}
           text={text}
         />
       </div>
@@ -188,7 +189,6 @@ export default function AdminPanelPage(props) {
                   subtitle={"Store ID: " + store.ID}
                   editClick={() => {
                     editStoreData(store);
-                    setRedirect("/settings");
                   }}
                   address={store.address}
                 ></AdminCard>
@@ -215,7 +215,6 @@ export default function AdminPanelPage(props) {
                   subtitle={"User ID: " + user.ID}
                   editClick={() => {
                     editUserData(user);
-                    setRedirect("/settings");
                   }}
                   address=""
                 ></AdminCard>
