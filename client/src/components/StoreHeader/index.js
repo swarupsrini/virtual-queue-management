@@ -7,8 +7,7 @@ subtitle2: 2nd part of address (city, province, postal code)
 
 Example: <StoreHeader
           title="Walmart"
-          subtitle1="300 Borough Dr Unit 3635,"
-          subtitle2="Scarborough, ON M1P 4P5"
+          subtitle="300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5"
         />
 */
 import React from "react";
@@ -20,8 +19,7 @@ export default function StoreHeader(props) {
   return (
     <div className={classes.parent}>
       <div className={classes.title}>{props.title}</div>
-      <div className={classes.subtitle}>{props.subtitle1}</div>
-      <div className={classes.subtitle}>{props.subtitle2}</div>
+      <div className={classes.subtitle}>{props.subtitle}</div>
     </div>
   );
 }

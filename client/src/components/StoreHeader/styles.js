@@ -12,6 +12,7 @@ export default makeStyles({
   },
   parent: {
     display: "inline-block",
-    margin: "30px"
+    width: "315px",
+    margin: "30px",
   },
 });

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { login } from "../../actions/utils";
+import { login } from "../../utils/actions";
 
 import { Link } from "react-router-dom";
 import Visibility from "@material-ui/icons/Visibility";
