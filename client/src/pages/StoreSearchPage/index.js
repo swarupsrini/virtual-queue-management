@@ -16,6 +16,7 @@ import Popover from "@material-ui/core/Popover";
 import Header from "../../components/Header";
 import useStyles from "./styles";
 import "./index.css";
+import { blueDot } from "./icon";
 
 const STORE_SHOW_LIMIT = 20;
 
@@ -94,10 +95,14 @@ function getStores() {
 }
 
 function getPosition() {
-  return new Promise((res, rej) => {
-    navigator.geolocation.getCurrentPosition((result) => {
-      res(result.coords);
-    });
+  return new Promise((res) => {
+    navigator.geolocation.getCurrentPosition(
+      (result) => {
+        res(result.coords);
+      },
+      () => {},
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
   });
 }
 
@@ -220,7 +225,7 @@ export default function StoreSearchPage() {
       {analyticsPage && <Redirect to={analyticsPage} />}
       {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
-      <Map center={[userLoc.lat, userLoc.long]} zoom={12} zoomControl={false}>
+      <Map center={[43.7763, -79.25802]} zoom={12} zoomControl={false}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -235,6 +240,13 @@ export default function StoreSearchPage() {
             }}
           ></Marker>
         ))}
+        {typeof userLoc.lat !== "undefined" && userLoc.long !== "undefined" && (
+          <Marker
+            key={122121212}
+            icon={blueDot}
+            position={[userLoc.lat, userLoc.long]}
+          ></Marker>
+        )}
       </Map>
       <List className={classes.leftOverlay}>
         <ListItem>
