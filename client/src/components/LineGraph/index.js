@@ -29,7 +29,7 @@ export default function LineGraph(props) {
 		animationEnabled: true,
 		theme: "light2", // "light1", "dark1", "dark2"
 		title:{
-			text: "Rate of User Entry"
+			text: "Number of Admissions per hour"
 		},
 		axisY: {
 			title: "Number of People",
