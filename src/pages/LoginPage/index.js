@@ -18,22 +18,28 @@ import useStyles from "./styles";
 
 export default function LoginPage(props) {
   const classes = useStyles();
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  // const [user, setUser] = useState({});
+  // const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setIsError] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState("");
 
   function postLogin() {
-    if ((userName === "user" && password === "user") || (userName === "admin" && password === "admin")) {
-      setLoggedIn(true);
+    if (
+      (userName === "user" && password === "user") ||
+      (userName === "admin" && password === "admin")
+    ) {
+      // call backend to login, get the user (if valid) and pass it in below
+      props.postUser({ username: "user" });
+      // setLoggedIn(true);
     } else {
       setIsError(true);
     }
   }
-
-  if (isLoggedIn) {
-    return <Redirect to={props.redirect} />;
+  console.log(props.user);
+  if (JSON.stringify(props.user) !== JSON.stringify({})) {
+    return props.loginRedirect(props.user);
   }
 
   return (

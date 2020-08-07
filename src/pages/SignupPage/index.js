@@ -22,6 +22,9 @@ import useStyles from "./styles";
 
 export default function SignupPage(props) {
   const classes = useStyles();
+
+  const [user, setUser] = useState({});
+
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   const [userName, setUserName] = useState("");
@@ -59,12 +62,14 @@ export default function SignupPage(props) {
       email !== "" &&
       password !== ""
     ) {
+      // call backend to sign up, get the user (if valid) and pass it in below
+      setUser({});
       setLoggedIn(true);
     }
   }
 
   if (isLoggedIn) {
-    return <Redirect to={props.redirect} />;
+    props.onSubmit(user);
   }
 
   return (
