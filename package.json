@@ -19,6 +19,7 @@
   "homepage": "https://github.com/csc309-summer-2020/team10#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "mongodb": "^3.6.0",
     "mongoose": "^5.9.27"
   }
