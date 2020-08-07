@@ -2,13 +2,16 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles({
   datacardSuffix:{
+    fontSize:"22pt"
   },
   datacardNumber:{
-    fontSize:"xx-large"
+    fontSize:"50pt"
+  },
+  datacardTitle:{
+    fontSize:"17pt"
   },
   datacard: {
-    marginLeft:"20px",
-    marginRight:"20px",
+    margin:"20px",
     textAlign:"center",
     font:"Inter",
     fontStyle:"regular",
