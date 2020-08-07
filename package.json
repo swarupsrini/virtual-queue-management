@@ -1,44 +1,25 @@
 {
   "name": "team10",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@material-ui/core": "^4.10.2",
-    "@material-ui/icons": "^4.9.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "framer": "^1.2.4",
-    "leaflet": "^1.6.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-leaflet": "^2.7.0",
-    "react-qr-scanner": "0.0.9",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
-    "express": "^4.17.1",
-    "mongodb": "^3.5.5",
-    "mongoose": "^5.9.2"
-  },
+  "version": "1.0.0",
+  "description": "Note: The commit for this `README` document including instructions has been submitted half an hour late, although the app itself has been completed on time. All the commits for the code have been made on time. Apologies for the inconvenience caused.",
+  "main": "server.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csc309-summer-2020/team10.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csc309-summer-2020/team10/issues"
+  },
+  "homepage": "https://github.com/csc309-summer-2020/team10#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.0",
+    "mongoose": "^5.9.27"
   }
 }

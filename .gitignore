@@ -1,5 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+package-lock.json
+mongo-data/
+client/build/
+client/package-lock.json
+client/node_modules/
+
 # dependencies
 /node_modules
 /.pnp
@@ -23,3 +29,4 @@ yarn-debug.log*
 yarn-error.log*
 
 mongo-data/
+package-lock.json
