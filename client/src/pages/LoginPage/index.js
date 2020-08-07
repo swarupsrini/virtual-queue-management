@@ -30,7 +30,7 @@ export default function LoginPage(props) {
       (userName === "admin" && password === "admin")
     ) {
       // call backend to login, get the user (if valid) and pass it in below
-      props.postUser({ username: "user" });
+      props.setUser({ username: "user" });
     } else {
       setIsError(true);
     }

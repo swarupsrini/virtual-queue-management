@@ -41,7 +41,7 @@ export default function App() {
     readCookie(setCurrentUser);
   }, []);
 
-  const postUser = (newCurrentUser) => {
+  const setUser = (newCurrentUser) => {
     setCurrentUser(newCurrentUser);
   };
 
@@ -65,7 +65,7 @@ export default function App() {
               <SignupPage
                 user={currentUser}
                 loginRedirect={loginRedirect}
-                postUser={postUser}
+                setUser={setUser}
               />
             )}
           />
@@ -76,35 +76,23 @@ export default function App() {
               <LoginPage
                 user={currentUser}
                 loginRedirect={loginRedirect}
-                postUser={postUser}
+                setUser={setUser}
               />
             )}
           />
           <Redirect exact from="/" to="/login" />
           <Route
             path="/settings"
-            render={() => <SettingsPage user={currentUser} />}
+            render={() => <SettingsPage setUser={setUser} />}
           />
-          <Route
-            path="/store-search"
-            render={() => <StoreSearchPage user={currentUser} />}
-          />
-          <Route
-            path="/admin-panel"
-            render={() => <AdminPanelPage user={currentUser} />}
-          />
+          <Route path="/store-search" render={() => <StoreSearchPage />} />
+          <Route path="/admin-panel" render={() => <AdminPanelPage />} />
           <Route
             path="/store-analytics/:store_id"
-            render={() => <StoreAnalytics user={currentUser} />}
+            render={() => <StoreAnalytics />}
           />
-          <Route
-            path="/queue-dashboard"
-            render={() => <QueueDashboard user={currentUser} />}
-          />
-          <Route
-            path="/queue-status"
-            render={() => <QueueStatus user={currentUser} />}
-          />
+          <Route path="/queue-dashboard" render={() => <QueueDashboard />} />
+          <Route path="/queue-status" render={() => <QueueStatus />} />
         </Switch>
       </BrowserRouter>
     </div>

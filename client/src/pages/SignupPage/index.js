@@ -55,7 +55,7 @@ export default function SignupPage(props) {
       password !== ""
     ) {
       // call backend to sign up, get the user (if valid) and pass it in below
-      props.postUser({ username: "user" });
+      props.setUser({ username: "user" });
     }
   }
 
