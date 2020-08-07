@@ -278,7 +278,7 @@ export default function StoreSearchPage() {
               }}
               viewClick={() => {
                 viewData(store);
-                setAnalyticsPage("/store-analytics");
+                setAnalyticsPage("/store-analytics/" + store.ID);
               }}
               updateUserFav={(fav) => updateUserFavStores(store.ID, fav)}
               address={store.address}
