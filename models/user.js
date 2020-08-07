@@ -1,12 +1,33 @@
 /* Student mongoose model */
 const mongoose = require('mongoose')
 
-const User = mongoose.model('User', {
-	username: {type: String},
-	phone_number: {type: String},
-	email: {type: String},
+const options = {discriminatorKey: 'kind'};
+
+const GeneralUser = mongoose.model('GeneralUser', {
 	password: {type: String},
-	queue_id: {type: String}
 })
 
-module.exports = { User }
+const User = GeneralUser.discriminator('User',
+  new mongoose.Schema({
+	username: String,
+	phone_number: String,
+	email: String,
+	queue_id: String
+}, options));
+
+const Manager = GeneralUser.discriminator('Manager',
+  new mongoose.Schema({
+	  store_id: String
+}, options));
+
+const Owner = GeneralUser.discriminator('Owner',
+  new mongoose.Schema({
+	  store_id: String
+}, options));
+
+const Admin = GeneralUser.discriminator('Admin',
+  new mongoose.Schema({
+	username: String
+}, options));
+
+module.exports = {GeneralUser, User, Manager, Owner, Admin }

@@ -22,14 +22,15 @@ export default makeStyles({
     justifyContent: "center",
   },
   linegraph: {
-    marginTop: "30px",
+    marginTop: "10px",
     marginBottom: "30px",
     marginLeft: "auto",
     marginRight: "auto",
     width: "600px",
   },
   frame: {
-    marginBottom: "60px",
+    marginTop: "10px",
+    marginBottom: "10px"
   },
   header: {
     marginTop: "20px",
