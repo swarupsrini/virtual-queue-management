@@ -7,6 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import Header from "../../components/Header";
 import useStyles from "./styles";
 import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
+import useInterval from "../../utils/useInterval";
+import { getUserStore } from "../../utils/actions";
 
 function getQueue(storeId) {
   return [2, 1, 1, 3];
@@ -45,6 +47,11 @@ export default function StoreAnalytics(props) {
   const storeTraffic = getStoreTraffic(storeId);
   const storeName = getStoreName(storeId);
   const address = getStoreAdd(storeId);
+
+  useInterval(async () => {
+    const store = getUserStore(()=>{}, ()=>{});
+    console.log(store)
+  }, 3000);
 
   return (
     <div>
@@ -87,7 +94,7 @@ export default function StoreAnalytics(props) {
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Visits today" number="104" suffix="min"></DataCard>
+            <DataCard title="Visits today" number="104" suffix=""></DataCard>
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
