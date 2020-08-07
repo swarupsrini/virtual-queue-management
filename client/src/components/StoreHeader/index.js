@@ -11,17 +11,17 @@ Example: <StoreHeader
           subtitle2="Scarborough, ON M1P 4P5"
         />
 */
-import React from 'react';
+import React from "react";
 
 import useStyles from "./styles";
 
 export default function StoreHeader(props) {
   const classes = useStyles();
   return (
-    <div>
-      <div className = {classes.title}>{props.title}</div>
-      <div className = {classes.subtitle}>{props.subtitle1}</div>
-      <div className = {classes.subtitle}>{props.subtitle2}</div>
+    <div className={classes.parent}>
+      <div className={classes.title}>{props.title}</div>
+      <div className={classes.subtitle}>{props.subtitle1}</div>
+      <div className={classes.subtitle}>{props.subtitle2}</div>
     </div>
   );
 }
