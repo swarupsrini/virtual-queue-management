@@ -4,16 +4,41 @@ export default makeStyles({
   exitQueue: {
     backgroundColor: "rgba(232, 107, 48, 1.0)",
     color: "white",
-    position: "fixed",
+    position: "absolute",
     top: "68px",
-    right: "47px",
+    right: "3vw",
   },
   displayQR: {
-    position: "fixed",
+    position: "absolute",
     top: "68px",
-    right: "305px",
+    right: "14vw",
   },
-  storeHeaderMargin: {
-    // marginTop: "10px",
+  paper: {
+    marginLeft: "30px",
+    marginTop: "20px",
+    marginRight: "30px",
+    height: "135px",
+  },
+  paper2: {
+    marginLeft: "30px",
+    marginTop: "20px",
+    marginRight: "30px",
+    height: "75px",
+    backgroundColor: "rgba(184, 184, 184, 0.5)",
+  },
+  typeTitle: {
+    display: "inline-block",
+  },
+  typeSubtitle: {
+    display: "inline-block",
+  },
+  divElem: {
+    marginTop: "10px",
+    width: "226px",
+    textAlign: "center",
+    borderRight: "2px solid lightgray",
+  },
+  message: {
+    marginLeft: "10px",
   },
 });
