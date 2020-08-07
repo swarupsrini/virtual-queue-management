@@ -32,12 +32,10 @@ export default function LoginPage(props) {
     ) {
       // call backend to login, get the user (if valid) and pass it in below
       props.postUser({ username: "user" });
-      // setLoggedIn(true);
     } else {
       setIsError(true);
     }
   }
-  console.log(props.user);
   if (JSON.stringify(props.user) !== JSON.stringify({})) {
     return props.loginRedirect(props.user);
   }
