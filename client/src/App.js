@@ -57,6 +57,7 @@ export default function App() {
     <div className="App">
       <BrowserRouter>
         <Switch>
+          {/* TODO: make all the routes conditional, only have them if user type allows it. */}
           <Route
             exact
             path="/signup"
@@ -70,7 +71,7 @@ export default function App() {
           />
           <Route
             exact
-            path="/"
+            path="/login"
             render={() => (
               <LoginPage
                 user={currentUser}
@@ -79,16 +80,31 @@ export default function App() {
               />
             )}
           />
-          {/* {currentUser && (
-          <> */}
-          <Route path="/settings" render={() => <SettingsPage />} />
-          <Route path="/store-search" render={() => <StoreSearchPage />} />
-          <Route path="/admin-panel" render={() => <AdminPanelPage />} />
-          <Route path="/store-analytics" render={() => <StoreAnalytics />} />
-          <Route path="/queue-dashboard" render={() => <QueueDashboard />} />
-          <Route path="/queue-status" render={() => <QueueStatus />} />
-          {/* </>
-          )} */}
+          <Redirect exact from="/" to="/login" />
+          <Route
+            path="/settings"
+            render={() => <SettingsPage user={currentUser} />}
+          />
+          <Route
+            path="/store-search"
+            render={() => <StoreSearchPage user={currentUser} />}
+          />
+          <Route
+            path="/admin-panel"
+            render={() => <AdminPanelPage user={currentUser} />}
+          />
+          <Route
+            path="/store-analytics/:store_id"
+            render={() => <StoreAnalytics user={currentUser} />}
+          />
+          <Route
+            path="/queue-dashboard"
+            render={() => <QueueDashboard user={currentUser} />}
+          />
+          <Route
+            path="/queue-status"
+            render={() => <QueueStatus user={currentUser} />}
+          />
         </Switch>
       </BrowserRouter>
     </div>
