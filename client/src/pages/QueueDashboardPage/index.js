@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import StoreHeader from "../../components/StoreHeader";
 
+import useInterval from "../../utils/useInterval";
+
+import StoreHeader from "../../components/StoreHeader";
 import Header from "../../components/Header";
+
 import useStyles from "./styles";
 
 export default function QueueDashboard(props) {
