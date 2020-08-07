@@ -22,3 +22,8 @@ export const signup = (setUser, data) => {
   setUser({ username: data.userName });
   return true;
 };
+
+export const getUserStore = async (setUser, setStore) => {
+  console.log("run");
+  setUser({ username: "hello" });
+};
