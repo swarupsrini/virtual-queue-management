@@ -22,18 +22,23 @@ export default makeStyles({
     justifyContent: "center",
   },
   linegraph: {
-    marginTop: "10px",
-    marginBottom: "30px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    width: "600px",
+    boxShadow: "0px 0px 3px #9E9E9E",
+    margin: "30px",
+    height: "100%"
   },
   frame: {
-    marginTop: "10px",
-    marginBottom: "10px"
+    boxShadow: "0px 0px 3px #9E9E9E",
+    margin: "30px",
+    borderRadius: "5px"
   },
   header: {
     marginTop: "20px",
     marginBottom: "30px",
   },
+  line:{
+    backgroundColor: "#A1A1A1",
+    opacity:"0.5",
+    width:"4px",
+    margin:"10px",
+  }
 });

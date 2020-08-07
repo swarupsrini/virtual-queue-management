@@ -15,5 +15,6 @@ export default makeStyles({
   },
   parent: {
     display: "inline-block",
+    margin: "30px"
   },
 });

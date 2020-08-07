@@ -59,26 +59,21 @@ export default function StoreAnalytics(props) {
           subtitle1={smallAddress + ", " + bigAddress}
         />
       </div>
-      <Frame
-        className={classes.frame}
-        size={300}
-        center
-        height="auto"
-        background={"#FFFFFF"}
-        shadow="1px 1px 3px 2px grey"
-        radius={8}
-        position="relative"
-        top={100}
-      >
+      <div className={classes.frame}>
         <Grid className={classes.datacards} container>
           <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <div className={classes.line}></div>
           <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <div className={classes.line}></div>
           <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <div className={classes.line}></div>
           <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <div className={classes.line}></div>
           <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+          <div className={classes.line}></div>
           <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
         </Grid>
-      </Frame>
+      </div>
       <div className={classes.linegraph}>
         <LineGraph yValues={storeTraffic} startTime={storeOpenTime} />
       </div>
