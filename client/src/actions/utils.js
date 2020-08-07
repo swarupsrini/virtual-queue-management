@@ -6,8 +6,8 @@ export const login = (setUser, data) => {
   // call backend to login, get the user (if valid) and call the setUser
   // to set it to the returned value
   if (
-    (userName === "user" && password === "user") ||
-    (userName === "admin" && password === "admin")
+    (data.userName === "user" && data.password === "user") ||
+    (data.userName === "admin" && data.password === "admin")
   ) {
     setUser({ username: data.userName });
     return true;
