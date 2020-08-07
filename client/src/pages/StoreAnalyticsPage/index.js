@@ -59,6 +59,7 @@ export default function StoreAnalytics(props) {
   const classes = useStyles();
   const [user, setUser] = useState({})
   const [store, setStore] = useState({num_visits_today:0})
+  const [viewPage, setViewPage] = useState(null);
 
   const storeId = 0;
   const queue = getQueue(storeId);
@@ -76,6 +77,7 @@ export default function StoreAnalytics(props) {
 
   return (
     <div>
+      {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
       <StoreHeader
           title={storeName}
@@ -86,8 +88,7 @@ export default function StoreAnalytics(props) {
         className={classes.backButton}
         color="primary"
         variant="contained"
-        onClick={() => {
-          return <Redirect to="/login" />;}}
+        onClick={()=>{setViewPage("/store-search")}}
       >
         Back
       </Button>
@@ -96,7 +97,7 @@ export default function StoreAnalytics(props) {
         className={classes.joinQueueButton}
         color="primary"
         variant="contained"
-        onClick={() => {}}
+        onClick={()=>{setViewPage("/queue-status")}}
       >
         Join Queue
       </Button>
