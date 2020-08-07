@@ -14,7 +14,6 @@ import "./App.css";
 
 const readCookie = (setCurrentUser) => {
   // currently bypassing backend w/ the next 2 lines
-  console.log("start");
   setCurrentUser({});
   return;
 
