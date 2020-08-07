@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 import Visibility from "@material-ui/icons/Visibility";
@@ -12,10 +11,7 @@ import {
   Button,
   InputAdornment,
   IconButton,
-  Select,
-  InputLabel,
   MenuItem,
-  FormControl,
 } from "@material-ui/core";
 
 import useStyles from "./styles";
@@ -172,6 +168,7 @@ export default function SignupPage(props) {
           variant="outlined"
           size="small"
           label="User Type"
+          defaultValue=""
           error={typeError}
           className={classes.textField}
           select
@@ -188,7 +185,7 @@ export default function SignupPage(props) {
         >
           Sign up
         </Button>
-        <Link to="/" className={classes.linkButton}>
+        <Link to="/login" className={classes.linkButton}>
           <Button color="primary" variant="text">
             Already have an account? Sign in
           </Button>
