@@ -225,30 +225,37 @@ export default function StoreSearchPage() {
       {analyticsPage && <Redirect to={analyticsPage} />}
       {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
-      <Map center={[43.7763, -79.25802]} zoom={12} zoomControl={false}>
-        <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+      <div className="bigMap">
+        <Map
+          center={[43.7763, -79.25802]}
+          zoom={12}
+          zoomControl={false}
+          id="main"
+        >
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
 
-        {stores.slice(0, number).map((store) => (
-          <Marker
-            key={store.ID}
-            position={[store.latitude, store.longitude]}
-            onclick={() => {
-              markerClicked(store);
-            }}
-          ></Marker>
-        ))}
-        {typeof userLoc.lat !== "undefined" &&
-          typeof userLoc.long !== "undefined" && (
+          {stores.slice(0, number).map((store) => (
             <Marker
-              key={122121212}
-              icon={blueDot}
-              position={[userLoc.lat, userLoc.long]}
+              key={store.ID}
+              position={[store.latitude, store.longitude]}
+              onclick={() => {
+                markerClicked(store);
+              }}
             ></Marker>
-          )}
-      </Map>
+          ))}
+          {typeof userLoc.lat !== "undefined" &&
+            typeof userLoc.long !== "undefined" && (
+              <Marker
+                key={122121212}
+                icon={blueDot}
+                position={[userLoc.lat, userLoc.long]}
+              ></Marker>
+            )}
+        </Map>
+      </div>
       <List className={classes.leftOverlay}>
         <ListItem>
           <Search
