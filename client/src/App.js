@@ -64,8 +64,8 @@ export default function App() {
             render={() => (
               <SignupPage
                 user={currentUser}
-                loginRedirect={loginRedirect}
                 setUser={setUser}
+                loginRedirect={loginRedirect}
               />
             )}
           />
@@ -75,8 +75,8 @@ export default function App() {
             render={() => (
               <LoginPage
                 user={currentUser}
-                loginRedirect={loginRedirect}
                 setUser={setUser}
+                loginRedirect={loginRedirect}
               />
             )}
           />

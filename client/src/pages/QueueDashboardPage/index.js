@@ -20,6 +20,9 @@ function getStoreBigAdd(storeId) {
 export default function QueueDashboard(props) {
   const classes = useStyles();
 
+  const [user, getUser] = useState({});
+  setInterval(async () => {});
+
   const [queueOpen, setQueueOpen] = useState(true);
   const [storeCount, setStoreCount] = useState(0);
   const [queue, setQueue] = useState([2, 1, 1, 3]);

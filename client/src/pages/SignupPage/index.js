@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { signup } from "../../actions/utils";
+
 import { Link } from "react-router-dom";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -37,12 +39,28 @@ export default function SignupPage(props) {
   const [type, setType] = useState("");
   const [typeError, setTypeError] = useState(false);
 
+  const setErrByName = (name, err) => {
+    switch (name) {
+      case "userName":
+        setUserError(err);
+      case "phone":
+        setPhoneError(err);
+      case "email":
+        setEmailError(err);
+      case "password":
+        setPassError(err);
+      case "type":
+        setTypeError(err);
+    }
+  };
+
   function postSignup() {
     if (userName === "") setUserError(true);
     if (phone === "") setPhoneError(true);
     if (email === "") setEmailError(true);
     if (password === "") setPassError(true);
     if (type === "") setTypeError(true);
+
     if (
       !userError &&
       !phoneError &&
@@ -54,8 +72,16 @@ export default function SignupPage(props) {
       email !== "" &&
       password !== ""
     ) {
-      // call backend to sign up, get the user (if valid) and pass it in below
-      props.setUser({ username: "user" });
+      const errors = signup(props.setUser, {
+        userName,
+        phone,
+        email,
+        password,
+        type,
+      });
+      if (errors != true) {
+        errors.forEach((err) => setErrByName(err, true));
+      }
     }
   }
 
