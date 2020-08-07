@@ -10,7 +10,18 @@ export default makeStyles({
   },
   datacards: {
     justifyContent: "space-evenly",
-
+  },
+  backButton: {
+    position: "absolute",
+    top: "80px",
+    right: "200px",
+    width: "150px"
+  },
+  joinQueueButton: {
+    position: "absolute",
+    top: "80px",
+    right: "30px",
+    width: "150px"
   },
   linegraph: {
     boxShadow: "0px 0px 3px #9E9E9E",

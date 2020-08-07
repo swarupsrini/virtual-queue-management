@@ -6,7 +6,7 @@ import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
 import Header from "../../components/Header";
 import useStyles from "./styles";
-import { Card, CardContent, Typography, Paper } from "@material-ui/core";
+import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
 
 function getQueue(storeId) {
   return [2, 1, 1, 3];
@@ -29,11 +29,8 @@ function getStoreTraffic(storeId) {
 function getStoreName(storeId) {
   return "Walmart";
 }
-function getStoreSmallAdd(storeId) {
-  return "300 Borough Dr Unit 3635";
-}
-function getStoreBigAdd(storeId) {
-  return "Scarborough, ON M1P 4P5";
+function getStoreAdd(storeId) {
+  return "300 Borough Dr Unit 3635 Scarborough, ON M1P 4P5";
 }
 
 export default function StoreAnalytics(props) {
@@ -47,17 +44,33 @@ export default function StoreAnalytics(props) {
   const storeOpenTime = getStoreOpenTime(storeId);
   const storeTraffic = getStoreTraffic(storeId);
   const storeName = getStoreName(storeId);
-  const smallAddress = getStoreSmallAdd(storeId);
-  const bigAddress = getStoreBigAdd(storeId);
+  const address = getStoreAdd(storeId);
 
   return (
     <div>
       <Header></Header>
       <StoreHeader
           title={storeName}
-          subtitle1={smallAddress + ", " + bigAddress}
+          subtitle={address}
         />
-      <Grid className={classes.datacards} container></Grid>
+      <Button
+        size="large"
+        className={classes.backButton}
+        color="primary"
+        variant="contained"
+        onClick={() => {}}
+      >
+        Back
+      </Button>
+      <Button
+        size="large"
+        className={classes.joinQueueButton}
+        color="primary"
+        variant="contained"
+        onClick={() => {}}
+      >
+        Join Queue
+      </Button>
       <div className={classes.frame}>
         <Grid className={classes.datacards} container spacing={6} >
           <div style={{width:"4px"}}></div>
