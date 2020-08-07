@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { login } from "../../actions/utils";
+
 import { Link } from "react-router-dom";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -17,8 +19,6 @@ import useStyles from "./styles";
 
 export default function LoginPage(props) {
   const classes = useStyles();
-  // const [user, setUser] = useState({});
-  // const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setIsError] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -29,8 +29,7 @@ export default function LoginPage(props) {
       (userName === "user" && password === "user") ||
       (userName === "admin" && password === "admin")
     ) {
-      // call backend to login, get the user (if valid) and pass it in below
-      props.setUser({ username: "user" });
+      login(props.setUser, userName, password);
     } else {
       setIsError(true);
     }
