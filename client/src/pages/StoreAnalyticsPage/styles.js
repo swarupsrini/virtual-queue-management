@@ -36,8 +36,23 @@ export default makeStyles({
   line:{
     backgroundColor: "#A1A1A1",
     opacity:"0.5",
-    width:"4px",
-    marginTop:"10px",
-    marginBottom:"10px",
-  }
+    width:"2px",
+    marginTop:"12px",
+    marginBottom:"12px",
+  },
+  paper: {
+    marginLeft: "30px",
+    marginTop: "20px",
+    marginRight: "30px",
+    height: "135px",
+  },
+  typeSubtitle: {
+    display: "inline-block",
+  },
+  divElem: {
+    marginTop: "10px",
+    width: "120px",
+    textAlign: "center",
+    borderRight: "2px solid lightgray",
+  },
 });
