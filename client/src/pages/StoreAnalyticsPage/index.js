@@ -121,11 +121,11 @@ export default function StoreAnalytics(props) {
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Best time" number="10" suffix="am"></DataCard>
+            <DataCard title="Least busy time" number="10" suffix="am"></DataCard>
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Worst time" number="10" suffix="am"></DataCard>
+            <DataCard title="Most busy time" number="10" suffix="am"></DataCard>
           </Grid>
           <div style={{width:"4px"}}></div>
         </Grid>
