@@ -20,6 +20,6 @@ export default makeStyles(() => ({
     color: "white",
   },
   spacerDiv: {
-    marginTop: "48px",
+    height: "48px",
   },
 }));

@@ -1,5 +1,10 @@
 import { makeStyles } from "@material-ui/core/styles";
 export default makeStyles((theme) => ({
+  root: {
+    marginLeft: "30px",
+    marginRight: "30px",
+    marginTop: "10px",
+  },
   topRightDiv: {
     position: "absolute",
     top: "68px",
@@ -33,5 +38,52 @@ export default makeStyles((theme) => ({
     fontSize: "22px",
     margin: "0px",
     marginTop: "-10px",
+  },
+  btnP: {
+    fontSize: "25px",
+    color: "white",
+    fontSize: "25px",
+    display: "table-cell",
+    verticalAlign: "middle",
+    textAlign: "center",
+  },
+  btnDiv: {
+    borderRadius: "5px",
+    display: "table",
+    cursor: "pointer",
+  },
+  btnStoreAnalytics: {
+    float: "left",
+    height: "132px",
+    width: "141px",
+    backgroundColor: "#5589D8",
+    marginLeft: "50px",
+  },
+  btnDeactivateQueue: {
+    height: "62px",
+    width: "246px",
+    backgroundColor: "#E86B30",
+    marginTop: "-132px",
+    marginLeft: "2px",
+  },
+  btnEmptyQueue: {
+    height: "62px",
+    width: "246px",
+    backgroundColor: "#F5CC00",
+    marginTop: "-64px",
+    marginLeft: "2px",
+    marginRight: "30px",
+  },
+  btnCustomerExited: {
+    height: "47px",
+    width: "230px",
+    clear: "both",
+    backgroundColor: "#5589D8",
+    marginTop: "-10px",
+  },
+  sectionTitle: {
+    fontSize: "37px",
+    color: "#4455BB",
+    marginTop: "60px",
   },
 }));
