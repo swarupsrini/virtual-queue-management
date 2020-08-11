@@ -16,7 +16,7 @@ import Popover from "@material-ui/core/Popover";
 import Header from "../../components/Header";
 import useStyles from "./styles";
 import "./index.css";
-import { blueDot } from "./icon";
+import { iconPerson, best } from "./icon";
 
 const STORE_SHOW_LIMIT = 20;
 
@@ -250,7 +250,7 @@ export default function StoreSearchPage() {
             typeof userLoc.long !== "undefined" && (
               <Marker
                 key={122121212}
-                icon={blueDot}
+                icon={best}
                 position={[userLoc.lat, userLoc.long]}
               ></Marker>
             )}

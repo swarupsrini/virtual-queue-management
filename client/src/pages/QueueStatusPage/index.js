@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import StoreHeader from "../../components/StoreHeader";
 import Header from "../../components/Header";
 import { Button, Grid, Paper, Typography } from "@material-ui/core";
-import useStyles from "./styles";
-import React from "react";
+import { useStyles } from "./styles";
+import { iconPerson, best } from "../StoreSearchPage/icon";
 import { REFRESH_INTERVAL, getUserStore } from "../../utils/actions";
 import useInterval from "../../utils/useInterval";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import "./index.css";
-import { blueDot } from "../StoreSearchPage/icon";
 
 function getStoreLatLong() {
   return [43.7763, -79.25802];
@@ -26,6 +25,10 @@ function getPosition() {
   });
 }
 
+function getQueueInfo(callback) {
+  callback(["ewdw", "gegre", "fwqwwqs", "dqdqs", "gete"]);
+}
+
 function getCurrentLocation(callback) {
   return getPosition().then((coords) => {
     callback({ lat: coords.latitude, long: coords.longitude });
@@ -37,11 +40,20 @@ export default function QueueStatus(props) {
 
   const [userLoc, setUserLoc] = useState({});
   const [storeInfo, setStoreInfo] = useState({});
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({ id: "ewdw" });
+  const [userQueue, setUserQueue] = useState([]);
+  const [msg, setMsg] = useState("");
 
   useInterval(async () => {
-    getUserStore(setUserInfo, setStoreInfo);
-  }, REFRESH_INTERVAL);
+    getUserStore(
+      () => {},
+      () => {}
+    );
+    getQueueInfo(setUserQueue);
+    setMsg(
+      "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
+    );
+  }, 0);
 
   useEffect(() => {
     getCurrentLocation(setUserLoc);
@@ -73,50 +85,56 @@ export default function QueueStatus(props) {
         Exit Queue
       </Button>
       <Paper className={classes.paper} elevation={3}>
-        <Grid container spacing={1} className={classes.gridContainer}>
+        <Grid container spacing={1}>
           <Grid item>
             <div className={classes.divElem}>
-              <Typography variant="h6">Forecast Wait</Typography>
-              <Typography variant="h2" className={classes.typeSubtitle}>
-                45
-              </Typography>
-              <Typography variant="h5" className={classes.typeSubtitle}>
-                min
-              </Typography>
+              <p className={classes.typeTitle}>Forecast Wait</p>
+              <p className={classes.typeSubtitle2}>45</p>
+              <p className={classes.typeSubtitle3}> min</p>
             </div>
           </Grid>
           <Grid item>
             <div className={classes.divElem}>
-              <Typography variant="h6">In Queue</Typography>
-              <Typography variant="h2" className={classes.typeSubtitle}>
-                45
-              </Typography>
-              <Typography
-                variant="h5"
-                className={classes.typeSubtitle}
-              ></Typography>
+              <p className={classes.typeTitle}>In Queue</p>
+              <p className={classes.typeSubtitle}>20</p>
             </div>
           </Grid>
           <Grid item>
             <div className={classes.divElem}>
-              <Typography variant="h6">In Store</Typography>
-              <Typography variant="h2" className={classes.typeSubtitle}>
-                45
-              </Typography>
-              <Typography
-                variant="h5"
-                className={classes.typeSubtitle}
-              ></Typography>
+              <p className={classes.typeTitle}>In Store</p>
+              <p className={classes.typeSubtitle}>45</p>
             </div>
+          </Grid>
+          <Grid item>
+            <div className={classes.divElem2}>
+              <p className={classes.typeTitle}>Your Position</p>
+            </div>
+            <Grid container spacing={1} className={classes.positionQueue}>
+              {userQueue.map((elem, index) => (
+                <Grid item key={elem}>
+                  {userInfo.id !== elem && (
+                    <div className={classes.notUserQueue}>
+                      <p className={classes.queueTextNotUser}>{index}</p>
+                    </div>
+                  )}
+                  {userInfo.id === elem && (
+                    <div className={classes.userQueue}>
+                      <p className={classes.queueTextUser}>{index}</p>
+                      <p className={classes.queueTextUser2}>You</p>
+                    </div>
+                  )}
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
         </Grid>
       </Paper>
       <Paper className={classes.paper2}>
-        <Typography variant="h5" className={classes.message}>
+        <Typography variant="h6" className={classes.message}>
           Message from store:
         </Typography>
-        <Typography variant="body1" className={classes.storeMsg}>
-          Actual Message from store
+        <Typography variant="h6" className={classes.storeMsg}>
+          {msg}
         </Typography>
       </Paper>
       <div className="miniMap">
@@ -129,7 +147,7 @@ export default function QueueStatus(props) {
             typeof userLoc.long !== "undefined" && (
               <Marker
                 key={122121212}
-                icon={blueDot}
+                icon={best}
                 position={[userLoc.lat, userLoc.long]}
               ></Marker>
             )}
