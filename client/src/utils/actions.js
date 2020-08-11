@@ -35,3 +35,15 @@ export const getUserStore = async (setUser, setStore) => {
 };
 
 export const deactivateQueueCall = async (setStore) => {};
+
+export const emptyQueueCall = async (setStore) => {
+  setStore({
+    id: 1,
+    name: "Walmart",
+    address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+    inStore: 54,
+    inQueue: 0,
+  });
+};
+
+export const customerExitedCall = async (setStore) => {};

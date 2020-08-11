@@ -7,6 +7,8 @@ import {
   REFRESH_INTERVAL,
   getUserStore,
   deactivateQueueCall,
+  emptyQueueCall,
+  customerExitedCall,
 } from "../../utils/actions";
 
 import StoreHeader from "../../components/StoreHeader";
@@ -63,7 +65,8 @@ export default function QueueDashboard(props) {
   const getStoreInQueue = () => store.inQueue;
   const getStoreInStore = () => store.inStore;
   const deactivateQueue = () => deactivateQueueCall(store, setStore);
-  const emptyQueue = () => {};
+  const emptyQueue = () => emptyQueueCall(setStore);
+  const customerExited = () => customerExitedCall(setStore);
 
   return (
     <div>
@@ -112,7 +115,13 @@ export default function QueueDashboard(props) {
               </tr>
             </td>
           </table>
+          <Button
+            className={classes.btnCustomerExited}
+            onClick={customerExited}
+            text="Customer Exited"
+          />
         </div>
+        <p className={classes.sectionTitle}>Recently Accepted</p>
       </div>
     </div>
   );

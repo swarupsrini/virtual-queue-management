@@ -74,4 +74,16 @@ export default makeStyles((theme) => ({
     marginLeft: "2px",
     marginRight: "30px",
   },
+  btnCustomerExited: {
+    height: "47px",
+    width: "230px",
+    clear: "both",
+    backgroundColor: "#5589D8",
+    marginTop: "-10px",
+  },
+  sectionTitle: {
+    fontSize: "37px",
+    color: "#4455BB",
+    marginTop: "60px",
+  },
 }));
