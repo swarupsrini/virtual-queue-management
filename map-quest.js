@@ -53,5 +53,4 @@ const getDistance = (fromLat, fromLong, toLat, toLong) => {
   });
 };
 
-// `http://www.mapquestapi.com/directions/v2/route?key=KEY&from=${},${}&to=${},${}`
 module.exports = { getLatLong, getDistance };
