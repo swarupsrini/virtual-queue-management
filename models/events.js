@@ -4,7 +4,8 @@ const mongoose = require("mongoose");
 const Event = mongoose.model("Event", {
   store_id: { type: String },
   user_id: { type: String },
-  time: { type: Date },
+  entry_time: { type: String },
+  exit_time: { type: String },
 });
 
 module.exports = { Event };

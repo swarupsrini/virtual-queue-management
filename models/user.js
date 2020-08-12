@@ -30,4 +30,6 @@ const Owner = User.discriminator(
   )
 );
 
-module.exports = { User, Employee, Owner };
+const Admin = User.discriminator("Admin", new mongoose.Schema({}, options));
+
+module.exports = { User, Employee, Owner, Admin };
