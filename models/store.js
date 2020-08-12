@@ -7,7 +7,6 @@ const Store = mongoose.model('Store', {
 	num_people_in_store: {type: Number},
 	customer_visits: {type: Array},
 	user_entry_rate: {type: Array},
-	hours: {type: Object},
 	open_time: {type: Date},
 	queue: {type: Array},
 	verified: {type: Boolean},
