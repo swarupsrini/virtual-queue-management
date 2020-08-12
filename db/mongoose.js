@@ -1,12 +1,17 @@
 /* This module will hold our connection to 
    our mongo server through the Mongoose API.
    We will access the connection in our express server. */
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 /* Connnect to our database */
 // Get the URI of the local database, or the one specified on deployment.
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/QueueAPI'
+const mongoURI =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/QueueAPI";
 
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
 
-module.exports = { mongoose }  // Export the active connection.
+module.exports = { mongoose }; // Export the active connection.

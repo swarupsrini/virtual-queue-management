@@ -1,7 +1,7 @@
 /* Student mongoose model */
 const mongoose = require("mongoose");
 
-const Store = mongoose.model("Store", {
+const Event = mongoose.model("Event", {
   name: { type: String },
   address: { type: String },
   open_time: { type: Date },
