@@ -93,6 +93,8 @@ app.post("/newStore", (req, res) => {
     verified: req.body.verified,
     owner_id: req.body.owner_id,
     employee_ids: [],
+    lat: "",
+    long: "",
   });
 
   // Save the user
