@@ -93,6 +93,8 @@ app.post("/newStore", (req, res) => {
     verified: req.body.verified,
     owner_id: req.body.owner_id,
     employee_ids: [],
+    lat: -1,
+    long: -1,
   });
 
   getLatLong(req.body.address)
@@ -110,7 +112,14 @@ app.post("/newStore", (req, res) => {
       );
     })
     .catch((error) => {
-      log(error);
+      store.save().then(
+        (store) => {
+          res.send(store);
+        },
+        (error) => {
+          res.status(400).send(error); // 400 for bad request
+        }
+      );
     });
 });
 
