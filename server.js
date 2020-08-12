@@ -13,7 +13,7 @@ const { User } = require("./models/user");
 const { Employee } = require("./models/user");
 const { Owner } = require("./models/user");
 const { Event } = require("./models/events");
-
+const { getLatLong } = require("./map-quest");
 const { ObjectID } = require("mongodb");
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
@@ -93,19 +93,25 @@ app.post("/newStore", (req, res) => {
     verified: req.body.verified,
     owner_id: req.body.owner_id,
     employee_ids: [],
-    lat: "",
-    long: "",
   });
 
-  // Save the user
-  store.save().then(
-    (store) => {
-      res.send(store);
-    },
-    (error) => {
-      res.status(400).send(error); // 400 for bad request
-    }
-  );
+  getLatLong(req.body.address)
+    .then((result) => {
+      store.lat = result.lat;
+      store.long = result.long;
+
+      store.save().then(
+        (store) => {
+          res.send(store);
+        },
+        (error) => {
+          res.status(400).send(error); // 400 for bad request
+        }
+      );
+    })
+    .catch((error) => {
+      log(error);
+    });
 });
 
 // All routes other than above will go to index.html
