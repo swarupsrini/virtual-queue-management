@@ -31,7 +31,6 @@ export const getUserStore = async (setUser, setStore) => {
     name: "Walmart",
     address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
     in_store: 54,
-    in_queue: 10,
     open_time:new Date(0,0,0,9),
     close_time:new Date(0,0,0,20),
     customer_visits: [

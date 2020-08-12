@@ -31,7 +31,7 @@ export default makeStyles({
   },
   frame: {
     boxShadow: "0px 0px 3px #9E9E9E",
-    marginTop:"30px",
+    marginTop:"40px",
     marginBottom:"50px"
   },
   line:{
