@@ -7,6 +7,7 @@ const Store = mongoose.model("Store", {
   verified: { type: Boolean },
   owner_id: { type: String },
   employee_ids: { type: Array },
+  in_store: { type: Number },
 });
 
 module.exports = { Store };
