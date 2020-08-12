@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Paper } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 
@@ -68,6 +69,60 @@ export default function QueueDashboard(props) {
   const emptyQueue = () => emptyQueueCall(setStore);
   const customerExited = () => customerExitedCall(setStore);
 
+  const [recent, setRecent] = useState({
+    name: "Eryk Spence",
+    others: 5,
+    time: 10,
+    notified: true,
+  });
+  const [current, setCurrent] = useState([
+    {
+      name: "Swarup Srinivasan",
+      others: 2,
+      time: 10,
+      notified: true,
+    },
+    {
+      name: "Hemant Bhanot",
+      others: 0,
+      time: 20,
+      notified: false,
+    },
+    {
+      name: "Bob",
+      others: 100,
+      time: 20,
+      notified: false,
+    },
+  ]);
+
+  const removeFromCurrent = (item) =>
+    setCurrent(
+      current.filter((x) => JSON.stringify(x) !== JSON.stringify(item))
+    );
+
+  const undo = () => {
+    setCurrent((old) => [recent, ...current]);
+    setRecent({});
+  };
+  const scanQr = (item, i) => {};
+  const accept = (item, i) => {
+    setRecent(item);
+    removeFromCurrent(item);
+  };
+  const reject = (item, i) => {
+    removeFromCurrent(item);
+  };
+  const notify = (item, i) => {
+    setCurrent(
+      current.map((x) =>
+        JSON.stringify(x) === JSON.stringify(item)
+          ? { ...x, notified: true }
+          : x
+      )
+    );
+  };
+
   return (
     <div>
       <Header />
@@ -90,30 +145,34 @@ export default function QueueDashboard(props) {
             subtitle="In queue"
           ></InfoCard>
           <table>
-            <td>
-              <NavLink to={`/store-analytics/${getStoreId()}`}>
-                <Button
-                  className={classes.btnStoreAnalytics}
-                  text="Store Analytics"
-                />
-              </NavLink>
-            </td>
-            <td>
+            <tbody>
               <tr>
-                <Button
-                  className={classes.btnDeactivateQueue}
-                  onClick={deactivateQueue}
-                  text="Deactivate Queue"
-                />
+                <td rowSpan="2">
+                  <NavLink to={`/store-analytics/${getStoreId()}`}>
+                    <Button
+                      className={classes.btnStoreAnalytics}
+                      text="Store Analytics"
+                    />
+                  </NavLink>
+                </td>
+                <td>
+                  <Button
+                    className={classes.btnDeactivateQueue}
+                    onClick={deactivateQueue}
+                    text="Deactivate Queue"
+                  />
+                </td>
               </tr>
               <tr>
-                <Button
-                  className={classes.btnEmptyQueue}
-                  onClick={emptyQueue}
-                  text="Empty Queue"
-                />
+                <td>
+                  <Button
+                    className={classes.btnEmptyQueue}
+                    onClick={emptyQueue}
+                    text="Empty Queue"
+                  />
+                </td>
               </tr>
-            </td>
+            </tbody>
           </table>
           <Button
             className={classes.btnCustomerExited}
@@ -121,7 +180,68 @@ export default function QueueDashboard(props) {
             text="Customer Exited"
           />
         </div>
-        <p className={classes.sectionTitle}>Recently Accepted</p>
+        <p className={classes.recentSectionTitle}>Recently Accepted</p>
+        {recent.name !== undefined && (
+          <Paper className={classes.recentSection}>
+            <p className={classes.recentTitle}>
+              {recent.name}, {recent.others} others
+            </p>
+            <Button className={classes.undo} onClick={undo} text="Undo" />
+          </Paper>
+        )}
+        <div className={classes.currentWaitingTitleBox}>
+          <p className={classes.currentSectionTitle}>Currently Waiting</p>
+          <Button
+            className={classes.btnSendAnnouncement}
+            onClick={null}
+            text="Send Announcement"
+          />
+        </div>
+        <Paper className={classes.currentSection}>
+          {current.map((item, i) => (
+            <div key={"currentWait" + i} className={classes.currentMember}>
+              <div className={classes.currentLeftStuff}>
+                <p className={classes.currentNumber}>{i + 1}</p>
+                <div className={classes.currentInfo}>
+                  <p className={classes.currentTitle}>
+                    {item.name}, {item.others} others
+                  </p>
+                  <p className={classes.currentSubtitle}>
+                    {item.notified
+                      ? `Notified ${item.time} minutes ago`
+                      : `Waiting for ${item.time} minutes`}
+                  </p>
+                </div>
+              </div>
+              <div className={classes.currentRightStuff}>
+                <Button
+                  className={classes.btnScanQr}
+                  onClick={() => scanQr(item, i)}
+                  text="Scan QR"
+                />
+                {item.notified ? (
+                  <Button
+                    className={classes.btnAccept}
+                    onClick={() => accept(item, i)}
+                    text="Accept"
+                  />
+                ) : (
+                  <Button
+                    className={classes.btnNotify}
+                    onClick={() => notify(item, i)}
+                    text="Notify"
+                  />
+                )}
+
+                <Button
+                  className={classes.btnReject}
+                  onClick={() => reject(item, i)}
+                  text="Reject"
+                />
+              </div>
+            </div>
+          ))}
+        </Paper>
       </div>
     </div>
   );

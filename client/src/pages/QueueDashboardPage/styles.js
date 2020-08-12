@@ -60,17 +60,16 @@ export default makeStyles((theme) => ({
     marginLeft: "50px",
   },
   btnDeactivateQueue: {
-    height: "62px",
+    height: "63px",
     width: "246px",
     backgroundColor: "#E86B30",
-    marginTop: "-132px",
+    marginBottom: "4px",
     marginLeft: "2px",
   },
   btnEmptyQueue: {
-    height: "62px",
+    height: "64px",
     width: "246px",
     backgroundColor: "#F5CC00",
-    marginTop: "-64px",
     marginLeft: "2px",
     marginRight: "30px",
   },
@@ -81,9 +80,97 @@ export default makeStyles((theme) => ({
     backgroundColor: "#5589D8",
     marginTop: "-10px",
   },
-  sectionTitle: {
+  recentSectionTitle: {
     fontSize: "37px",
     color: "#4455BB",
     marginTop: "60px",
+    marginBottom: "10px",
+  },
+  recentSection: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  recentTitle: {
+    fontSize: "30px",
+    marginLeft: "93px",
+  },
+  undo: {
+    height: "50px",
+    width: "180px",
+    backgroundColor: "#F5CC00",
+    marginRight: "50px",
+  },
+  currentWaitingTitleBox: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  currentSectionTitle: {
+    fontSize: "37px",
+  },
+  btnSendAnnouncement: {
+    height: "50px",
+    width: "275px",
+    backgroundColor: "#5589D8",
+    marginLeft: "30px",
+  },
+  currentSection: {},
+  currentMember: {
+    height: "100px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  currentNumber: {
+    fontSize: "58px",
+    marginLeft: "30px",
+  },
+  currentLeftStuff: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  currentInfo: {
+    marginLeft: "30px",
+  },
+  currentTitle: {
+    fontSize: "30px",
+    margin: "0px",
+  },
+  currentSubtitle: {
+    fontSize: "18px",
+    margin: "0px",
+    opacity: 0.5,
+    fontStyle: "italic",
+  },
+  currentRightStuff: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  btnScanQr: {
+    height: "50px",
+    width: "175px",
+    backgroundColor: "#5589D8",
+    marginRight: "20px",
+  },
+  btnAccept: {
+    height: "50px",
+    width: "175px",
+    backgroundColor: "#A8E071",
+    marginRight: "20px",
+  },
+  btnNotify: {
+    height: "50px",
+    width: "175px",
+    backgroundColor: "#F5CC00",
+    marginRight: "20px",
+  },
+  btnReject: {
+    height: "50px",
+    width: "175px",
+    backgroundColor: "#E86B30",
+    marginRight: "20px",
   },
 }));
