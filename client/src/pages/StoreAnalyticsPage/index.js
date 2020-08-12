@@ -72,7 +72,7 @@ export default function StoreAnalytics(props) {
   const address = getStoreAdd(storeId);
 
   useInterval(async () => {
-    updateNumVisitsToday(setUser, setStore)
+    //updateNumVisitsToday(setUser, setStore)
   }, 3000);
 
   return (
