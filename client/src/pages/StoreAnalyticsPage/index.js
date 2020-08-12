@@ -8,7 +8,7 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
 import useInterval from "../../utils/useInterval";
-import { getUserStore } from "../../utils/actions";
+import { REFRESH_INTERVAL,getUserStore, getNumVisitsToday } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
 let num_visits_today = 0
@@ -67,7 +67,9 @@ export default function StoreAnalytics(props) {
     inQueue: 10,
     num_visits_today:0,
     customer_visits: [
-      {user_id: "1001", time_of_entry: new Date(2020, 8, 11)}
+      {user_id: "1001", time_of_entry: new Date(2020,7,12,5)},
+      {user_id: "1001", time_of_entry: new Date(2020,7,12,4)},
+      {user_id: "1001", time_of_entry: new Date(2020,7,11,4)},
     ]
   })
   const [viewPage, setViewPage] = useState(null);
@@ -84,20 +86,8 @@ export default function StoreAnalytics(props) {
 
   useInterval(async () => {
     getUserStore(setUser, setStore)
-    const dayStart = new Date()
-    dayStart.setHours(0)
-    dayStart.setMinutes(0)
-    dayStart.setSeconds(0)
-
-    let num_visits_today = 0
-    while(num_visits_today < store.customer_visits.length &&
-      dayStart < store.customer_visits[num_visits_today].time_of_entry){
-      num_visits_today+=1
-    }
-    store.num_visits_today = num_visits_today
-    setStore(store)
-    //updateNumVisitsToday(setUser, setStore)
-  }, 3000);
+    getNumVisitsToday(store, setStore)
+  }, REFRESH_INTERVAL);
 
   return (
     <div className={classes.root}>
