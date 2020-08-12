@@ -8,14 +8,11 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
 import useInterval from "../../utils/useInterval";
-import { REFRESH_INTERVAL,getUserStore, getNumVisitsToday, getAvgAdmissions, getLeastBusyTime, getMostBusyTime } from "../../utils/actions";
+import { REFRESH_INTERVAL,getUserStore, getNumVisitsToday, getAvgAdmissions, getLeastBusyTime, getMostBusyTime, getQueue, getForeCastWaitTime, updateStore } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
 let num_visits_today = 0
 
-function getQueue(storeId) {
-  return [2, 1, 1, 3];
-}
 function getStoreCount(storeId) {
   return 0;
 }
@@ -65,20 +62,25 @@ export default function StoreAnalytics(props) {
       address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
       in_store: 54,
       in_queue:1,
-      open_time:3,
-      close_time:10,
+      open_time:3,//new Date(0,0,0,3),
+      close_time:10,//new Date(0,0,0,10),
       num_visits_today:0,
+      least_busy_time: 7,
+      queue:[],
+      forecast_wait_time:3,
       customer_visits: [
-        {user_id: "1001", entry_time: new Date(2020,7,12,5)},
-        {user_id: "1001", entry_time: new Date(2020,7,12,4)},
-        {user_id: "1001", entry_time: new Date(2020,7,11,4)},
+        {user_id: "1001", exit_time: ""},
+        {user_id: "1001", exit_time: ""},
+        {user_id: "1001", exit_time: ""},
+        {user_id: "1001", exit_time: new Date(2020,7,12,5)},
+        {user_id: "1001", exit_time: new Date(2020,7,12,4)},
+        {user_id: "1001", exit_time: new Date(2020,7,11,4)},
       ]
     }
   )
   const [viewPage, setViewPage] = useState(null);
 
   const storeId = 0;
-  const queue = getQueue(storeId);
   const storeCount = getStoreCount(storeId);
   const avgShoppingLength = getAvgShoppingLength(storeId);
   const storeCapacity = getStoreCapacity(storeId);
@@ -87,14 +89,9 @@ export default function StoreAnalytics(props) {
   const storeName = getStoreName(storeId);
   const address = getStoreAdd(storeId);
 
-
   useInterval(async () => {
     getUserStore(setUser, setStore)
-    getAvgAdmissions(store, setStore)
-    getNumVisitsToday(store, setStore)
-    getAvgAdmissions(store, setStore)
-    getLeastBusyTime(store, setStore)
-    getMostBusyTime(store, setStore)
+    updateStore(store,setStore)
     console.log(store)
   }, REFRESH_INTERVAL);
 
@@ -128,7 +125,7 @@ export default function StoreAnalytics(props) {
         <Grid className={classes.datacards} container spacing={6} >
           <div style={{width:"4px"}}></div>
           <Grid item>
-            <DataCard title="Forecast wait" number="45" suffix="min"></DataCard>
+            <DataCard title="Forecast wait" number={store.forecast_wait_time} suffix="min"></DataCard>
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
@@ -144,11 +141,11 @@ export default function StoreAnalytics(props) {
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Least busy time" number="10" suffix="am"></DataCard>
+            <DataCard title="Least busy time" number={store.least_busy_time} suffix="am"></DataCard>
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Most busy time" number="10" suffix="am"></DataCard>
+            <DataCard title="Most busy time" number={store.most_busy_time} suffix="am"></DataCard>
           </Grid>
           <div style={{width:"4px"}}></div>
         </Grid>

@@ -1,6 +1,7 @@
 /* Utility functions to help with back-end calls and global information. */
 
 export const REFRESH_INTERVAL = 3000;
+export const AVG_WAIT_TIME = 3;
 
 export const login = (setUser, data) => {
   // call backend to login, get the user (if valid) and call the setUser
@@ -58,8 +59,8 @@ export const getNumVisitsToday = async (store, setStore) => {
   dayStart.setSeconds(0)
 
   let num_visits_today = 0
-  while(num_visits_today < store.customer_visits.length &&
-    dayStart < store.customer_visits[num_visits_today].entry_time){
+  while(num_visits_today + store.queue.length < store.customer_visits.length &&
+    dayStart < store.customer_visits[num_visits_today + store.queue.length].exit_time){
     num_visits_today+=1
   }
   store.num_visits_today = num_visits_today
@@ -76,8 +77,8 @@ export const getAvgAdmissions = async (store, setStore) => {
   let last_day = 0;
   let last_month = 0;
   let last_year = 0;
-  for(let i=0;i<store.customer_visits.length;i++){
-    const visit = store.customer_visits[i].entry_time
+  for(let i=store.queue.length;i<store.customer_visits.length;i++){
+    const visit = store.customer_visits[i].exit_time
     const visit_hour = visit.getHours()
     
     if(visit.getDay() != last_day || visit.getMonth() != last_month || visit.getYear() != last_year){
@@ -124,7 +125,27 @@ export const getMostBusyTime = async (store, setStore) => {
   setStore(store)
 }
 
-export const getForeCastWaitTime = async (store, setStore) => {
-  store.forecast_wait_time = 20
+export const getQueue = async (store, setStore) => {
+  let i = 0
+  while(i < store.customer_visits.length && store.customer_visits[i].exit_time == ""){
+    i++
+  }
+  store.queue = store.customer_visits.slice(0,i)
+  store.in_queue = store.queue.length
   setStore(store)
+}
+
+export const getForeCastWaitTime = async (store, setStore) => {
+  const queue_size = store.queue.length
+  store.forecast_wait_time = queue_size * AVG_WAIT_TIME
+  setStore(store)
+}
+
+export const updateStore = async (store, setStore) => {
+  getQueue(store, setStore)
+  getAvgAdmissions(store, setStore)
+  getNumVisitsToday(store, setStore)
+  getLeastBusyTime(store, setStore)
+  getMostBusyTime(store, setStore)
+  getForeCastWaitTime(store, setStore)
 }
