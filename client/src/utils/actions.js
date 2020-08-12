@@ -26,16 +26,30 @@ export const signup = (setUser, data) => {
 
 export const getUserStore = async (setUser, setStore) => {
   setUser({ username: "hello" });
-  setStore({
+  const store = {
     id: 1,
     name: "Walmart",
     address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-    inStore: 54,
-    inQueue: 10,
+    in_store: 54,
+    in_queue: 10,
+    open_time:new Date(0,0,0,9),
+    close_time:new Date(0,0,0,20),
     customer_visits: [
-      {user_id: "1001", entry_time: new Date(2020, 8, 11)}
+      {user_id: "1001", entry_time: new Date(2020, 7, 12, 18), exit_time: ""},
+      {user_id: "1001", entry_time: new Date(2020, 7, 12, 17), exit_time: ""},
+      {user_id: "1001", entry_time: new Date(2020, 7, 12, 16), exit_time: ""},
+      {user_id: "1001", entry_time: new Date(2020, 7, 12, 15), exit_time: new Date(2020,7,12,15,10)},
+      {user_id: "1001", entry_time: new Date(2020, 7, 12, 14), exit_time: new Date(2020,7,12,14,10)},
+      {user_id: "1001", entry_time: new Date(2020, 7, 11, 13), exit_time: new Date(2020,7,11,13,10)},
     ]
-  });
+  }
+  getQueue(store, ()=>{})
+  getAvgAdmissions(store, ()=>{})
+  getNumVisitsToday(store, ()=>{})
+  getLeastBusyTime(store, ()=>{})
+  getMostBusyTime(store, ()=>{})
+  getForeCastWaitTime(store, ()=>{})
+  setStore(store);
 };
 
 export const deactivateQueueCall = async (setStore) => {};
@@ -68,18 +82,14 @@ export const getNumVisitsToday = async (store, setStore) => {
 };
 
 export const getAvgAdmissions = async (store, setStore) => {
-  //Event.findById(store.id).then((store) => {console.log(store)}
-  const hour_to_num_admissions = {}
-  for(let i=store.open_time;i<store.close_time;i++){
-    hour_to_num_admissions[i] = 0
-  }
+  const num_admissions = new Array(store.close_time.getHours() - store.open_time.getHours()).fill(0)
+
   let num_days = 0
   let last_day = 0;
   let last_month = 0;
   let last_year = 0;
   for(let i=store.queue.length;i<store.customer_visits.length;i++){
     const visit = store.customer_visits[i].exit_time
-    const visit_hour = visit.getHours()
     
     if(visit.getDay() != last_day || visit.getMonth() != last_month || visit.getYear() != last_year){
       last_day = visit.getDay()
@@ -87,41 +97,21 @@ export const getAvgAdmissions = async (store, setStore) => {
       last_year = visit.getYear()
       num_days+=1
     }
-    hour_to_num_admissions[visit_hour] += 1
+    num_admissions[visit.getHours() - store.open_time.getHours()] += 1
   }
-  for(let i=store.open_time;i<store.close_time;i++){
-    hour_to_num_admissions[i] = hour_to_num_admissions[i]/num_days
-  }
-
-  store.avg_num_admissions = hour_to_num_admissions
+  store.avg_num_admissions = num_admissions.map(n => n / num_days)
   setStore(store)
 };
 
 export const getLeastBusyTime = async (store, setStore) => {
-  let least_busy_time = null;
-  let least_num_admissions = null;
-  for(let i=store.open_time;i<store.close_time;i++){
-    const num_admissions = store.avg_num_admissions[i]
-    if(least_busy_time == null || num_admissions < least_num_admissions){
-      least_busy_time = i
-      least_num_admissions = num_admissions
-    }
-  }
-  store.least_busy_time = least_busy_time
+  const min_num_admissions = Math.min.apply(null, store.avg_num_admissions);
+  store.least_busy_time = store.avg_num_admissions.indexOf(min_num_admissions) + store.open_time.getHours()
   setStore(store)
 }
 
 export const getMostBusyTime = async (store, setStore) => {
-  let most_busy_time = null;
-  let most_num_admissions = null;
-  for(let i=store.open_time;i<store.close_time;i++){
-    const num_admissions = store.avg_num_admissions[i]
-    if(most_busy_time == null || num_admissions > most_num_admissions){
-      most_busy_time = i
-      most_num_admissions = num_admissions
-    }
-  }
-  store.most_busy_time = most_busy_time
+  const max_num_admissions = Math.max.apply(null, store.avg_num_admissions);
+  store.most_busy_time = store.avg_num_admissions.indexOf(max_num_admissions) + store.open_time.getHours()
   setStore(store)
 }
 
@@ -139,13 +129,4 @@ export const getForeCastWaitTime = async (store, setStore) => {
   const queue_size = store.queue.length
   store.forecast_wait_time = queue_size * AVG_WAIT_TIME
   setStore(store)
-}
-
-export const updateStore = async (store, setStore) => {
-  getQueue(store, setStore)
-  getAvgAdmissions(store, setStore)
-  getNumVisitsToday(store, setStore)
-  getLeastBusyTime(store, setStore)
-  getMostBusyTime(store, setStore)
-  getForeCastWaitTime(store, setStore)
 }

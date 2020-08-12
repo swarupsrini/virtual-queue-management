@@ -65,7 +65,8 @@ export default function StoreAnalytics(props) {
       open_time:3,//new Date(0,0,0,3),
       close_time:10,//new Date(0,0,0,10),
       num_visits_today:0,
-      least_busy_time: 7,
+      least_busy_time: 3,
+      most_busy_time: 4,
       queue:[],
       forecast_wait_time:3,
       customer_visits: [
@@ -91,7 +92,7 @@ export default function StoreAnalytics(props) {
 
   useInterval(async () => {
     getUserStore(setUser, setStore)
-    updateStore(store,setStore)
+    //updateStore(store,setStore)
     console.log(store)
   }, REFRESH_INTERVAL);
 
@@ -141,11 +142,11 @@ export default function StoreAnalytics(props) {
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Least busy time" number={store.least_busy_time} suffix="am"></DataCard>
+            <DataCard title="Least busy time" number={store.least_busy_time%12} suffix={(store.least_busy_time < 12) ? "am" : "pm"}></DataCard>
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Most busy time" number={store.most_busy_time} suffix="am"></DataCard>
+            <DataCard title="Most busy time" number={store.most_busy_time%12} suffix={(store.most_busy_time < 12) ? "am" : "pm"}></DataCard>
           </Grid>
           <div style={{width:"4px"}}></div>
         </Grid>
