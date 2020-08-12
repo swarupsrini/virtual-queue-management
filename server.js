@@ -12,6 +12,8 @@ const { Store } = require("./models/store");
 const { User } = require("./models/user");
 const { Employee } = require("./models/user");
 const { Owner } = require("./models/user");
+const { Event } = require("./models/events");
+
 const { ObjectID } = require("mongodb");
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
