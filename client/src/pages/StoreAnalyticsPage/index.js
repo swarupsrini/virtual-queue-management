@@ -8,7 +8,7 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
 import useInterval from "../../utils/useInterval";
-import { getUserStore } from "../../utils/actions";
+import { REFRESH_INTERVAL,getUserStore, getNumVisitsToday } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
 let num_visits_today = 0
@@ -39,6 +39,7 @@ function getStoreAdd(storeId) {
 }
 
 function updateNumVisitsToday(setUser, setStore){
+  /*
   getUserStore(setUser, setStore).then((store) => {
     const dayStart = new Date()
     dayStart.setHours(0)
@@ -52,13 +53,27 @@ function updateNumVisitsToday(setUser, setStore){
     }
     store.num_visits_today = num_visits_today
     setStore(store)
-  })
+  })*/
 }
 
 export default function StoreAnalytics(props) {
   const classes = useStyles();
   const [user, setUser] = useState({})
-  const [store, setStore] = useState({num_visits_today:0})
+  const [store, setStore] = useState(
+    {
+      id: 1,
+      name: "Walmart",
+      address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+      inStore: 54,
+      inQueue:1,
+      num_visits_today:0,
+      customer_visits: [
+        {user_id: "1001", time_of_entry: new Date(2020,7,12,5)},
+        {user_id: "1001", time_of_entry: new Date(2020,7,12,4)},
+        {user_id: "1001", time_of_entry: new Date(2020,7,11,4)},
+      ]
+    }
+  )
   const [viewPage, setViewPage] = useState(null);
 
   const storeId = 0;
@@ -72,11 +87,12 @@ export default function StoreAnalytics(props) {
   const address = getStoreAdd(storeId);
 
   useInterval(async () => {
-    //updateNumVisitsToday(setUser, setStore)
-  }, 3000);
+    getUserStore(setUser, setStore)
+    getNumVisitsToday(store, setStore)
+  }, REFRESH_INTERVAL);
 
   return (
-    <div>
+    <div className={classes.root}>
       {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
       <StoreHeader
@@ -109,11 +125,11 @@ export default function StoreAnalytics(props) {
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="In queue" number="45" suffix=""></DataCard>
+            <DataCard title="In queue" number={store.inQueue} suffix=""></DataCard>
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="In store" number="20" suffix=""></DataCard>
+            <DataCard title="In store" number={store.inStore} suffix=""></DataCard>
           </Grid>
           <div className={classes.line}></div>
           <Grid item>
