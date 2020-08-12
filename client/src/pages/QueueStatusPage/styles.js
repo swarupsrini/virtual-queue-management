@@ -3,6 +3,11 @@ import L from "leaflet";
 import ExtraMarkers from "leaflet-extra-markers";
 
 const useStyles = makeStyles({
+  root: {
+    marginLeft: "30px",
+    marginRight: "30px",
+    marginTop: "10px",
+  },
   exitQueue: {
     backgroundColor: "rgba(232, 107, 48, 1.0)",
     color: "white",
@@ -16,12 +21,11 @@ const useStyles = makeStyles({
     right: "230px",
   },
   paper: {
-    marginLeft: "30px",
+    marginTop: "20px",
     marginRight: "30px",
     height: "135px",
   },
   paper2: {
-    marginLeft: "30px",
     marginTop: "20px",
     marginRight: "30px",
     height: "75px",
