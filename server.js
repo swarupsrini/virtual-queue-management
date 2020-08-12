@@ -87,19 +87,18 @@ app.post("/newEmployee", (req, res) => {
 
 app.post("/newStore", (req, res) => {
   // Create a new Store
-  const user = new Store({
-    name: { type: String },
-    address: { type: String },
-    open_time: { type: Date },
-    verified: { type: Boolean },
-    owner_id: "",
+  const store = new Store({
+    name: req.body.name,
+    address: req.body.address,
+    verified: req.body.verified,
+    owner_id: req.body.owner_id,
     employee_ids: [],
   });
 
   // Save the user
-  user.save().then(
-    (user) => {
-      res.send(user);
+  store.save().then(
+    (store) => {
+      res.send(store);
     },
     (error) => {
       res.status(400).send(error); // 400 for bad request
