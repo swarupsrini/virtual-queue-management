@@ -39,6 +39,7 @@ function getStoreAdd(storeId) {
 }
 
 function updateNumVisitsToday(setUser, setStore){
+  /*
   getUserStore(setUser, setStore).then((store) => {
     const dayStart = new Date()
     dayStart.setHours(0)
@@ -52,13 +53,23 @@ function updateNumVisitsToday(setUser, setStore){
     }
     store.num_visits_today = num_visits_today
     setStore(store)
-  })
+  })*/
 }
 
 export default function StoreAnalytics(props) {
   const classes = useStyles();
   const [user, setUser] = useState({})
-  const [store, setStore] = useState({num_visits_today:0})
+  const [store, setStore] = useState({
+    id: 1,
+    name: "Walmart",
+    address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+    inStore: 54,
+    inQueue: 10,
+    num_visits_today:0,
+    customer_visits: [
+      {user_id: "1001", time_of_entry: new Date(2020, 8, 11)}
+    ]
+  })
   const [viewPage, setViewPage] = useState(null);
 
   const storeId = 0;
@@ -72,11 +83,24 @@ export default function StoreAnalytics(props) {
   const address = getStoreAdd(storeId);
 
   useInterval(async () => {
+    getUserStore(setUser, setStore)
+    const dayStart = new Date()
+    dayStart.setHours(0)
+    dayStart.setMinutes(0)
+    dayStart.setSeconds(0)
+
+    let num_visits_today = 0
+    while(num_visits_today < store.customer_visits.length &&
+      dayStart < store.customer_visits[num_visits_today].time_of_entry){
+      num_visits_today+=1
+    }
+    store.num_visits_today = num_visits_today
+    setStore(store)
     //updateNumVisitsToday(setUser, setStore)
   }, 3000);
 
   return (
-    <div>
+    <div className={classes.root}>
       {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
       <StoreHeader

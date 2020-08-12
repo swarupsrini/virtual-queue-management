@@ -25,12 +25,13 @@ export default makeStyles({
   },
   linegraph: {
     boxShadow: "0px 0px 3px #9E9E9E",
-    margin: "30px",
+    marginTop:"30px",
+    marginBottom:"30px",
     height: "100%"
   },
   frame: {
     boxShadow: "0px 0px 3px #9E9E9E",
-    margin:"30px",
+    marginTop:"30px",
     marginBottom:"50px"
   },
   line:{
@@ -55,4 +56,9 @@ export default makeStyles({
     textAlign: "center",
     borderRight: "2px solid lightgray",
   },
+  root: {
+    marginLeft: "30px",
+    marginRight: "30px",
+    marginTop: "10px"
+  }
 });
