@@ -13,6 +13,7 @@ import {
 import AdminCard from "../../components/AdminCard";
 import Header from "../../components/Header";
 import Search from "../../components/Search";
+import UserSettingsPopup from "../../components/UserSettingsPopup";
 import useStyles from "./styles";
 
 function getStores() {
@@ -85,25 +86,26 @@ function getUsers() {
   ];
 }
 
-function editStoreData(store) {
-  // Backend call update the admin's currently editing state
-}
-
-function editUserData(user) {
-  // Backend call update the admin's currently editing state
-}
-
 export default function AdminPanelPage(props) {
   const [anchor, setAnchor] = useState(null);
   const [text, setText] = useState("");
   const [showUsers, setShowUsers] = useState(true);
   const [showStores, setShowStores] = useState(true);
 
+  const [showUserSettings, setShowUserSettings] = useState(false);
+  const [showStoreSettings, setShowStoreSettings] = useState(false);
+
   const [users, setUsers] = useState(getUsers());
   const [stores, setStores] = useState(getStores());
   const classes = useStyles();
 
-  useEffect(() => {}, [showUsers, showStores]);
+  // useEffect(() => {}, [showUsers, showStores]);
+
+  function editStoreData(store) {}
+
+  function editUserData(user) {
+    setShowUserSettings(true);
+  }
 
   function searchBarClicked(query) {
     if (query === "") {
@@ -157,6 +159,9 @@ export default function AdminPanelPage(props) {
   return (
     <div>
       <Header></Header>
+      {showUserSettings && (
+        <UserSettingsPopup close={() => setShowUserSettings(false)} />
+      )}
       <div className={classes.search}>
         <Search
           filterClick={(e) => {
