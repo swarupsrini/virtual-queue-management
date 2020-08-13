@@ -163,20 +163,32 @@ export const getForeCastWaitTime = async (store, setStore) => {
 
 export const getAllStores = (callback) => {
   const url = "http://localhost:5000/getAllStores";
-  const dummy = [
-    [20, 5],
-    [5, 100],
-    [23, 32.5],
-    [10, 1],
-  ];
-
+  const dummy = [5, 100, 32.5, 1];
   fetch(url)
     .then((res) => res.json())
     .then((res) => {
       res.map((store, i) => {
-        store.distance = dummy[i][0];
-        store.wait = dummy[i][1];
+        store.wait = dummy[i];
       });
+      callback(res);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const getDistance = (
+  callback,
+  userLat,
+  userLong,
+  storeLat,
+  storeLong
+) => {
+  const url = `http://localhost:5000/getDistance?fromLat=${userLat}&fromLong=${userLong}&toLat=${storeLat}&toLong=${storeLong}`;
+
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
       callback(res);
     })
     .catch((error) => {

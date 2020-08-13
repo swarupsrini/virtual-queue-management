@@ -141,16 +141,16 @@ app.post("/newStore", (req, res) => {
 
 app.get("/getDistance", (req, res) => {
   getDistance(
-    req.body.fromLat,
-    req.body.fromLong,
-    req.body.toLat,
-    req.body.toLong
+    req.query.fromLat,
+    req.query.fromLong,
+    req.query.toLat,
+    req.query.toLong
   )
     .then((result) => {
       res.send(result);
     })
     .catch((error) => {
-      log(error);
+      res.send(JSON.stringify({ dist: 0 }));
     });
 });
 

@@ -17,10 +17,10 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import "./index.css";
 import { iconPerson, best } from "./icon";
-import { getAllStores } from "../../utils/actions";
-
+import { getAllStores, getDistance } from "../../utils/actions";
+import { getCurLocation } from "../../utils/location";
 const STORE_SHOW_LIMIT = 20;
-
+const log = console.log;
 function joinedQueue(storeInfo) {
   // there will be a backend call to update user's queue status
 }
@@ -31,44 +31,12 @@ function updateUserFavStores(storeID, value) {
   // there will be a backend call to update user's favourited stores
 }
 
-function getDistance(storeID) {
-  // Get distance from current location to the store through external API
-  // Code below return mock distances based on store names
-
-  // if (storeName.includes("Walmart")) {
-  //   return 20;
-  // } else if (storeName.includes("No Frills")) {
-  //   return 100;
-  // } else {
-  //   return 30;
-  // }
-  return 20;
-}
-
 function getUserInfo() {
   // Get user info from server
   // code below requires backend call
   return {
     fav: [0, 2],
   };
-}
-
-function getPosition() {
-  return new Promise((res) => {
-    navigator.geolocation.getCurrentPosition(
-      (result) => {
-        res(result.coords);
-      },
-      () => {},
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-    );
-  });
-}
-
-function getCurrentLocation(callback) {
-  return getPosition().then((coords) => {
-    callback({ lat: coords.latitude, long: coords.longitude });
-  });
 }
 
 export default function StoreSearchPage() {
@@ -88,14 +56,24 @@ export default function StoreSearchPage() {
   const [analyticsPage, setAnalyticsPage] = useState(null);
 
   useEffect(() => {
-    getCurrentLocation(setUserLoc);
-  }, [userLoc]);
-
-  useEffect(() => {
-    getAllStores((stores) => {
-      setStores(stores);
-      sort(stores);
-      if (fav) setStores(displayFav(stores));
+    getCurLocation((res) => {
+      setUserLoc(res);
+      getAllStores((stores) => {
+        stores.map((store) => {
+          getDistance(
+            (result) => {
+              store.distance = result.dist;
+              setStores(stores);
+              sort(stores);
+              if (fav) setStores(displayFav(stores));
+            },
+            res.lat,
+            res.long,
+            store.lat,
+            store.long
+          );
+        });
+      });
     });
   }, [waitTime, fav]);
 
@@ -157,24 +135,28 @@ export default function StoreSearchPage() {
 
   function filter(query) {
     let result = [];
-    getAllStores((res) => {
-      const temp = res;
-      if (query === "") result = temp;
-      else {
-        for (let i = 0; i < temp.length; i++) {
-          if (temp[i].name.toLowerCase().includes(query.toLowerCase())) {
-            result.push(temp[i]);
-          } else if (temp[i]._id === query) {
-            result.push(temp[i]);
-            break;
+    getAllStores(
+      (res) => {
+        const temp = res;
+        if (query === "") result = temp;
+        else {
+          for (let i = 0; i < temp.length; i++) {
+            if (temp[i].name.toLowerCase().includes(query.toLowerCase())) {
+              result.push(temp[i]);
+            } else if (temp[i]._id === query) {
+              result.push(temp[i]);
+              break;
+            }
           }
         }
-      }
-      if (fav) {
-        result = displayFav(result);
-      }
-      sort(result);
-    });
+        if (fav) {
+          result = displayFav(result);
+        }
+        sort(result);
+      },
+      userLoc.lat,
+      userLoc.long
+    );
   }
 
   return (
@@ -197,7 +179,10 @@ export default function StoreSearchPage() {
           {stores.slice(0, number).map((store) => (
             <Marker
               key={store._id}
-              position={[store.lat, store.long]}
+              position={[
+                typeof store.lat !== "undefined" && store.lat,
+                typeof store.lat !== "undefined" && store.long,
+              ]}
               onclick={() => {
                 markerClicked(store);
               }}

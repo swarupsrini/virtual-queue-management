@@ -42,7 +42,7 @@ const getDistance = (fromLat, fromLong, toLat, toLong) => {
         } else {
           const result = body.route.distance;
           resolve({
-            dist: result * 1.609,
+            dist: Math.round(result * 1.609 * 100) / 100,
           });
         }
       }
