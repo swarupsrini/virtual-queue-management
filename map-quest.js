@@ -17,7 +17,6 @@ const getLatLong = (address) => {
           reject("Issue with getting resource");
         } else {
           const result = body.results[0].locations[0].latLng;
-          log(result);
           resolve({
             lat: result.lat,
             long: result.lng,
@@ -41,11 +40,9 @@ const getDistance = (fromLat, fromLong, toLat, toLong) => {
         } else if (response.statusCode !== 200) {
           reject("Issue with getting resource");
         } else {
-          const result = body.results[0].locations[0].latLng;
-          log(result);
+          const result = body.route.distance;
           resolve({
-            lat: result.lat,
-            long: result.lng,
+            dist: result * 1.609,
           });
         }
       }

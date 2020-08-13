@@ -13,7 +13,7 @@ const { User } = require("./models/user");
 const { Employee } = require("./models/user");
 const { Owner } = require("./models/user");
 const { Event } = require("./models/events");
-const { getLatLong } = require("./map-quest");
+const { getLatLong, getDistance } = require("./map-quest");
 const { ObjectID } = require("mongodb");
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
@@ -120,6 +120,22 @@ app.post("/newStore", (req, res) => {
           res.status(400).send(error); // 400 for bad request
         }
       );
+    });
+});
+
+app.get("/getDistance", (req, res) => {
+  log(req.body);
+  getDistance(
+    req.body.fromLat,
+    req.body.fromLong,
+    req.body.toLat,
+    req.body.toLong
+  )
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((error) => {
+      log(error);
     });
 });
 
