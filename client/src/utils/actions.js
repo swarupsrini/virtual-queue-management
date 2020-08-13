@@ -1,5 +1,7 @@
 /* Utility functions to help with back-end calls and global information. */
 
+import datetime from "date-and-time";
+
 export const REFRESH_INTERVAL = 3000;
 export const AVG_WAIT_TIME = 3;
 
@@ -24,16 +26,42 @@ export const signup = (setUser, data) => {
   return true;
 };
 
-export const getUserStore = async (setUser, setStore) => {
-  setUser({ username: "hello" });
-  const store = {
-    id: 1,
+export const getUserById = async (id, setUser) => {
+  setUser({
+    username: "user",
+    email: "user@user.com",
+    password: "user",
+    phone_number: "123",
+  });
+};
+
+export const getStoreById = async (id, setStore) => {
+  setStore({
+    owner_id: "1",
     name: "Walmart",
     address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+    employee_ids: [],
+    open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
+    close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
+  });
+};
+
+export const getUserStore = async (setUser, setStore) => {
+  setUser({
+    username: "user",
+    email: "user@user.com",
+    password: "user",
+    phone_number: "123",
+  });
+  const store = {
+    id: 1,
+    owner_id: "1",
+    name: "Walmart",
+    address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+    employee_ids: [],
     in_store: 54,
-    in_queue: 10,
-    open_time: new Date(0, 0, 0, 9),
-    close_time: new Date(0, 0, 0, 20),
+    open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
+    close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
     customer_visits: [
       { user_id: "1001", entry_time: new Date(2020, 7, 12, 18), exit_time: "" },
       { user_id: "1001", entry_time: new Date(2020, 7, 12, 17), exit_time: "" },
@@ -62,6 +90,43 @@ export const getUserStore = async (setUser, setStore) => {
   getMostBusyTime(store, () => {});
   getForeCastWaitTime(store, () => {});
   setStore(store);
+};
+
+export const resetStoreCall = async (setStore) => {
+  setStore({
+    id: 1,
+    owner_id: "1",
+    name: "Walmart",
+    address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
+    employee_ids: [],
+    open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
+    close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
+  });
+};
+
+export const saveUserSettingsCall = async (
+  user,
+  setUser,
+  setUserError,
+  setPhoneError,
+  setEmailError,
+  setPassError,
+  setNewPassError
+) => {
+  // call backend to set 'user', if any errors set them
+  return [];
+};
+
+export const saveStoreSettingsCall = async (
+  store,
+  setStore,
+  storeError,
+  addressError,
+  openTimeError,
+  closeTimeError
+) => {
+  // call backend to set 'store', if any errors set them
+  return [];
 };
 
 export const deactivateQueueCall = async (setStore) => {};

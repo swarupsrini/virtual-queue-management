@@ -14,6 +14,7 @@ import AdminCard from "../../components/AdminCard";
 import Header from "../../components/Header";
 import Search from "../../components/Search";
 import UserSettingsPopup from "../../components/UserSettingsPopup";
+import StoreSettingsPopup from "../../components/StoreSettingsPopup";
 import useStyles from "./styles";
 
 function getStores() {
@@ -99,9 +100,9 @@ export default function AdminPanelPage(props) {
   const [stores, setStores] = useState(getStores());
   const classes = useStyles();
 
-  // useEffect(() => {}, [showUsers, showStores]);
-
-  function editStoreData(store) {}
+  function editStoreData(store) {
+    setShowStoreSettings(true);
+  }
 
   function editUserData(user) {
     setShowUserSettings(true);
@@ -160,7 +161,16 @@ export default function AdminPanelPage(props) {
     <div>
       <Header></Header>
       {showUserSettings && (
-        <UserSettingsPopup close={() => setShowUserSettings(false)} />
+        <UserSettingsPopup
+          isAdmin={true}
+          close={() => setShowUserSettings(false)}
+        />
+      )}
+      {showStoreSettings && (
+        <StoreSettingsPopup
+          isAdmin={true}
+          close={() => setShowStoreSettings(false)}
+        />
       )}
       <div className={classes.search}>
         <Search
