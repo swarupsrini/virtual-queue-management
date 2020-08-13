@@ -24,8 +24,22 @@ export const signup = (setUser, data) => {
   return true;
 };
 
+export const getUserById = async (id, setUser) => {
+  setUser({
+    username: "user",
+    email: "user@user.com",
+    password: "user",
+    phone_number: "123",
+  });
+};
+
 export const getUserStore = async (setUser, setStore) => {
-  setUser({ username: "hello" });
+  setUser({
+    username: "user",
+    email: "user@user.com",
+    password: "user",
+    phone_number: "123",
+  });
   const store = {
     id: 1,
     name: "Walmart",
@@ -63,6 +77,8 @@ export const getUserStore = async (setUser, setStore) => {
   getForeCastWaitTime(store, () => {});
   setStore(store);
 };
+
+export const saveUserSettingsCall = async (setUser) => {};
 
 export const deactivateQueueCall = async (setStore) => {};
 

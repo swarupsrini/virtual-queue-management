@@ -1,5 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
+import {
+  getUserById,
+  getUserStore,
+  saveUserSettingsCall,
+} from "../../utils/actions";
 
 import {
   Paper,
@@ -12,24 +18,30 @@ import {
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import SaveButton from "../SaveButton";
+
 import useStyles from "./styles";
 
 export default function UserSettingsPopup(props) {
   const classes = useStyles();
 
-  const [userName, setUserName] = useState("user");
   const [userError, setUserError] = useState(false);
 
-  const [phone, setPhone] = useState("123456789");
   const [phoneError, setPhoneError] = useState(false);
 
-  const [email, setEmail] = useState("user@user.com");
   const [emailError, setEmailError] = useState(false);
 
-  const [password, setPassword] = useState("");
   const [passError, setPassError] = useState(false);
 
-  const [newPassword, setNewPassword] = useState("");
+  const [user, setUser] = useState({});
+
+  const setUserVal = (key, value) =>
+    setUser((user) => ({ ...user, [key]: value }));
+
+  useEffect(() => {
+    if (props.id) getUserById(props.id, setUser);
+    else getUserStore(setUser);
+  }, []);
+
   const [newPassError, setNewPassError] = useState(false);
 
   const [newConfirmPassword, setNewConfirmPassword] = useState("");
@@ -43,17 +55,21 @@ export default function UserSettingsPopup(props) {
     let updated = [];
     // call server to get all the current info about user
     // call server to change any of them if it's different
-    if (!userError && userName !== "" && userName !== "user")
+    if (!userError && user.username !== "" && user.username !== "user")
       updated.push("username");
-    if (!phoneError && phone !== "" && phone !== "123456789")
+    if (
+      !phoneError &&
+      user.phone_number !== "" &&
+      user.phone_number !== "123456789"
+    )
       updated.push("phone");
-    if (!emailError && email !== "" && email !== "user@user.com")
+    if (!emailError && user.email !== "" && user.email !== "user@user.com")
       updated.push("email");
     if (
       !passError &&
       !newPassError &&
       !newConfirmPassError &&
-      password !== newPassword
+      user.password !== newPassword
     )
       updated.push("password");
     if (updated.length > 0) {
@@ -82,10 +98,10 @@ export default function UserSettingsPopup(props) {
         <div className={classes.topLeftMargin}>
           <TextField
             onChange={(e) => {
-              setUserName(e.target.value);
+              setUserVal("username", e.target.value);
               setUserError(false);
             }}
-            value={userName}
+            value={user.username}
             variant="outlined"
             size="small"
             label="Username"
@@ -110,7 +126,7 @@ export default function UserSettingsPopup(props) {
           ></TextField>
           <TextField
             onChange={(e) => {
-              setEmail(e.target.value);
+              setUserVal("email", e.target.value);
               const reg = /\S+@\S+\.\S+/;
               if (e.target.value !== "" && !reg.test(e.target.value)) {
                 setEmailError(true);
@@ -118,7 +134,7 @@ export default function UserSettingsPopup(props) {
                 setEmailError(false);
               }
             }}
-            value={email}
+            value={user.email}
             variant="outlined"
             size="small"
             label="Email"
@@ -138,13 +154,13 @@ export default function UserSettingsPopup(props) {
             <div className={classes.topLeftMargin}>
               <TextField
                 onChange={(e) => {
-                  setPassword(e.target.value);
+                  setUserVal("password", e.target.value);
                   setPassError(false);
                 }}
                 variant="outlined"
                 size="small"
                 type={showPass ? "text" : "password"}
-                value={password}
+                value={user.password}
                 label="Old Password"
                 error={passError}
                 className={`${classes.textField} ${classes.rightMargin}`}
@@ -160,14 +176,14 @@ export default function UserSettingsPopup(props) {
               ></TextField>
               <TextField
                 onChange={(e) => {
-                  setNewPassword(e.target.value);
+                  setUserVal("new_password", e.target.value);
                   setNewPassError(false);
                 }}
                 variant="outlined"
                 size="small"
                 type={showNewPass ? "text" : "password"}
                 label="New Password"
-                value={newPassword}
+                value={user.new_password}
                 error={newPassError}
                 className={`${classes.textField} ${classes.rightMargin}`}
                 InputProps={{
