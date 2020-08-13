@@ -13,6 +13,9 @@ export default makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
   },
+  rootFlow: {
+    marginTop: "40px",
+  },
   paper: {
     width: theme.spacing(1000 / 8),
     padding: theme.spacing(25 / 8),

@@ -107,7 +107,7 @@ export default function UserSettingsPopup(props) {
   }
 
   return (
-    <div className={classes.root}>
+    <div className={props.isAdmin ? classes.root : classes.rootFlow}>
       <Paper elevation={2} variant="elevation" className={classes.paper}>
         <SaveButton onClick={saveUserSettings}></SaveButton>
         <Typography className={classes.title}>User Settings</Typography>

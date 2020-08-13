@@ -92,7 +92,7 @@ export default function StoreSettings(props) {
   const resetStore = () => resetStoreCall(setStore);
 
   return (
-    <div className={classes.root}>
+    <div className={props.isAdmin ? classes.root : ""}>
       <Paper elevation={2} variant="elevation" className={classes.paper}>
         <SaveButton onClick={saveStoreSettings}></SaveButton>
         <Typography className={classes.title}>Store Settings</Typography>

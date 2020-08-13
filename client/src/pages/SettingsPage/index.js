@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 import {
   Paper,
@@ -19,6 +18,9 @@ import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import SaveButton from "../../components/SaveButton";
 import Header from "../../components/Header";
+
+import StoreSettingsPopup from "../../components/StoreSettingsPopup";
+import UserSettingsPopup from "../../components/UserSettingsPopup";
 
 import useStyles from "./styles";
 
@@ -367,8 +369,10 @@ export default function SettingsPage() {
   return (
     <div className={classes.root}>
       <Header></Header>
-      <UserSettings />
-      <StoreSettings />
+      <UserSettingsPopup isAdmin={false} close={() => {}} />
+      <StoreSettingsPopup isAdmin={false} close={() => {}} />
+      {/* <UserSettings />
+      <StoreSettings /> */}
     </div>
   );
 }
