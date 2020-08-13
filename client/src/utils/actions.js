@@ -226,37 +226,13 @@ export const getForeCastWaitTime = async (store, setStore) => {
   setStore(store);
 };
 
-export const getAllStores = (callback) => {
+export const getAllStores = () => {
   const url = "http://localhost:5000/getAllStores";
-  const dummy = [5, 100, 32.5, 1];
-  fetch(url)
-    .then((res) => res.json())
-    .then((res) => {
-      res.map((store, i) => {
-        store.wait = dummy[i];
-      });
-      callback(res);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  return fetch(url);
 };
 
-export const getDistance = (
-  callback,
-  userLat,
-  userLong,
-  storeLat,
-  storeLong
-) => {
+export const getDistance = (userLat, userLong, storeLat, storeLong) => {
   const url = `http://localhost:5000/getDistance?fromLat=${userLat}&fromLong=${userLong}&toLat=${storeLat}&toLong=${storeLong}`;
 
-  fetch(url)
-    .then((res) => res.json())
-    .then((res) => {
-      callback(res);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  return fetch(url);
 };

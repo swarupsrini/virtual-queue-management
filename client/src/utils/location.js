@@ -1,15 +1,11 @@
-"use strict";
-
-export const getCurLocation = (callback) => {
-  new Promise((res) => {
+export const getCurLocation = () => {
+  return new Promise((res) => {
     navigator.geolocation.getCurrentPosition(
       (result) => {
-        res(result.coords);
+        res({ lat: result.coords.latitude, long: result.coords.longitude });
       },
       () => {},
       { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
     );
-  }).then((coords) => {
-    callback({ lat: coords.latitude, long: coords.longitude });
   });
 };

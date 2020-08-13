@@ -56,26 +56,43 @@ export default function StoreSearchPage() {
   const [analyticsPage, setAnalyticsPage] = useState(null);
 
   useEffect(() => {
-    getCurLocation((res) => {
-      setUserLoc(res);
-      getAllStores((stores) => {
-        stores.map((store) => {
-          getDistance(
-            (result) => {
-              store.distance = result.dist;
-              setStores(stores);
-              sort(stores);
-              if (fav) setStores(displayFav(stores));
-            },
-            res.lat,
-            res.long,
-            store.lat,
-            store.long
-          );
+    getCurLocation()
+      .then((user) => {
+        setUserLoc(user);
+        return [new Promise((resolve) => resolve(user)), getAllStores()];
+      })
+      .then((arr) => Promise.all(arr))
+      .then(([user, storeRes]) => [
+        new Promise((resolve) => resolve(user)),
+        storeRes.json(),
+      ])
+      .then((arr) => Promise.all(arr))
+      .then(([user, storeRes]) => {
+        return storeRes.map((store) => {
+          return getDistance(user.lat, user.long, store.lat, store.long)
+            .then((res) => res.json())
+            .then((res) => {
+              return { ...store, distance: res.dist };
+            });
         });
+      })
+      .then((storeRes) => Promise.all(storeRes))
+      .then((storeRes) => {
+        let result = [];
+        if (text === "") result = storeRes;
+        else {
+          storeRes.map((temp) => {
+            if (temp.name.toLowerCase().includes(text.toLowerCase())) {
+              result.push(temp);
+            } else if (temp._id === text) {
+              result.push(temp);
+            }
+          });
+        }
+        sort(result);
+        if (fav) setStores(displayFav(result));
       });
-    });
-  }, [waitTime, fav]);
+  }, [waitTime, fav, text]);
 
   function toggleWait() {
     setWait((prev) => !prev);
@@ -96,9 +113,7 @@ export default function StoreSearchPage() {
   function sortByWait(stores) {
     const sorted = [...stores];
     sorted.sort((a, b) => {
-      if (a.wait < b.wait) {
-        return -1;
-      }
+      return a.wait - b.wait;
     });
     return sorted;
   }
@@ -106,9 +121,7 @@ export default function StoreSearchPage() {
   function sortByDist(stores) {
     const sorted = [...stores];
     sorted.sort((a, b) => {
-      if (a.distance < b.distance) {
-        return -1;
-      }
+      return a.distance - b.distance;
     });
     return sorted;
   }
@@ -122,41 +135,6 @@ export default function StoreSearchPage() {
       }
     }
     return result;
-  }
-
-  function markerClicked(store) {
-    setText(store._id);
-    searchBarText(store._id);
-  }
-
-  function searchBarText(query) {
-    filter(query);
-  }
-
-  function filter(query) {
-    let result = [];
-    getAllStores(
-      (res) => {
-        const temp = res;
-        if (query === "") result = temp;
-        else {
-          for (let i = 0; i < temp.length; i++) {
-            if (temp[i].name.toLowerCase().includes(query.toLowerCase())) {
-              result.push(temp[i]);
-            } else if (temp[i]._id === query) {
-              result.push(temp[i]);
-              break;
-            }
-          }
-        }
-        if (fav) {
-          result = displayFav(result);
-        }
-        sort(result);
-      },
-      userLoc.lat,
-      userLoc.long
-    );
   }
 
   return (
@@ -184,7 +162,7 @@ export default function StoreSearchPage() {
                 typeof store.lat !== "undefined" && store.long,
               ]}
               onclick={() => {
-                markerClicked(store);
+                setText(store._id);
               }}
             ></Marker>
           ))}
@@ -204,10 +182,9 @@ export default function StoreSearchPage() {
             filterClick={(e) => {
               setAnchor(e.currentTarget);
             }}
-            searchClick={searchBarText}
+            searchClick={setText}
             clearClick={() => {
               setText("");
-              searchBarText("");
             }}
             onChangedSync={(e) => setText(e)}
             text={text}
