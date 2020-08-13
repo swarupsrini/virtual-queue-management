@@ -63,8 +63,8 @@ export default function QueueDashboard(props) {
   const getStoreId = () => store.id;
   const getStoreName = () => store.name;
   const getStoreAddress = () => store.address;
-  const getStoreInQueue = () => store.inQueue;
-  const getStoreInStore = () => store.inStore;
+  const getStoreInQueue = () => store.in_queue;
+  const getStoreInStore = () => store.in_store;
   const deactivateQueue = () => deactivateQueueCall(store, setStore);
   const emptyQueue = () => emptyQueueCall(setStore);
   const customerExited = () => customerExitedCall(setStore);
