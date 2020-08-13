@@ -214,16 +214,16 @@ function UserSettings() {
         ></TextField>
       </div>
 
-      <Link to="/" className={classes.linkButton}>
-        <Button
-          color="primary"
-          variant="contained"
-          className={classes.topLeftMargin}
-          onClick={deactivateAccount}
-        >
-          Deactivate Account
-        </Button>
-      </Link>
+      {/* <Link to="/" className={classes.linkButton}> */}
+      <Button
+        color="primary"
+        variant="contained"
+        className={classes.topLeftMargin}
+        onClick={deactivateAccount}
+      >
+        Deactivate Account
+      </Button>
+      {/* </Link> */}
     </Paper>
   );
 }

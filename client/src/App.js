@@ -58,6 +58,7 @@ export default function App() {
       <BrowserRouter>
         <Switch>
           {/* TODO: make all the routes conditional, only have them if user type allows it. */}
+          {/* if no user, redirect to login */}
           <Route
             exact
             path="/signup"

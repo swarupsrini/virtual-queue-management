@@ -15,6 +15,7 @@ export default makeStyles((theme) => ({
   },
   paper: {
     width: theme.spacing(1000 / 8),
+    marginTop: theme.spacing(30 / 8),
     padding: theme.spacing(25 / 8),
   },
   title: {
@@ -24,7 +25,7 @@ export default makeStyles((theme) => ({
     fontSize: 24,
   },
   textField: {
-    width: theme.spacing(250 / 8),
+    width: theme.spacing(175 / 8),
   },
   topLeftMargin: {
     marginTop: theme.spacing(20 / 8),
@@ -34,9 +35,12 @@ export default makeStyles((theme) => ({
     marginTop: theme.spacing(20 / 8),
   },
   rightMargin: {
-    marginRight: theme.spacing(50 / 8),
+    marginRight: theme.spacing(10 / 8),
   },
-  linkButton: {
-    textDecoration: "none",
+  employeeList: {
+    overflow: "auto",
+    height: theme.spacing(100 / 8),
+    width: theme.spacing(600 / 8),
+    marginLeft: theme.spacing(20 / 8),
   },
 }));

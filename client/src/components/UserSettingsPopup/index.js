@@ -25,21 +25,23 @@ export default function UserSettingsPopup(props) {
   const classes = useStyles();
 
   const [userError, setUserError] = useState(false);
-
   const [phoneError, setPhoneError] = useState(false);
-
   const [emailError, setEmailError] = useState(false);
-
   const [passError, setPassError] = useState(false);
 
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    phone_number: "",
+  });
 
   const setUserVal = (key, value) =>
     setUser((user) => ({ ...user, [key]: value }));
 
   useEffect(() => {
     if (props.id) getUserById(props.id, setUser);
-    else getUserStore(setUser);
+    else getUserStore(setUser, () => {});
   }, []);
 
   const [newPassError, setNewPassError] = useState(false);
@@ -52,41 +54,56 @@ export default function UserSettingsPopup(props) {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   function saveUserSettings() {
-    let updated = [];
-    // call server to get all the current info about user
-    // call server to change any of them if it's different
-    if (!userError && user.username !== "" && user.username !== "user")
-      updated.push("username");
-    if (
-      !phoneError &&
-      user.phone_number !== "" &&
-      user.phone_number !== "123456789"
-    )
-      updated.push("phone");
-    if (!emailError && user.email !== "" && user.email !== "user@user.com")
-      updated.push("email");
-    if (
-      !passError &&
-      !newPassError &&
-      !newConfirmPassError &&
-      user.password !== newPassword
-    )
-      updated.push("password");
-    if (updated.length > 0) {
+    const errors = saveUserSettingsCall(
+      user,
+      setUser,
+      setUserError,
+      setPhoneError,
+      setEmailError,
+      setPassError,
+      setNewPassError
+    );
+    if (errors.length > 0)
       alert(
-        "The following fields have been updated: ".concat(updated.join(", "))
+        "No fields have been updated! Please make sure all fields are valid!"
       );
-    } else {
-      alert(
-        "No fields have been updated! Please make sure all fields are valid and are different from the current fields!"
-      );
-    }
+    else alert("Your settings have been updated!");
+
+    // all this stuff must go to backend
+    // let updated = [];
+    // if (!userError && user.username !== "" && user.username !== "user")
+    //   updated.push("username");
+    // if (
+    //   !phoneError &&
+    //   user.phone_number !== "" &&
+    //   user.phone_number !== "123456789"
+    // )
+    //   updated.push("phone");
+    // if (!emailError && user.email !== "" && user.email !== "user@user.com")
+    //   updated.push("email");
+    // if (
+    //   !passError &&
+    //   !newPassError &&
+    //   !newConfirmPassError &&
+    //   user.password !== newPassword
+    // )
+    //   updated.push("password");
+    // if (updated.length > 0) {
+    //   alert(
+    //     "The following fields have been updated: ".concat(updated.join(", "))
+    //   );
+    // } else {
+    //   alert(
+    //     "No fields have been updated! Please make sure all fields are valid and are different from the current fields!"
+    //   );
+    // }
     props.close();
   }
 
   function deactivateAccount() {
     // send a server call to deactivate the account
     alert("Account deactivated!");
+    props.close();
   }
 
   return (
@@ -110,14 +127,14 @@ export default function UserSettingsPopup(props) {
           ></TextField>
           <TextField
             onChange={(e) => {
-              setPhone(e.target.value);
+              setUserVal("phone_number", e.target.value);
               if (isNaN(e.target.value)) {
                 setPhoneError(true);
               } else {
                 setPhoneError(false);
               }
             }}
-            value={phone}
+            value={user.phone_number}
             variant="outlined"
             size="small"
             label="Phone"
@@ -143,7 +160,7 @@ export default function UserSettingsPopup(props) {
           ></TextField>
         </div>
 
-        {props.showPass && (
+        {!props.isAdmin && (
           <>
             <Typography
               className={`${classes.changePassTitle} ${classes.topLeftMargin}`}
@@ -199,7 +216,7 @@ export default function UserSettingsPopup(props) {
               <TextField
                 onChange={(e) => {
                   setNewConfirmPassword(e.target.value);
-                  if (e.target.value !== newPassword) {
+                  if (e.target.value !== user.new_password) {
                     setNewConfirmPassError(true);
                   } else {
                     setNewConfirmPassError(false);
@@ -227,8 +244,7 @@ export default function UserSettingsPopup(props) {
             </div>
           </>
         )}
-
-        <Link to="/" className={classes.linkButton}>
+        {props.isAdmin ? (
           <Button
             color="primary"
             variant="contained"
@@ -237,7 +253,18 @@ export default function UserSettingsPopup(props) {
           >
             Deactivate Account
           </Button>
-        </Link>
+        ) : (
+          <Link to="/" className={classes.linkButton}>
+            <Button
+              color="primary"
+              variant="contained"
+              className={classes.topLeftMargin}
+              onClick={deactivateAccount}
+            >
+              Deactivate Account
+            </Button>
+          </Link>
+        )}
       </Paper>
     </div>
   );
