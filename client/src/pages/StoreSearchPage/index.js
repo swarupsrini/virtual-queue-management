@@ -108,9 +108,11 @@ function getPosition() {
 
 function getCurrentLocation(callback) {
   return getPosition().then((coords) => {
+    console.log(coords);
     callback({ lat: coords.latitude, long: coords.longitude });
   });
 }
+
 export default function StoreSearchPage() {
   const classes = useStyles();
   const [waitTime, setWait] = useState(false);
