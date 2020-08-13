@@ -159,7 +159,7 @@ export default function AdminPanelPage(props) {
 
   return (
     <div>
-      <Header></Header>
+      <Header />
       {showUserSettings && (
         <UserSettingsPopup
           isAdmin={true}

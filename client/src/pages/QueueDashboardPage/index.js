@@ -17,6 +17,7 @@ import Header from "../../components/Header";
 
 import useStyles from "./styles";
 import { NavLink } from "react-router-dom";
+import QrPopup from "../../components/QrPopup";
 
 function InfoCard(props) {
   return (
@@ -48,6 +49,9 @@ function Button(props) {
 
 export default function QueueDashboard(props) {
   const classes = useStyles();
+
+  const [showQr, setShowQr] = useState(false);
+  const [showAnn, setShowAnn] = useState(false);
 
   const [user, setUser] = useState({});
   const [store, setStore] = useState({});
@@ -112,7 +116,9 @@ export default function QueueDashboard(props) {
     setCurrent((old) => [recent, ...current]);
     setRecent({});
   };
-  const scanQr = (item, i) => {};
+  const scanQr = (item, i) => {
+    setShowQr(true);
+  };
   const accept = (item, i) => {
     setRecent(item);
     removeFromCurrent(item);
@@ -133,6 +139,8 @@ export default function QueueDashboard(props) {
   return (
     <div>
       <Header />
+      {showQr && <QrPopup />}
+
       <div className={classes.root}>
         <StoreHeader
           title={getStoreName()}
