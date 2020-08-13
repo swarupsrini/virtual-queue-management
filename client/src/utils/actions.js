@@ -71,12 +71,14 @@ export const emptyQueueCall = async (setStore) => {
     id: 1,
     name: "Walmart",
     address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-    inStore: 54,
-    inQueue: 0,
+    in_store: 54,
+    in_queue: 0,
   });
 };
 
-export const customerExitedCall = async (setStore) => {};
+export const customerExitedCall = async (setStore) => {
+  setStore((store) => ({ ...store, in_store: store.in_store - 1 }));
+};
 
 export const getNumVisitsToday = async (store, setStore) => {
   const dayStart = new Date();
