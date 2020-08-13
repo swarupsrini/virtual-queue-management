@@ -160,3 +160,26 @@ export const getForeCastWaitTime = async (store, setStore) => {
   store.forecast_wait_time = queue_size * AVG_WAIT_TIME;
   setStore(store);
 };
+
+export const getAllStores = (callback) => {
+  const url = "http://localhost:5000/getAllStores";
+  const dummy = [
+    [20, 5],
+    [5, 100],
+    [23, 32.5],
+    [10, 1],
+  ];
+
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
+      res.map((store, i) => {
+        store.distance = dummy[i][0];
+        store.wait = dummy[i][1];
+      });
+      callback(res);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};

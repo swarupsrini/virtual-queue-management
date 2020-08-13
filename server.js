@@ -6,6 +6,7 @@ log("Express server");
 const express = require("express");
 const { mongoose } = require("./db/mongoose");
 mongoose.set("useFindAndModify", false); // for some deprecation issues
+const cors = require("cors");
 const app = express();
 
 const { Store } = require("./models/store");
@@ -15,17 +16,29 @@ const { Owner } = require("./models/user");
 const { Event } = require("./models/events");
 const { getLatLong, getDistance } = require("./map-quest");
 const { ObjectID } = require("mongodb");
-
+const { getStoreByID, getAllStores } = require("./basic._mongo");
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-
+app.use(cors());
 // Setting up a static directory for the files in /pub
 app.use(express.static(__dirname + "/client/build"));
 
 /*************************************************/
-// API Endpoints Below
+// MiddleWares for checking Mongo Stuff
 
+const mongoIDChecker = (req, res, next) => {
+  // check mongoose connection established.
+  if (!ObjectID.isValid(req.query.store_id)) {
+    res.status(500).send("Wrong Mongo ID");
+    return;
+  } else {
+    next();
+  }
+};
+
+/*************************************************/
+// API Endpoints Below
 app.post("/newCustomer", (req, res) => {
   const user = new User({
     password: req.body.password,
@@ -95,6 +108,9 @@ app.post("/newStore", (req, res) => {
     employee_ids: [],
     lat: -1,
     long: -1,
+    in_store: 0,
+    open_time: req.body.open_time,
+    close_time: req.body.close_time,
   });
 
   getLatLong(req.body.address)
@@ -124,7 +140,6 @@ app.post("/newStore", (req, res) => {
 });
 
 app.get("/getDistance", (req, res) => {
-  log(req.body);
   getDistance(
     req.body.fromLat,
     req.body.fromLong,
@@ -137,6 +152,29 @@ app.get("/getDistance", (req, res) => {
     .catch((error) => {
       log(error);
     });
+});
+
+app.get("/getAllStores", (req, res) => {
+  getAllStores(
+    (result) => {
+      res.send(result);
+    },
+    (error) => {
+      res.status(400).send(error);
+    }
+  );
+});
+
+app.get("/getStoreById", mongoIDChecker, (req, res) => {
+  getStoreByID(
+    (result) => {
+      res.send(result);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.query.store_id
+  );
 });
 
 // All routes other than above will go to index.html
