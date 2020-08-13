@@ -8,6 +8,7 @@ const User = mongoose.model("Users", {
   email: { type: String },
   username: { type: String },
   phone_number: { type: String },
+  fav_stores: { type: Array },
 });
 
 const Employee = User.discriminator(

@@ -17,6 +17,7 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import "./index.css";
 import { iconPerson, best } from "./icon";
+import { getAllStores } from "../../utils/actions";
 
 const STORE_SHOW_LIMIT = 20;
 
@@ -30,17 +31,18 @@ function updateUserFavStores(storeID, value) {
   // there will be a backend call to update user's favourited stores
 }
 
-function getDistance(storeName) {
+function getDistance(storeID) {
   // Get distance from current location to the store through external API
   // Code below return mock distances based on store names
 
-  if (storeName.includes("Walmart")) {
-    return 20;
-  } else if (storeName.includes("No Frills")) {
-    return 100;
-  } else {
-    return 30;
-  }
+  // if (storeName.includes("Walmart")) {
+  //   return 20;
+  // } else if (storeName.includes("No Frills")) {
+  //   return 100;
+  // } else {
+  //   return 30;
+  // }
+  return 20;
 }
 
 function getUserInfo() {
@@ -49,49 +51,6 @@ function getUserInfo() {
   return {
     fav: [0, 2],
   };
-}
-
-function getStores() {
-  // Get stores from server
-  // code below requires backend call
-  return [
-    {
-      name: "Walmart",
-      address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-      latitude: 43.7763,
-      longitude: -79.25802,
-      wait: 12,
-      ID: 0,
-      isVerified: true,
-    },
-    {
-      name: "No Frills",
-      address: "4473 Kingston Rd, Scarborough, ON M1E 2N7",
-      latitude: 43.76984,
-      longitude: -79.18742,
-      ID: 1,
-      wait: 9,
-      isVerified: false,
-    },
-    {
-      name: "FreshCo",
-      address: "650 Kingston Rd, Pickering, ON L1V 1A6",
-      latitude: 43.81807,
-      longitude: -79.11887,
-      ID: 2,
-      wait: 24,
-      isVerified: true,
-    },
-    {
-      name: "Walmart",
-      address: "3850 Sheppard Ave E, Scarborough, ON M1T 3L3",
-      latitude: 43.7843507,
-      longitude: -79.2933375,
-      wait: 100,
-      ID: 4,
-      isVerified: false,
-    },
-  ];
 }
 
 function getPosition() {
@@ -108,7 +67,6 @@ function getPosition() {
 
 function getCurrentLocation(callback) {
   return getPosition().then((coords) => {
-    console.log(coords);
     callback({ lat: coords.latitude, long: coords.longitude });
   });
 }
@@ -121,7 +79,7 @@ export default function StoreSearchPage() {
   const [fav, setFav] = useState(false);
 
   const [anchor, setAnchor] = useState(null);
-  const [stores, setStores] = useState(sortByDist(getStores()));
+  const [stores, setStores] = useState([]);
 
   const [text, setText] = useState("");
   const [number, setNumber] = useState(10);
@@ -131,11 +89,14 @@ export default function StoreSearchPage() {
 
   useEffect(() => {
     getCurrentLocation(setUserLoc);
-  }, []);
+  }, [userLoc]);
 
   useEffect(() => {
-    sort(getStores());
-    if (fav) setStores(displayFav(stores));
+    getAllStores((stores) => {
+      setStores(stores);
+      sort(stores);
+      if (fav) setStores(displayFav(stores));
+    });
   }, [waitTime, fav]);
 
   function toggleWait() {
@@ -166,9 +127,6 @@ export default function StoreSearchPage() {
 
   function sortByDist(stores) {
     const sorted = [...stores];
-    for (let i = 0; i < sorted.length; i++) {
-      sorted[i].distance = getDistance(sorted[i].name);
-    }
     sorted.sort((a, b) => {
       if (a.distance < b.distance) {
         return -1;
@@ -181,7 +139,7 @@ export default function StoreSearchPage() {
     const result = [];
     const favs = getUserInfo().fav;
     for (let i = 0; i < stores.length; i++) {
-      if (favs.includes(stores[i].ID)) {
+      if (favs.includes(stores[i]._id)) {
         result.push(stores[i]);
       }
     }
@@ -189,37 +147,34 @@ export default function StoreSearchPage() {
   }
 
   function markerClicked(store) {
-    setText(store.ID);
-    searchBarText(store.ID);
+    setText(store._id);
+    searchBarText(store._id);
   }
 
   function searchBarText(query) {
-    const filteredResult = filter(query);
-    sort(filteredResult);
+    filter(query);
   }
 
   function filter(query) {
     let result = [];
-    const temp = getStores();
-    console.log(userLoc);
-
-    if (query === "") result = temp;
-    else {
-      for (let i = 0; i < temp.length; i++) {
-        if (isNaN(query)) {
+    getAllStores((res) => {
+      const temp = res;
+      if (query === "") result = temp;
+      else {
+        for (let i = 0; i < temp.length; i++) {
           if (temp[i].name.toLowerCase().includes(query.toLowerCase())) {
             result.push(temp[i]);
+          } else if (temp[i]._id === query) {
+            result.push(temp[i]);
+            break;
           }
-        } else if (temp[i].ID === parseInt(query)) {
-          result.push(temp[i]);
-          break;
         }
       }
-    }
-    if (fav) {
-      result = displayFav(result);
-    }
-    return result;
+      if (fav) {
+        result = displayFav(result);
+      }
+      sort(result);
+    });
   }
 
   return (
@@ -241,8 +196,8 @@ export default function StoreSearchPage() {
 
           {stores.slice(0, number).map((store) => (
             <Marker
-              key={store.ID}
-              position={[store.latitude, store.longitude]}
+              key={store._id}
+              position={[store.lat, store.long]}
               onclick={() => {
                 markerClicked(store);
               }}
@@ -274,22 +229,22 @@ export default function StoreSearchPage() {
           />
         </ListItem>
         {stores.slice(0, number).map((store) => (
-          <ListItem key={store.ID}>
+          <ListItem key={store._id}>
             <StoreCard
               title={store.name}
               min={store.wait}
-              dist={getDistance(store.name)}
-              verified={store.isVerified}
-              favorited={Boolean(getUserInfo().fav.includes(store.ID))}
+              dist={store.distance}
+              verified={store.verified}
+              favorited={Boolean(getUserInfo().fav.includes(store._id))}
               joinClick={() => {
                 joinedQueue(store);
                 setViewPage("/queue-status");
               }}
               viewClick={() => {
                 viewData(store);
-                setAnalyticsPage("/store-analytics/" + store.ID);
+                setAnalyticsPage("/store-analytics/" + store._id);
               }}
-              updateUserFav={(fav) => updateUserFavStores(store.ID, fav)}
+              updateUserFav={(fav) => updateUserFavStores(store._id, fav)}
               address={store.address}
             ></StoreCard>
           </ListItem>
