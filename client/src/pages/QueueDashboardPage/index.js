@@ -63,11 +63,14 @@ export default function QueueDashboard(props) {
   const getStoreId = () => store.id;
   const getStoreName = () => store.name;
   const getStoreAddress = () => store.address;
-  const getStoreInQueue = () => store.inQueue;
-  const getStoreInStore = () => store.inStore;
+  const getStoreInQueue = () => store.in_queue;
+  const getStoreInStore = () => store.in_store;
   const deactivateQueue = () => deactivateQueueCall(store, setStore);
   const emptyQueue = () => emptyQueueCall(setStore);
-  const customerExited = () => customerExitedCall(setStore);
+  const customerExited = () => {
+    customerExitedCall(setStore);
+    console.log(store);
+  };
 
   const [recent, setRecent] = useState({
     name: "Eryk Spence",
@@ -95,6 +98,10 @@ export default function QueueDashboard(props) {
       notified: false,
     },
   ]);
+
+  useEffect(() => {
+    setStore((old) => ({ ...old, in_queue: current.length }));
+  }, [current]);
 
   const removeFromCurrent = (item) =>
     setCurrent(
