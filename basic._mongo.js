@@ -2,6 +2,7 @@
 const log = console.log;
 const { Store } = require("./models/store");
 const { User } = require("./models/user");
+const { Event } = require("./models/events");
 
 function getAllStores(thenCallBack, errorCallback) {
   Store.find().then(thenCallBack).catch(errorCallback);
@@ -17,4 +18,15 @@ function getStoreByID(thenCallBack, errorCallback, storeID) {
 function getUserByID(thenCallBack, errorCallback, userID) {
   User.findById(userID).then(thenCallBack).catch(errorCallback);
 }
-module.exports = { getStoreByID, getAllStores, getAllUsers, getUserByID };
+
+function getEventsByStoreID(thenCallBack, errorCallback, storeID) {
+  Event.find({ store_id: storeID }).then(thenCallBack).catch(errorCallback);
+}
+
+module.exports = {
+  getStoreByID,
+  getAllStores,
+  getEventsByStoreID,
+  getAllUsers,
+  getUserByID,
+};

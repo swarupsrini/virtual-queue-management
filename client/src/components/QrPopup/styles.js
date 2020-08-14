@@ -50,7 +50,6 @@ export default makeStyles((theme) => ({
   btnGroupDiv: {
     margin: "20px auto",
     display: "flex",
-    flexDirection: "row",
     justifyContent: "center",
   },
   btnLetIn: {
@@ -60,16 +59,32 @@ export default makeStyles((theme) => ({
   btnReject: {
     backgroundColor: "#E86B30",
   },
-  alertValid: {
+  alert: {
     borderRadius: "10px",
-    backgroundColor: "#CDEDAD",
     fontSize: "36px",
-    color: "#86E170",
     height: "50px",
+    boxSizing: "border-box",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingLeft: "20px",
+    paddingRight: "20px",
     width: "420px",
     position: "absolute",
     left: "calc(50% - 210px)",
     marginTop: "-65px",
     zIndex: "2",
+  },
+  alertValid: {
+    backgroundColor: "#CDEDAD",
+    color: "#86E170",
+  },
+  alertInvalid: {
+    backgroundColor: "#F7C0A7",
+    color: "#EE7A44",
+  },
+  alertIcon: {
+    width: "50px",
+    height: "100%",
   },
 }));

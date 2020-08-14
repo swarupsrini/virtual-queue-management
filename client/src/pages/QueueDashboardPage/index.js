@@ -51,6 +51,7 @@ export default function QueueDashboard(props) {
   const classes = useStyles();
 
   const [showQr, setShowQr] = useState(false);
+  const [qrData, setQrData] = useState();
   const [showAnn, setShowAnn] = useState(false);
 
   const [user, setUser] = useState({});
@@ -78,26 +79,30 @@ export default function QueueDashboard(props) {
   };
 
   const [recent, setRecent] = useState({
-    name: "Eryk Spence",
+    id: "1",
+    username: "eryk123",
     others: 5,
     time: 10,
     notified: true,
   });
   const [current, setCurrent] = useState([
     {
-      name: "Swarup Srinivasan",
+      id: "1",
+      username: "srini140",
       others: 2,
       time: 10,
       notified: true,
     },
     {
-      name: "Hemant Bhanot",
+      id: "2",
+      username: "bhanothe",
       others: 0,
       time: 20,
       notified: false,
     },
     {
-      name: "Bob",
+      id: "1",
+      username: "bob123",
       others: 100,
       time: 20,
       notified: false,
@@ -117,13 +122,9 @@ export default function QueueDashboard(props) {
     setCurrent((old) => [recent, ...current]);
     setRecent({});
   };
-  const scanQr = (item, i) => {
-    setShowQr(true);
-  };
-  const accept = (item, i) => {
-    setRecent(item);
-    removeFromCurrent(item);
-  };
+  // const scanQr = (item, i) => {
+  //   setShowQr(item.id);
+  // };
   const reject = (item, i) => {
     removeFromCurrent(item);
   };
@@ -136,11 +137,29 @@ export default function QueueDashboard(props) {
       )
     );
   };
+  const accept = (item, i) => {
+    setQrData(item);
+    setShowQr(true);
+  };
+  const qrAccept = () => {
+    setRecent(qrData);
+    removeFromCurrent(qrData);
+  };
+  const qrReject = () => {
+    reject(qrData);
+  };
 
   return (
     <div>
       <Header />
-      {showQr && <QrPopup close={() => setShowQr(false)} />}
+      {showQr && (
+        <QrPopup
+          validData={showQr}
+          accept={qrAccept}
+          reject={qrReject}
+          close={() => setShowQr(false)}
+        />
+      )}
 
       <div className={classes.root}>
         <StoreHeader
@@ -197,10 +216,10 @@ export default function QueueDashboard(props) {
           />
         </div>
         <p className={classes.recentSectionTitle}>Recently Accepted</p>
-        {recent.name !== undefined && (
+        {recent.username !== undefined && (
           <Paper className={classes.recentSection}>
             <p className={classes.recentTitle}>
-              {recent.name}, {recent.others} others
+              {recent.username}, {recent.others} others
             </p>
             <Button className={classes.undo} onClick={undo} text="Undo" />
           </Paper>
@@ -220,7 +239,7 @@ export default function QueueDashboard(props) {
                 <p className={classes.currentNumber}>{i + 1}</p>
                 <div className={classes.currentInfo}>
                   <p className={classes.currentTitle}>
-                    {item.name}, {item.others} others
+                    {item.username}, {item.others} others
                   </p>
                   <p className={classes.currentSubtitle}>
                     {item.notified
@@ -230,11 +249,11 @@ export default function QueueDashboard(props) {
                 </div>
               </div>
               <div className={classes.currentRightStuff}>
-                <Button
+                {/* <Button
                   className={classes.btnScanQr}
                   onClick={() => scanQr(item, i)}
                   text="Scan QR"
-                />
+                /> */}
                 {item.notified ? (
                   <Button
                     className={classes.btnAccept}
