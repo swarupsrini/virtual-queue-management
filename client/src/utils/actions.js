@@ -37,14 +37,12 @@ export const getUserById = async (id, setUser) => {
 };
 
 export const getStoreById = async (id, setStore) => {
-  setStore({
-    owner_id: "1",
-    name: "Walmart",
-    address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-    employee_ids: [],
-    open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
-    close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
-  });
+  const url = `http://localhost:5000/getStoreById?store_id=${id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
+      setStore(res);
+    });
 };
 
 export const getUserStore = async (setUser, setStore) => {
@@ -64,23 +62,62 @@ export const getUserStore = async (setUser, setStore) => {
     open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
     close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
     customer_visits: [
-      { user_id: "1001", entry_time: datetime.parse("Aug 14 2020 06:00:00 PM", "MMM D YYYY hh:mm:ss A"), exit_time: "" },
-      { user_id: "1001", entry_time: datetime.parse("Aug 14 2020 05:00:00 PM", "MMM D YYYY hh:mm:ss A"), exit_time: "" },
-      { user_id: "1001", entry_time: datetime.parse("Aug 14 2020 04:00:00 PM", "MMM D YYYY hh:mm:ss A"), exit_time: "" },
       {
         user_id: "1001",
-        entry_time: datetime.parse("Aug 14 2020 03:00:00 PM", "MMM D YYYY hh:mm:ss A"),
-        exit_time: datetime.parse("Aug 14 2020 03:10:00 PM", "MMM D YYYY hh:mm:ss A"),
+        entry_time: datetime.parse(
+          "Aug 14 2020 06:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: "",
       },
       {
         user_id: "1001",
-        entry_time: datetime.parse("Aug 14 2020 02:00:00 PM", "MMM D YYYY hh:mm:ss A"),
-        exit_time: datetime.parse("Aug 14 2020 02:10:00 PM", "MMM D YYYY hh:mm:ss A"),
+        entry_time: datetime.parse(
+          "Aug 14 2020 05:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: "",
       },
       {
         user_id: "1001",
-        entry_time: datetime.parse("Aug 14 2020 01:00:00 PM", "MMM D YYYY hh:mm:ss A"),
-        exit_time: datetime.parse("Aug 14 2020 01:10:00 PM", "MMM D YYYY hh:mm:ss A"),
+        entry_time: datetime.parse(
+          "Aug 14 2020 04:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: "",
+      },
+      {
+        user_id: "1001",
+        entry_time: datetime.parse(
+          "Aug 14 2020 03:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: datetime.parse(
+          "Aug 14 2020 03:10:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+      },
+      {
+        user_id: "1001",
+        entry_time: datetime.parse(
+          "Aug 14 2020 02:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: datetime.parse(
+          "Aug 14 2020 02:10:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+      },
+      {
+        user_id: "1001",
+        entry_time: datetime.parse(
+          "Aug 14 2020 01:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: datetime.parse(
+          "Aug 14 2020 01:10:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
       },
     ],
   };
