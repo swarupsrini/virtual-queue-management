@@ -66,7 +66,7 @@ export default makeStyles((theme) => ({
     marginLeft: "2px",
   },
   btnEmptyQueue: {
-    height: "64px",
+    height: "63px",
     width: "246px",
     backgroundColor: "#F5CC00",
     marginLeft: "2px",
