@@ -42,7 +42,6 @@ export default makeStyles((theme) => ({
   btnP: {
     fontSize: "25px",
     color: "white",
-    fontSize: "25px",
     display: "table-cell",
     verticalAlign: "middle",
     textAlign: "center",

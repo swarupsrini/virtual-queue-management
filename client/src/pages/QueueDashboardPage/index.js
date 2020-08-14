@@ -62,6 +62,7 @@ export default function QueueDashboard(props) {
 
   useInterval(async () => {
     getUserStore(setUser, setStore);
+    // get queue from backend, remove from waiting if user exited queue
   }, REFRESH_INTERVAL);
 
   const getStoreId = () => store.id;
@@ -139,7 +140,7 @@ export default function QueueDashboard(props) {
   return (
     <div>
       <Header />
-      {showQr && <QrPopup />}
+      {showQr && <QrPopup close={() => setShowQr(false)} />}
 
       <div className={classes.root}>
         <StoreHeader

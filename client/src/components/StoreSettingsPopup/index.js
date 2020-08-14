@@ -2,9 +2,14 @@
 
 import datetime from "date-and-time";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { resetStoreCall, saveStoreSettingsCall } from "../../utils/actions";
+import {
+  resetStoreCall,
+  saveStoreSettingsCall,
+  getStoreById,
+  getUserStore,
+} from "../../utils/actions";
 
 import {
   Paper,
@@ -38,6 +43,11 @@ export default function StoreSettings(props) {
   });
 
   const setStoreVal = (key, value) => setStore({ ...store, [key]: value });
+
+  useEffect(() => {
+    if (props.id) getStoreById(props.id, setStore);
+    else getUserStore(() => {}, setStore);
+  }, [props.id]);
 
   const [storeError, setStoreError] = useState(false);
   const [addressError, setAddressError] = useState(false);
