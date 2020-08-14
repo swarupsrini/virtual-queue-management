@@ -14,7 +14,7 @@ const { User } = require("./models/user");
 const { Employee } = require("./models/user");
 const { Owner } = require("./models/user");
 const { Event } = require("./models/events");
-const { getLatLong, getDistance } = require("./map-quest");
+const { getLatLong, getDistance } = require("./third-party-api");
 const { ObjectID } = require("mongodb");
 const { getStoreByID, getAllStores } = require("./basic._mongo");
 // body-parser: middleware for parsing HTTP JSON body into a usable object
@@ -140,18 +140,13 @@ app.post("/newStore", (req, res) => {
 });
 
 app.get("/getDistance", (req, res) => {
-  getDistance(
+  const dist = getDistance(
     req.query.fromLat,
     req.query.fromLong,
     req.query.toLat,
     req.query.toLong
-  )
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((error) => {
-      res.send(JSON.stringify({ dist: 0 }));
-    });
+  );
+  res.send(JSON.stringify({ dist: dist }));
 });
 
 app.get("/getAllStores", (req, res) => {
