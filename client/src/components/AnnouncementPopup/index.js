@@ -1,14 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { sendAnnouncement } from "../../utils/actions";
 
-import {
-  Paper,
-  Typography,
-  TextField,
-  InputAdornment,
-  IconButton,
-} from "@material-ui/core";
+import { Paper, IconButton } from "@material-ui/core";
 
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 

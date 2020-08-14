@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
+import { readCookie } from "./utils/actions";
+
 // importing all the pages
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -12,88 +14,120 @@ import QueueDashboard from "./pages/QueueDashboardPage";
 import QueueStatus from "./pages/QueueStatusPage";
 import "./App.css";
 
-const readCookie = (setCurrentUser) => {
-  // currently bypassing backend w/ the next 2 lines
-  setCurrentUser({});
-  return;
-
-  const url = "/users/check-session";
-  fetch(url)
-    .then((res) => {
-      if (res.status === 200) {
-        return res.json();
-      }
-    })
-    .then((json) => {
-      if (json && json.currentUser) {
-        setCurrentUser({ currentUser: json.currentUser });
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
 export default function App() {
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    console.log("reading cookie");
     readCookie(setCurrentUser);
   }, []);
+
+  useEffect(() => {
+    console.log("changed current user:", currentUser);
+  }, [currentUser]);
 
   const setUser = (newCurrentUser) => {
     setCurrentUser(newCurrentUser);
   };
 
-  const loginRedirect = () => {
-    // if customer, redirect to store search
-    // if admin, redirect to admin panel
-    // if store owner, redirect to queue dashboard
-    // if store employee, redirect to queue dashboard
-    return <Redirect to="/store-search" />;
-  };
-
+  const login = (
+    <Route
+      exact
+      path="/login"
+      render={() => (
+        <LoginPage
+          user={currentUser}
+          setUser={setUser}
+          // loginRedirect={loginRedirect}
+        />
+      )}
+    />
+  );
+  const signup = (
+    <Route
+      exact
+      path="/signup"
+      render={() => (
+        <SignupPage
+          user={currentUser}
+          setUser={setUser}
+          // loginRedirect={loginRedirect}
+        />
+      )}
+    />
+  );
+  const storeSearch = (
+    <Route path="/store-search" render={() => <StoreSearchPage />} />
+  );
+  const storeAnalytics = (
+    <Route
+      path="/store-analytics/:store_id"
+      render={() => <StoreAnalytics />}
+    />
+  );
+  const queueStatus = (
+    <Route path="/queue-status" render={() => <QueueStatus />} />
+  );
+  const adminPanel = (
+    <Route path="/admin-panel" render={() => <AdminPanelPage />} />
+  );
+  const queueDashboard = (
+    <Route path="/queue-dashboard" render={() => <QueueDashboard />} />
+  );
+  const settings = (
+    <Route path="/settings" render={() => <SettingsPage setUser={setUser} />} />
+  );
   return (
     <div className="App">
       <BrowserRouter>
         <Switch>
           {/* TODO: make all the routes conditional, only have them if user type allows it. */}
           {/* if no user, redirect to login */}
-          <Route
-            exact
-            path="/signup"
-            render={() => (
-              <SignupPage
-                user={currentUser}
-                setUser={setUser}
-                loginRedirect={loginRedirect}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/login"
-            render={() => (
-              <LoginPage
-                user={currentUser}
-                setUser={setUser}
-                loginRedirect={loginRedirect}
-              />
-            )}
-          />
-          <Redirect exact from="/" to="/login" />
-          <Route
-            path="/settings"
-            render={() => <SettingsPage setUser={setUser} />}
-          />
-          <Route path="/store-search" render={() => <StoreSearchPage />} />
-          <Route path="/admin-panel" render={() => <AdminPanelPage />} />
-          <Route
-            path="/store-analytics/:store_id"
-            render={() => <StoreAnalytics />}
-          />
-          <Route path="/queue-dashboard" render={() => <QueueDashboard />} />
-          <Route path="/queue-status" render={() => <QueueStatus />} />
+
+          {/* Routes */}
+          {!currentUser && (
+            <>
+              {login}
+              {signup}
+              <Redirect from="/" to="/login" />
+            </>
+          )}
+
+          {currentUser && currentUser.__t === "visitor" && (
+            <>
+              {storeSearch}
+              {storeAnalytics}
+              {queueStatus}
+              {settings}
+              <Redirect from="/" to="/store-search" />
+            </>
+          )}
+
+          {currentUser && currentUser.__t === "owner" && (
+            <>
+              {queueDashboard}
+              {storeAnalytics}
+              {settings}
+              <Redirect from="/" to="/queue-dashboard" />
+            </>
+          )}
+
+          {currentUser && currentUser.__t === "employee" && (
+            <>
+              {queueDashboard}
+              {storeAnalytics}
+              {settings}
+              <Redirect from="/" to="/queue-dashboard" />
+            </>
+          )}
+
+          {currentUser && currentUser.__t === "admin" && (
+            <>
+              {adminPanel}
+              {settings}
+              <Redirect from="/" to="/admin-panel" />
+            </>
+          )}
         </Switch>
       </BrowserRouter>
     </div>

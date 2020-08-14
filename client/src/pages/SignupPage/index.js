@@ -79,22 +79,19 @@ export default function SignupPage(props) {
       email !== "" &&
       password !== ""
     ) {
-      const errors = signup(props.setUser, {
-        userName,
-        phone,
+      signup(props.setUser, {
+        username: userName,
+        phone_number: phone,
         email,
         password,
         type,
       });
-      if (errors !== true) {
-        errors.forEach((err) => setErrByName(err, true));
-      }
     }
   }
 
-  if (JSON.stringify(props.user) !== JSON.stringify({})) {
-    return props.loginRedirect(props.user);
-  }
+  // if (JSON.stringify(props.user) !== JSON.stringify({})) {
+  //   return props.loginRedirect(props.user);
+  // }
 
   return (
     <Container maxWidth={false} className={classes.background}>

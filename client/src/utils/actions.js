@@ -6,25 +6,106 @@ export const REFRESH_INTERVAL = 3000;
 // In minutes
 export const AVG_WAIT_TIME = 3;
 
+const base = "http://localhost:5000";
+
+export const readCookie = (setCurrentUser) => {
+  const url = base + "/check-session";
+
+  fetch(url)
+    .then((res) => {
+      if (res.status === 200) return res.json();
+    })
+    .then((res) => {
+      console.log(res);
+      if (res && res.currentUser) {
+        console.log({ currentUser: res.currentUser, __t: res.__t });
+        setCurrentUser({ currentUser: res.currentUser, __t: res.__t });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 export const login = (setUser, data) => {
-  // call backend to login, get the user (if valid) and call the setUser
-  // to set it to the returned value
-  if (
-    (data.userName === "user" && data.password === "user") ||
-    (data.userName === "admin" && data.password === "admin")
-  ) {
-    setUser({ username: data.userName });
-    return true;
-  }
+  const url = base + "/login";
+  fetch(url, {
+    method: "post",
+    body: JSON.stringify(data),
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      if (res.status === 200) return res.json();
+      else {
+        alert("Invalid credentials!");
+        throw "Invalid login credentials!";
+      }
+    })
+    .then((res) => {
+      setUser(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const signup = (setUser, data) => {
-  // call backend to sign up, get the user (if valid) and call the setUser
-  // to set it to the returned value
-  // if backend returns error for some of the fields, then return an array
-  // of all the string names of the fields errorring
-  setUser({ username: data.userName });
-  return true;
+  let url = base;
+  if (data.type === "visitor") url += "/newCustomer";
+  else if (data.type === "owner") url += "/newOwner";
+  else if (data.type === "employee") url += "/newEmployee";
+  else console.error("Invalid user type in signup");
+
+  console.log(data);
+
+  fetch(url, {
+    method: "post",
+    body: JSON.stringify(data),
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      if (res.status === 200) return res.json();
+      if (res.status === 403) {
+        alert("These credentials have been taken!");
+        throw "Signup credentials have been taken!";
+      }
+    })
+    .then((res) => {
+      login(setUser, res);
+      return res;
+    })
+    .then((res) => {
+      if (data.type === "owner") {
+        const url1 = base + "/newStore";
+        fetch(url1, {
+          method: "post",
+          body: JSON.stringify({
+            name: "Default Store",
+            address: "Default Address",
+            verified: false,
+            owner_id: res._id,
+            employee_ids: [],
+            open_time: "09:00:00 AM",
+            close_time: "05:00:00 PM",
+          }),
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => console.log("created store:", res));
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const getUserById = async (id, setUser) => {
@@ -64,23 +145,62 @@ export const getUserStore = async (setUser, setStore) => {
     open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
     close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
     customer_visits: [
-      { user_id: "1001", entry_time: datetime.parse("Aug 14 2020 06:00:00 PM", "MMM D YYYY hh:mm:ss A"), exit_time: "" },
-      { user_id: "1001", entry_time: datetime.parse("Aug 14 2020 05:00:00 PM", "MMM D YYYY hh:mm:ss A"), exit_time: "" },
-      { user_id: "1001", entry_time: datetime.parse("Aug 14 2020 04:00:00 PM", "MMM D YYYY hh:mm:ss A"), exit_time: "" },
       {
         user_id: "1001",
-        entry_time: datetime.parse("Aug 14 2020 03:00:00 PM", "MMM D YYYY hh:mm:ss A"),
-        exit_time: datetime.parse("Aug 14 2020 03:10:00 PM", "MMM D YYYY hh:mm:ss A"),
+        entry_time: datetime.parse(
+          "Aug 14 2020 06:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: "",
       },
       {
         user_id: "1001",
-        entry_time: datetime.parse("Aug 14 2020 02:00:00 PM", "MMM D YYYY hh:mm:ss A"),
-        exit_time: datetime.parse("Aug 14 2020 02:10:00 PM", "MMM D YYYY hh:mm:ss A"),
+        entry_time: datetime.parse(
+          "Aug 14 2020 05:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: "",
       },
       {
         user_id: "1001",
-        entry_time: datetime.parse("Aug 14 2020 01:00:00 PM", "MMM D YYYY hh:mm:ss A"),
-        exit_time: datetime.parse("Aug 14 2020 01:10:00 PM", "MMM D YYYY hh:mm:ss A"),
+        entry_time: datetime.parse(
+          "Aug 14 2020 04:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: "",
+      },
+      {
+        user_id: "1001",
+        entry_time: datetime.parse(
+          "Aug 14 2020 03:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: datetime.parse(
+          "Aug 14 2020 03:10:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+      },
+      {
+        user_id: "1001",
+        entry_time: datetime.parse(
+          "Aug 14 2020 02:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: datetime.parse(
+          "Aug 14 2020 02:10:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+      },
+      {
+        user_id: "1001",
+        entry_time: datetime.parse(
+          "Aug 14 2020 01:00:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
+        exit_time: datetime.parse(
+          "Aug 14 2020 01:10:00 PM",
+          "MMM D YYYY hh:mm:ss A"
+        ),
       },
     ],
   };

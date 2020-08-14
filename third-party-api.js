@@ -25,7 +25,6 @@ const getLatLong = (address) => {
           reject("Issue with getting resource");
         } else {
           // const result = body.l;
-          log(body);
           resolve({
             lat: body.latt,
             long: body.longt,

@@ -25,14 +25,12 @@ export default function LoginPage(props) {
   const [showPassword, setShowPassword] = useState("");
 
   function postLogin() {
-    if (!login(props.setUser, { userName, password })) {
-      setIsError(true);
-    }
+    login(props.setUser, { username: userName, password });
   }
 
-  if (JSON.stringify(props.user) !== JSON.stringify({})) {
-    return props.loginRedirect(props.user);
-  }
+  // if (JSON.stringify(props.user) !== JSON.stringify({})) {
+  //   return props.loginRedirect(props.user);
+  // }
 
   return (
     <Container maxWidth={false} className={classes.root}>

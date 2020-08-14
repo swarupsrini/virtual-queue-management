@@ -8,11 +8,12 @@ const { mongoose } = require("./db/mongoose");
 mongoose.set("useFindAndModify", false); // for some deprecation issues
 const cors = require("cors");
 const app = express();
+// CORS for React back-end
+app.use(cors());
 
+// import mongoose models
 const { Store } = require("./models/store");
-const { User } = require("./models/user");
-const { Employee } = require("./models/user");
-const { Owner } = require("./models/user");
+const { User, Employee, Owner } = require("./models/user");
 const { Event } = require("./models/events");
 const { getLatLong, getDistance } = require("./third-party-api");
 const { ObjectID } = require("mongodb");
@@ -23,12 +24,80 @@ const {
   getUserByID,
   getEventsByStoreID,
 } = require("./basic._mongo");
+
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-app.use(cors());
+
 // Setting up a static directory for the files in /pub
 app.use(express.static(__dirname + "/client/build"));
+
+// express-session for managing user sessions
+const session = require("express-session");
+app.use(bodyParser.urlencoded({ extended: true }));
+
+/*************************************************
+ * Session Handling */
+app.use(
+  session({
+    secret: "oursecret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 60000,
+      httpOnly: true,
+    },
+  })
+);
+
+// A route to login and create a session
+app.post("/login", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  // Use the static method on the User model to find a user by their username and password
+  User.findByUsernamePassword(username, password)
+    .then((user) => {
+      // Add the user's id to the session cookie.
+      // We can check later if this exists to ensure we are logged in.
+      req.session.user = user._id;
+      req.session.username = user.username;
+      req.session.__t = !user.__t ? "visitor" : user.__t.toLowerCase();
+      req.session.save();
+      console.log("set session", req.session);
+      res.send({
+        currentUser: user.username,
+        __t: req.session.__t,
+      });
+    })
+    .catch((error) => {
+      res.status(400).send();
+    });
+});
+
+// A route to logout a user
+app.get("/logout", (req, res) => {
+  log("logout");
+  // Remove the session
+  req.session.destroy((error) => {
+    if (error) {
+      res.status(500).send(error);
+    } else {
+      res.send();
+    }
+  });
+});
+
+// A route to check if a use is logged in on the session cookie
+app.get("/check-session", (req, res) => {
+  console.log("check session", req.session);
+  if (req.session.user) {
+    log(req.session.username);
+    res.send({ currentUser: req.session.username, __t: req.session.__t });
+  } else {
+    res.status(401).send();
+  }
+});
 
 /*************************************************/
 // MiddleWares for checking Mongo Stuff
@@ -53,20 +122,60 @@ const mongoUserIDChecker = (req, res, next) => {
   }
 };
 
+// session authentication middleware
+const authenticate = (req, res, next) => {
+  if (req.session.user) {
+    User.findById(req.session.user)
+      .then((user) => {
+        if (!user) {
+          return Promise.reject();
+        } else {
+          req.user = user;
+          next();
+        }
+      })
+      .catch((error) => {
+        res.status(401).send("Unauthorized");
+      });
+  } else {
+    res.status(401).send("Unauthorized");
+  }
+};
+
+const userExists = (req, res, next) => {
+  let invalid = false;
+  User.findOne(
+    {
+      email: req.body.email,
+      username: req.body.username,
+      phone_number: req.body.phone_number,
+    },
+    (err, obj) => {
+      if (obj !== null) {
+        res.status(403).send(err);
+        invalid = true;
+      }
+    }
+  );
+  if (!invalid) next();
+};
+
 /*************************************************/
 // API Endpoints Below
-app.post("/newCustomer", (req, res) => {
+app.post("/newCustomer", userExists, (req, res) => {
+  log("new customer");
   const user = new User({
     password: req.body.password,
     email: req.body.email,
     username: req.body.username,
     phone_number: req.body.phone_number,
+    fav_stores: [],
   });
 
   // Save the user
   user.save().then(
     (user) => {
-      res.send(user);
+      res.send({ ...user.toObject(), __t: "visitor" });
     },
     (error) => {
       res.status(400).send(error);
@@ -74,19 +183,20 @@ app.post("/newCustomer", (req, res) => {
   );
 });
 
-app.post("/newOwner", (req, res) => {
+app.post("/newOwner", userExists, (req, res) => {
+  log("new owne");
   const user = new Owner({
     password: req.body.password,
     email: req.body.email,
     username: req.body.username,
     phone_number: req.body.phone_number,
-    store_id: req.body.store_id,
+    store_id: "",
   });
 
   // Save the user
   user.save().then(
     (user) => {
-      res.send(user);
+      res.send({ ...user.toObject(), __t: "owner" });
     },
     (error) => {
       res.status(400).send(error);
@@ -94,19 +204,20 @@ app.post("/newOwner", (req, res) => {
   );
 });
 
-app.post("/newEmployee", (req, res) => {
+app.post("/newEmployee", userExists, (req, res) => {
+  log("new employee");
   const user = new Employee({
     password: req.body.password,
     email: req.body.email,
     username: req.body.username,
     phone_number: req.body.phone_number,
-    store_id: req.body.store_id,
+    store_id: "",
   });
 
   // Save the user
   user.save().then(
     (user) => {
-      res.send(user);
+      res.send({ ...user.toObject(), __t: "employee" });
     },
     (error) => {
       res.status(400).send(error);
@@ -165,7 +276,7 @@ app.get("/getDistance", (req, res) => {
   res.send(JSON.stringify({ dist: dist }));
 });
 
-app.get("/getAllStores", (req, res) => {
+app.get("/getAllStores", authenticate, (req, res) => {
   getAllStores(
     (result) => {
       res.send(result);
@@ -176,7 +287,7 @@ app.get("/getAllStores", (req, res) => {
   );
 });
 
-app.get("/getAllUsers", (req, res) => {
+app.get("/getAllUsers", authenticate, (req, res) => {
   getAllUsers(
     (result) => {
       res.send(result);
@@ -187,7 +298,7 @@ app.get("/getAllUsers", (req, res) => {
   );
 });
 
-app.get("/getUserById", mongoUserIDChecker, (req, res) => {
+app.get("/getUserById", authenticate, mongoUserIDChecker, (req, res) => {
   getUserByID(
     (result) => {
       res.send(result);
@@ -199,7 +310,7 @@ app.get("/getUserById", mongoUserIDChecker, (req, res) => {
   );
 });
 
-app.get("/getStoreById", mongoStoreIDChecker, (req, res) => {
+app.get("/getStoreById", authenticate, mongoStoreIDChecker, (req, res) => {
   getStoreByID(
     (result) => {
       res.send(result);
@@ -211,7 +322,7 @@ app.get("/getStoreById", mongoStoreIDChecker, (req, res) => {
   );
 });
 
-app.post("/newEvent", (req, res) => {
+app.post("/newEvent", authenticate, (req, res) => {
   // Create a new Event
   const event = new Event({
     store_id: req.body.store_id,
@@ -230,17 +341,22 @@ app.post("/newEvent", (req, res) => {
   );
 });
 
-app.get("/getEventsByStoreId", mongoStoreIDChecker, (req, res) => {
-  getEventsByStoreID(
-    (result) => {
-      res.send(result);
-    },
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.query.store_id
-  );
-});
+app.get(
+  "/getEventsByStoreId",
+  authenticate,
+  mongoStoreIDChecker,
+  (req, res) => {
+    getEventsByStoreID(
+      (result) => {
+        res.send(result);
+      },
+      (error) => {
+        res.status(400).send(error);
+      },
+      req.query.store_id
+    );
+  }
+);
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
