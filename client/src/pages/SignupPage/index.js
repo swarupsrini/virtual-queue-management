@@ -43,14 +43,21 @@ export default function SignupPage(props) {
     switch (name) {
       case "userName":
         setUserError(err);
+        break;
       case "phone":
         setPhoneError(err);
+        break;
       case "email":
         setEmailError(err);
+        break;
       case "password":
         setPassError(err);
+        break;
       case "type":
         setTypeError(err);
+        break;
+      default:
+        break;
     }
   };
 
@@ -79,7 +86,7 @@ export default function SignupPage(props) {
         password,
         type,
       });
-      if (errors != true) {
+      if (errors !== true) {
         errors.forEach((err) => setErrByName(err, true));
       }
     }
