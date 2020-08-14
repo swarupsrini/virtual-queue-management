@@ -42,19 +42,35 @@ export default makeStyles({
     marginBottom:"12px",
   },
   paper: {
-    marginLeft: "30px",
     marginTop: "20px",
     marginRight: "30px",
     height: "135px",
   },
+  typeTitle: {
+    fontSize: "20px",
+    marginTop: "0px",
+    marginBottom: "5px",
+  },
   typeSubtitle: {
+    margin: "0px",
+    fontSize: "55px",
+  },
+  typeSubtitle2: {
     display: "inline-block",
+    fontSize: "55px",
+    margin: "0px",
+  },
+  typeSubtitle3: {
+    display: "inline-block",
+    fontSize: "20px",
+    margin: "0px",
   },
   divElem: {
     marginTop: "10px",
-    width: "120px",
+    width: "156px",
     textAlign: "center",
-    borderRight: "2px solid lightgray",
+    borderRight: "3px solid lightgray",
+    height: "100px",
   },
   root: {
     marginLeft: "30px",
