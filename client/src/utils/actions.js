@@ -3,6 +3,7 @@
 import datetime from "date-and-time";
 
 export const REFRESH_INTERVAL = 3000;
+// In minutes
 export const AVG_WAIT_TIME = 3;
 
 export const login = (setUser, data) => {
@@ -63,13 +64,13 @@ export const getUserStore = async (setUser, setStore) => {
     open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
     close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
     customer_visits: [
-      { user_id: "1001", entry_time: new Date(2020, 7, 12, 18), exit_time: "" },
-      { user_id: "1001", entry_time: new Date(2020, 7, 12, 17), exit_time: "" },
-      { user_id: "1001", entry_time: new Date(2020, 7, 12, 16), exit_time: "" },
+      { user_id: "1001", entry_time: new Date(2020, 7, 13, 18), exit_time: "" },
+      { user_id: "1001", entry_time: new Date(2020, 7, 13, 17), exit_time: "" },
+      { user_id: "1001", entry_time: new Date(2020, 7, 13, 16), exit_time: "" },
       {
         user_id: "1001",
-        entry_time: new Date(2020, 7, 12, 15),
-        exit_time: new Date(2020, 7, 12, 15, 10),
+        entry_time: new Date(2020, 7, 13, 15),
+        exit_time: new Date(2020, 7, 13, 15, 10),
       },
       {
         user_id: "1001",

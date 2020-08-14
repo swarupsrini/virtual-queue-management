@@ -11,6 +11,8 @@ import useInterval from "../../utils/useInterval";
 import { REFRESH_INTERVAL,getUserStore, getQueue, getForeCastWaitTime } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
+import datetime from "date-and-time";
+
 function getNumVisitsToday (store) {
   const dayStart = new Date();
   dayStart.setHours(0);
@@ -84,14 +86,18 @@ export default function StoreAnalytics(props) {
   const [user, setUser] = useState({})
   const [store, setStore] = useState(
     {
-      open_time:new Date(0,0,0,3),
-      close_time:new Date(0,0,0,20),
+      open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
+      close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
       avg_num_admissions:[],
       queue:[],
       customer_visits:[]
     }
   )
   const [viewPage, setViewPage] = useState(null);
+
+  //datetime.format(reservation.time, datetime.compile("MMM D YYYY, h:mm aa"))
+  //const a = datetime.parse("09:00:00 AM", "hh:mm:ss A");
+  //console.log(a.getHours())
 
   useEffect(() => {
     getUserStore(setUser, (store) => {
