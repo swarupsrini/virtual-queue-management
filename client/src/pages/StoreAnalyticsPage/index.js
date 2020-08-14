@@ -136,35 +136,49 @@ export default function StoreAnalytics(props) {
       >
         Join Queue
       </Button>
-      <div className={classes.frame}>
-        <Grid className={classes.datacards} container spacing={6} >
-          <div style={{width:"4px"}}></div>
+      <Paper className={classes.paper} elevation={3}>
+        <Grid container spacing={1}>
           <Grid item>
-            <DataCard title="Forecast wait" number={store.forecast_wait_time} suffix="min"></DataCard>
+            <div className={classes.divElem}>
+              <p className={classes.typeTitle}>Forecast Wait</p>
+              <p className={classes.typeSubtitle2}>{store.forecast_wait_time}</p>
+              <p className={classes.typeSubtitle3}> min</p>
+            </div>
           </Grid>
-          <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="In queue" number={store.in_queue} suffix=""></DataCard>
+            <div className={classes.divElem}>
+              <p className={classes.typeTitle}>In Queue</p>
+              <p className={classes.typeSubtitle}>{store.in_queue}</p>
+            </div>
           </Grid>
-          <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="In store" number={store.in_store} suffix=""></DataCard>
+            <div className={classes.divElem}>
+              <p className={classes.typeTitle}>In Store</p>
+              <p className={classes.typeSubtitle}>{store.in_store}</p>
+            </div>
           </Grid>
-          <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Visits today" number={store.num_visits_today} suffix=""></DataCard>
+            <div className={classes.divElem}>
+              <p className={classes.typeTitle}>Visits today</p>
+              <p className={classes.typeSubtitle}>{store.num_visits_today}</p>
+            </div>
           </Grid>
-          <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Least busy time" number={store.least_busy_time%12} suffix={(store.least_busy_time < 12) ? "am" : "pm"}></DataCard>
+            <div className={classes.divElem}>
+              <p className={classes.typeTitle}>Least busy time</p>
+              <p className={classes.typeSubtitle2}>{store.least_busy_time%12}</p>
+              <p className={classes.typeSubtitle3}>{(store.least_busy_time < 12) ? "am" : "pm"}</p>
+            </div>
           </Grid>
-          <div className={classes.line}></div>
           <Grid item>
-            <DataCard title="Most busy time" number={store.most_busy_time%12} suffix={(store.most_busy_time < 12) ? "am" : "pm"}></DataCard>
+            <div className={classes.divElem}>
+              <p className={classes.typeTitle}>Most busy time</p>
+              <p className={classes.typeSubtitle2}>{store.most_busy_time%12}</p>
+              <p className={classes.typeSubtitle3}>{(store.most_busy_time < 12) ? "am" : "pm"}</p>
+            </div>
           </Grid>
-          <div style={{width:"4px"}}></div>
         </Grid>
-      </div>
+      </Paper>
       <div className={classes.linegraph}>
         <LineGraph yValues={store.avg_num_admissions} startTime={store.open_time.getHours()} />
       </div>
