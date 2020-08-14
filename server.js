@@ -230,7 +230,7 @@ app.post("/newEvent", (req, res) => {
   );
 });
 
-app.get("/getEventsByStoreId", mongoIDChecker, (req, res) => {
+app.get("/getEventsByStoreId", mongoStoreIDChecker, (req, res) => {
   getEventsByStoreID(
     (result) => {
       res.send(result);
