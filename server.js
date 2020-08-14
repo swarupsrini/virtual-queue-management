@@ -54,6 +54,7 @@ app.use(
 app.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  log("login:", username, password);
 
   // Use the static method on the User model to find a user by their username and password
   User.findByUsernamePassword(username, password)
@@ -92,7 +93,6 @@ app.get("/logout", (req, res) => {
 app.get("/check-session", (req, res) => {
   console.log("check session", req.session);
   if (req.session.user) {
-    log(req.session.username);
     res.send({ currentUser: req.session.username, __t: req.session.__t });
   } else {
     res.status(401).send();
@@ -175,7 +175,7 @@ app.post("/newCustomer", userExists, (req, res) => {
   // Save the user
   user.save().then(
     (user) => {
-      res.send({ ...user.toObject(), __t: "visitor" });
+      res.send({ _id: user._id });
     },
     (error) => {
       res.status(400).send(error);
@@ -184,7 +184,7 @@ app.post("/newCustomer", userExists, (req, res) => {
 });
 
 app.post("/newOwner", userExists, (req, res) => {
-  log("new owne");
+  log("new owner");
   const user = new Owner({
     password: req.body.password,
     email: req.body.email,
@@ -196,7 +196,7 @@ app.post("/newOwner", userExists, (req, res) => {
   // Save the user
   user.save().then(
     (user) => {
-      res.send({ ...user.toObject(), __t: "owner" });
+      res.send({ _id: user._id });
     },
     (error) => {
       res.status(400).send(error);
@@ -217,7 +217,7 @@ app.post("/newEmployee", userExists, (req, res) => {
   // Save the user
   user.save().then(
     (user) => {
-      res.send({ ...user.toObject(), __t: "employee" });
+      res.send({ _id: user._id });
     },
     (error) => {
       res.status(400).send(error);

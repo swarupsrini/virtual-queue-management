@@ -16,9 +16,7 @@ export const readCookie = (setCurrentUser) => {
       if (res.status === 200) return res.json();
     })
     .then((res) => {
-      console.log(res);
       if (res && res.currentUser) {
-        console.log({ currentUser: res.currentUser, __t: res.__t });
         setCurrentUser({ currentUser: res.currentUser, __t: res.__t });
       }
     })
@@ -40,7 +38,7 @@ export const login = (setUser, data) => {
     .then((res) => {
       if (res.status === 200) return res.json();
       else {
-        alert("Invalid credentials!");
+        alert("Invalid login credentials!");
         throw "Invalid login credentials!";
       }
     })
@@ -54,12 +52,10 @@ export const login = (setUser, data) => {
 
 export const signup = (setUser, data) => {
   let url = base;
-  if (data.type === "visitor") url += "/newCustomer";
-  else if (data.type === "owner") url += "/newOwner";
-  else if (data.type === "employee") url += "/newEmployee";
+  if (data.__t === "visitor") url += "/newCustomer";
+  else if (data.__t === "owner") url += "/newOwner";
+  else if (data.__t === "employee") url += "/newEmployee";
   else console.error("Invalid user type in signup");
-
-  console.log(data);
 
   fetch(url, {
     method: "post",
@@ -77,11 +73,11 @@ export const signup = (setUser, data) => {
       }
     })
     .then((res) => {
-      login(setUser, res);
+      login(setUser, data);
       return res;
     })
     .then((res) => {
-      if (data.type === "owner") {
+      if (data.__t === "owner") {
         const url1 = base + "/newStore";
         fetch(url1, {
           method: "post",
@@ -267,10 +263,9 @@ export const customerExitedCall = async (setStore) => {
 export const getQueue = async (store, setStore) => {
   let i = 0;
   while (
-    i < store.customer_visits.length && (
-      store.customer_visits[i].exit_time == "" ||
-      store.customer_visits[i].exit_time == null
-    )
+    i < store.customer_visits.length &&
+    (store.customer_visits[i].exit_time == "" ||
+      store.customer_visits[i].exit_time == null)
   ) {
     i++;
   }
@@ -301,12 +296,15 @@ export const getEventsByStoreId = (store, setStore) => {
     .then((res) => res.json())
     .then((res) => {
       res.map((n) => {
-        n.entry_time = datetime.parse(n.entry_time, "MMM D YYYY hh:mm:ss A")
-        n.exit_time = (n.exit_time != "") ? datetime.parse(n.exit_time, "MMM D YYYY hh:mm:ss A") : null
-        return n
+        n.entry_time = datetime.parse(n.entry_time, "MMM D YYYY hh:mm:ss A");
+        n.exit_time =
+          n.exit_time != ""
+            ? datetime.parse(n.exit_time, "MMM D YYYY hh:mm:ss A")
+            : null;
+        return n;
       });
-      store.customer_visits = res
-      setStore(store)
+      store.customer_visits = res;
+      setStore(store);
     });
 };
 

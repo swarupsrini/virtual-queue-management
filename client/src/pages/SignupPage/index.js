@@ -84,7 +84,7 @@ export default function SignupPage(props) {
         phone_number: phone,
         email,
         password,
-        type,
+        __t: type,
       });
     }
   }
