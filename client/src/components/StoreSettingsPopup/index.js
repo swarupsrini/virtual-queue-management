@@ -45,6 +45,10 @@ export default function StoreSettings(props) {
   const setStoreVal = (key, value) => setStore({ ...store, [key]: value });
 
   useEffect(() => {
+    console.log(store);
+  }, [store]);
+
+  useEffect(() => {
     if (props.id) getStoreById(props.id, setStore);
     else getUserStore(() => {}, setStore);
   }, [props.id]);

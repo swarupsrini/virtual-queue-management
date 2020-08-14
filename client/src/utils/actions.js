@@ -28,12 +28,12 @@ export const signup = (setUser, data) => {
 };
 
 export const getUserById = async (id, setUser) => {
-  setUser({
-    username: "user",
-    email: "user@user.com",
-    password: "user",
-    phone_number: "123",
-  });
+  const url = `http://localhost:5000/getUserById?user_id=${id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
+      setUser(res);
+    });
 };
 
 export const getStoreById = async (id, setStore) => {
@@ -41,6 +41,11 @@ export const getStoreById = async (id, setStore) => {
   fetch(url)
     .then((res) => res.json())
     .then((res) => {
+      const temp = datetime.parse(res.open_time, "hh:mm:ss A");
+      const temp2 = datetime.parse(res.close_time, "hh:mm:ss A");
+      res.open_time = temp;
+      res.close_time = temp2;
+      console.log(res);
       setStore(res);
     });
 };

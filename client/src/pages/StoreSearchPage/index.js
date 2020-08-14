@@ -20,6 +20,7 @@ import { iconPerson, best } from "./icon";
 import { getAllStores, getDistance } from "../../utils/actions";
 import { getCurLocation } from "../../utils/location";
 const STORE_SHOW_LIMIT = 20;
+
 function joinedQueue(storeInfo) {
   // there will be a backend call to update user's queue status
 }
@@ -169,7 +170,7 @@ export default function StoreSearchPage() {
             typeof userLoc.long !== "undefined" && (
               <Marker
                 key={122121212}
-                icon={best}
+                icon={iconPerson}
                 position={[userLoc.lat, userLoc.long]}
               ></Marker>
             )}

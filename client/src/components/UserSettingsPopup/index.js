@@ -113,6 +113,16 @@ export default function UserSettingsPopup(props) {
         <Typography className={classes.title}>User Settings</Typography>
 
         <div className={classes.topLeftMargin}>
+          {props.isAdmin && user.store_id && (
+            <TextField
+              variant="outlined"
+              size="small"
+              label="Store ID"
+              disabled
+              value={user.store_id}
+              className={`${classes.textField} ${classes.rightMargin} ${classes.bottomMargin}`}
+            ></TextField>
+          )}
           <TextField
             onChange={(e) => {
               setUserVal("username", e.target.value);
