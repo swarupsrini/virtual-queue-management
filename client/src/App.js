@@ -18,7 +18,6 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    console.log("reading cookie");
     readCookie(setCurrentUser);
   }, []);
 

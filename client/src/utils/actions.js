@@ -8,10 +8,18 @@ export const AVG_WAIT_TIME = 3;
 
 const base = "http://localhost:5000";
 
+const fetchOptions = {
+  headers: {
+    Accept: "application/json, text/plain, */*",
+    "Content-Type": "application/json",
+  },
+  credentials: "include", // REMOVE IF BUILDING
+};
+
 export const readCookie = (setCurrentUser) => {
   const url = base + "/check-session";
 
-  fetch(url)
+  fetch(url, { ...fetchOptions })
     .then((res) => {
       if (res.status === 200) return res.json();
     })
@@ -30,10 +38,7 @@ export const login = (setUser, data) => {
   fetch(url, {
     method: "post",
     body: JSON.stringify(data),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    },
+    ...fetchOptions,
   })
     .then((res) => {
       if (res.status === 200) return res.json();
@@ -60,10 +65,7 @@ export const signup = (setUser, data) => {
   fetch(url, {
     method: "post",
     body: JSON.stringify(data),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    },
+    ...fetchOptions,
   })
     .then((res) => {
       if (res.status === 200) return res.json();
@@ -106,7 +108,9 @@ export const signup = (setUser, data) => {
 
 export const getUserById = async (id, setUser) => {
   const url = `http://localhost:5000/getUserById?user_id=${id}`;
-  fetch(url)
+  fetch(url, {
+    ...fetchOptions,
+  })
     .then((res) => res.json())
     .then((res) => {
       setUser(res);
@@ -115,7 +119,9 @@ export const getUserById = async (id, setUser) => {
 
 export const getStoreById = async (id, setStore) => {
   const url = `http://localhost:5000/getStoreById?store_id=${id}`;
-  fetch(url)
+  fetch(url, {
+    ...fetchOptions,
+  })
     .then((res) => res.json())
     .then((res) => {
       const temp = datetime.parse(res.open_time, "hh:mm:ss A");
@@ -282,17 +288,23 @@ export const getForeCastWaitTime = async (store, setStore) => {
 
 export const getAllStores = () => {
   const url = "http://localhost:5000/getAllStores";
-  return fetch(url);
+  return fetch(url, {
+    ...fetchOptions,
+  });
 };
 
 export const getAllUsers = () => {
   const url = "http://localhost:5000/getAllUsers";
-  return fetch(url);
+  return fetch(url, {
+    ...fetchOptions,
+  });
 };
 
 export const getEventsByStoreId = (store, setStore) => {
   const url = `http://localhost:5000/getEventsByStoreId?store_id=${store._id}`;
-  fetch(url)
+  fetch(url, {
+    ...fetchOptions,
+  })
     .then((res) => res.json())
     .then((res) => {
       res.map((n) => {
@@ -311,7 +323,9 @@ export const getEventsByStoreId = (store, setStore) => {
 export const getDistance = (userLat, userLong, storeLat, storeLong) => {
   const url = `http://localhost:5000/getDistance?fromLat=${userLat}&fromLong=${userLong}&toLat=${storeLat}&toLong=${storeLong}`;
 
-  return fetch(url);
+  return fetch(url, {
+    ...fetchOptions,
+  });
 };
 
 export const sendAnnouncement = (store, msg) => {

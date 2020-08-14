@@ -9,7 +9,8 @@ mongoose.set("useFindAndModify", false); // for some deprecation issues
 const cors = require("cors");
 const app = express();
 // CORS for React back-end
-app.use(cors());
+// REMOVE OPTIONS IN CORS CALL IF BUILDING
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 // import mongoose models
 const { Store } = require("./models/store");
@@ -46,6 +47,7 @@ app.use(
     cookie: {
       expires: 60000,
       httpOnly: true,
+      // secure: false,
     },
   })
 );
@@ -64,8 +66,6 @@ app.post("/login", (req, res) => {
       req.session.user = user._id;
       req.session.username = user.username;
       req.session.__t = !user.__t ? "visitor" : user.__t.toLowerCase();
-      req.session.save();
-      console.log("set session", req.session);
       res.send({
         currentUser: user.username,
         __t: req.session.__t,
@@ -91,7 +91,6 @@ app.get("/logout", (req, res) => {
 
 // A route to check if a use is logged in on the session cookie
 app.get("/check-session", (req, res) => {
-  console.log("check session", req.session);
   if (req.session.user) {
     res.send({ currentUser: req.session.username, __t: req.session.__t });
   } else {
