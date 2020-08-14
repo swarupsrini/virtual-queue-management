@@ -45,7 +45,6 @@ export const getStoreById = async (id, setStore) => {
       const temp2 = datetime.parse(res.close_time, "hh:mm:ss A");
       res.open_time = temp;
       res.close_time = temp2;
-      console.log(res);
       setStore(res);
     });
 };
@@ -187,8 +186,10 @@ export const customerExitedCall = async (setStore) => {
 export const getQueue = async (store, setStore) => {
   let i = 0;
   while (
-    i < store.customer_visits.length &&
-    store.customer_visits[i].exit_time == ""
+    i < store.customer_visits.length && (
+      store.customer_visits[i].exit_time == "" ||
+      store.customer_visits[i].exit_time == null
+    )
   ) {
     i++;
   }
@@ -211,6 +212,21 @@ export const getAllStores = () => {
 export const getAllUsers = () => {
   const url = "http://localhost:5000/getAllUsers";
   return fetch(url);
+};
+
+export const getEventsByStoreId = (store, setStore) => {
+  const url = `http://localhost:5000/getEventsByStoreId?store_id=${store._id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
+      res.map((n) => {
+        n.entry_time = datetime.parse(n.entry_time, "MMM D YYYY hh:mm:ss A")
+        n.exit_time = (n.exit_time != "") ? datetime.parse(n.exit_time, "MMM D YYYY hh:mm:ss A") : null
+        return n
+      });
+      store.customer_visits = res
+      setStore(store)
+    });
 };
 
 export const getDistance = (userLat, userLong, storeLat, storeLong) => {
