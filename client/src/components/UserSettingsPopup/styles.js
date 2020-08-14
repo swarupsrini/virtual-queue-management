@@ -36,6 +36,9 @@ export default makeStyles((theme) => ({
   topMargin: {
     marginTop: theme.spacing(20 / 8),
   },
+  bottomMargin: {
+    marginBottom: theme.spacing(20 / 8),
+  },
   rightMargin: {
     marginRight: theme.spacing(50 / 8),
   },

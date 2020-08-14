@@ -109,23 +109,25 @@ export const signup = (setUser, data) => {
 };
 
 export const getUserById = async (id, setUser) => {
-  setUser({
-    username: "user",
-    email: "user@user.com",
-    password: "user",
-    phone_number: "123",
-  });
+  const url = `http://localhost:5000/getUserById?user_id=${id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
+      setUser(res);
+    });
 };
 
 export const getStoreById = async (id, setStore) => {
-  setStore({
-    owner_id: "1",
-    name: "Walmart",
-    address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-    employee_ids: [],
-    open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
-    close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
-  });
+  const url = `http://localhost:5000/getStoreById?store_id=${id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
+      const temp = datetime.parse(res.open_time, "hh:mm:ss A");
+      const temp2 = datetime.parse(res.close_time, "hh:mm:ss A");
+      res.open_time = temp;
+      res.close_time = temp2;
+      setStore(res);
+    });
 };
 
 export const getUserStore = async (setUser, setStore) => {
@@ -265,8 +267,10 @@ export const customerExitedCall = async (setStore) => {
 export const getQueue = async (store, setStore) => {
   let i = 0;
   while (
-    i < store.customer_visits.length &&
-    store.customer_visits[i].exit_time == ""
+    i < store.customer_visits.length && (
+      store.customer_visits[i].exit_time == "" ||
+      store.customer_visits[i].exit_time == null
+    )
   ) {
     i++;
   }
@@ -289,6 +293,21 @@ export const getAllStores = () => {
 export const getAllUsers = () => {
   const url = "http://localhost:5000/getAllUsers";
   return fetch(url);
+};
+
+export const getEventsByStoreId = (store, setStore) => {
+  const url = `http://localhost:5000/getEventsByStoreId?store_id=${store._id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
+      res.map((n) => {
+        n.entry_time = datetime.parse(n.entry_time, "MMM D YYYY hh:mm:ss A")
+        n.exit_time = (n.exit_time != "") ? datetime.parse(n.exit_time, "MMM D YYYY hh:mm:ss A") : null
+        return n
+      });
+      store.customer_visits = res
+      setStore(store)
+    });
 };
 
 export const getDistance = (userLat, userLong, storeLat, storeLong) => {

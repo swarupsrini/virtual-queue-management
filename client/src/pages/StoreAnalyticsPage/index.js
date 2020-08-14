@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router";
 import StoreHeader from "../../components/StoreHeader";
 import LineGraph from "../../components/LineGraph";
 import DataCard from "../../components/DataCard";
@@ -8,10 +9,11 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
 import useInterval from "../../utils/useInterval";
-import { REFRESH_INTERVAL,getUserStore, getQueue, getForeCastWaitTime } from "../../utils/actions";
+import { REFRESH_INTERVAL,getUserStore, getStoreById, getEventsByStoreId, getQueue, getForeCastWaitTime } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
 import datetime from "date-and-time";
+import { Router } from "@material-ui/icons";
 
 function getNumVisitsToday (store) {
   const dayStart = new Date();
@@ -41,7 +43,6 @@ function getAvgAdmissions (store)  {
   let last_year = 0;
   for (let i = store.queue.length; i < store.customer_visits.length; i++) {
     const visit = store.customer_visits[i].exit_time;
-
     if (
       visit.getDay() != last_day ||
       visit.getMonth() != last_month ||
@@ -74,14 +75,21 @@ function getMostBusyTime (store) {
   return most_busy_time
 };
 
-function updateStore (store) {
-  store.num_visits_today = getNumVisitsToday(store);
-  store.avg_num_admissions = getAvgAdmissions(store);
-  store.least_busy_time = getLeastBusyTime(store);
-  store.most_busy_time = getMostBusyTime(store);
+function updateStore (store, setStore) {
+  getEventsByStoreId(store, (store) => {
+    getQueue(store, () => {});
+    getForeCastWaitTime(store, () => {});
+    store.num_visits_today = getNumVisitsToday(store);
+    store.avg_num_admissions = getAvgAdmissions(store);
+    store.least_busy_time = getLeastBusyTime(store);
+    store.most_busy_time = getMostBusyTime(store);
+    setStore(store)
+  })
+  
 }
 
 export default function StoreAnalytics(props) {
+  const { store_id } = useParams()
   const classes = useStyles();
   const [user, setUser] = useState({})
   const [store, setStore] = useState(
@@ -96,17 +104,16 @@ export default function StoreAnalytics(props) {
   const [viewPage, setViewPage] = useState(null);
 
   useEffect(() => {
-    getUserStore(setUser, (store) => {
-      updateStore(store)
-      setStore(store)
+    getStoreById(store_id, (store) => {
+      updateStore(store, setStore)
     });
     
   }, []);
   
   useInterval(async () => {
-    getUserStore(setUser, (store) => {
-      updateStore(store)
-      setStore(store)
+    getStoreById(store_id, (store) => {
+      updateStore(store, setStore)
+      console.log(store)
     });
   }, REFRESH_INTERVAL);
 

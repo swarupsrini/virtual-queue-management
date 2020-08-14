@@ -158,11 +158,11 @@ export default function AdminPanelPage(props) {
   }, [text, showUsers, showStores]);
 
   function editStoreData(store) {
-    setShowStoreSettings(true);
+    setShowStoreSettings(store);
   }
 
   function editUserData(user) {
-    setShowUserSettings(true);
+    setShowUserSettings(user);
   }
 
   return (
@@ -170,12 +170,14 @@ export default function AdminPanelPage(props) {
       <Header />
       {showUserSettings && (
         <UserSettingsPopup
+          id={showUserSettings._id}
           isAdmin={true}
           close={() => setShowUserSettings(false)}
         />
       )}
       {showStoreSettings && (
         <StoreSettingsPopup
+          id={showStoreSettings._id}
           isAdmin={true}
           close={() => setShowStoreSettings(false)}
         />
