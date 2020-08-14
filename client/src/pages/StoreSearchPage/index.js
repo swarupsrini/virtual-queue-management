@@ -20,7 +20,6 @@ import { iconPerson, best } from "./icon";
 import { getAllStores, getDistance } from "../../utils/actions";
 import { getCurLocation } from "../../utils/location";
 const STORE_SHOW_LIMIT = 20;
-const log = console.log;
 function joinedQueue(storeInfo) {
   // there will be a backend call to update user's queue status
 }
