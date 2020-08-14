@@ -17,29 +17,24 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import useStyles from "./styles";
 
 export default function Search(props) {
-  const [text, setText] = useState("");
   const classes = useStyles();
-
-  useEffect(() => {
-    setText(props.text);
-  }, [props.text]);
 
   return (
     <div>
       <TextField
         className={classes.input}
-        value={text}
+        value={props.text}
         label="Search"
         variant="outlined"
         size="small"
         onKeyPress={(e) => {
           if (e.key === "Enter") {
-            props.searchClick(text);
+            props.searchClick(props.text);
             e.preventDefault();
           }
         }}
         onChange={(e) => {
-          setText(e.target.value);
+          // setText(e.target.value);
           props.onChangedSync(e.target.value);
         }}
         InputProps={{
@@ -56,7 +51,7 @@ export default function Search(props) {
           ),
         }}
       ></TextField>
-      <IconButton onClick={() => props.searchClick(text)}>
+      <IconButton onClick={() => props.searchClick(props.text)}>
         <SearchIcon size="medium"></SearchIcon>
       </IconButton>
       <IconButton onClick={(e) => props.filterClick(e)}>

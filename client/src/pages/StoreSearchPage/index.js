@@ -17,9 +17,10 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import "./index.css";
 import { iconPerson, best } from "./icon";
-
+import { getAllStores, getDistance } from "../../utils/actions";
+import { getCurLocation } from "../../utils/location";
 const STORE_SHOW_LIMIT = 20;
-
+const log = console.log;
 function joinedQueue(storeInfo) {
   // there will be a backend call to update user's queue status
 }
@@ -30,19 +31,6 @@ function updateUserFavStores(storeID, value) {
   // there will be a backend call to update user's favourited stores
 }
 
-function getDistance(storeName) {
-  // Get distance from current location to the store through external API
-  // Code below return mock distances based on store names
-
-  if (storeName.includes("Walmart")) {
-    return 20;
-  } else if (storeName.includes("No Frills")) {
-    return 100;
-  } else {
-    return 30;
-  }
-}
-
 function getUserInfo() {
   // Get user info from server
   // code below requires backend call
@@ -51,66 +39,6 @@ function getUserInfo() {
   };
 }
 
-function getStores() {
-  // Get stores from server
-  // code below requires backend call
-  return [
-    {
-      name: "Walmart",
-      address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-      latitude: 43.7763,
-      longitude: -79.25802,
-      wait: 12,
-      ID: 0,
-      isVerified: true,
-    },
-    {
-      name: "No Frills",
-      address: "4473 Kingston Rd, Scarborough, ON M1E 2N7",
-      latitude: 43.76984,
-      longitude: -79.18742,
-      ID: 1,
-      wait: 9,
-      isVerified: false,
-    },
-    {
-      name: "FreshCo",
-      address: "650 Kingston Rd, Pickering, ON L1V 1A6",
-      latitude: 43.81807,
-      longitude: -79.11887,
-      ID: 2,
-      wait: 24,
-      isVerified: true,
-    },
-    {
-      name: "Walmart",
-      address: "3850 Sheppard Ave E, Scarborough, ON M1T 3L3",
-      latitude: 43.7843507,
-      longitude: -79.2933375,
-      wait: 100,
-      ID: 4,
-      isVerified: false,
-    },
-  ];
-}
-
-function getPosition() {
-  return new Promise((res) => {
-    navigator.geolocation.getCurrentPosition(
-      (result) => {
-        res(result.coords);
-      },
-      () => {},
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-    );
-  });
-}
-
-function getCurrentLocation(callback) {
-  return getPosition().then((coords) => {
-    callback({ lat: coords.latitude, long: coords.longitude });
-  });
-}
 export default function StoreSearchPage() {
   const classes = useStyles();
   const [waitTime, setWait] = useState(false);
@@ -119,7 +47,7 @@ export default function StoreSearchPage() {
   const [fav, setFav] = useState(false);
 
   const [anchor, setAnchor] = useState(null);
-  const [stores, setStores] = useState(sortByDist(getStores()));
+  const [stores, setStores] = useState([]);
 
   const [text, setText] = useState("");
   const [number, setNumber] = useState(10);
@@ -128,13 +56,43 @@ export default function StoreSearchPage() {
   const [analyticsPage, setAnalyticsPage] = useState(null);
 
   useEffect(() => {
-    getCurrentLocation(setUserLoc);
-  }, []);
-
-  useEffect(() => {
-    sort(getStores());
-    if (fav) setStores(displayFav(stores));
-  }, [waitTime, fav]);
+    getCurLocation()
+      .then((user) => {
+        setUserLoc(user);
+        return [new Promise((resolve) => resolve(user)), getAllStores()];
+      })
+      .then((arr) => Promise.all(arr))
+      .then(([user, storeRes]) => [
+        new Promise((resolve) => resolve(user)),
+        storeRes.json(),
+      ])
+      .then((arr) => Promise.all(arr))
+      .then(([user, storeRes]) => {
+        return storeRes.map((store) => {
+          return getDistance(user.lat, user.long, store.lat, store.long)
+            .then((res) => res.json())
+            .then((res) => {
+              return { ...store, distance: res.dist };
+            });
+        });
+      })
+      .then((storeRes) => Promise.all(storeRes))
+      .then((storeRes) => {
+        let result = [];
+        if (text === "") result = storeRes;
+        else {
+          storeRes.map((temp) => {
+            if (temp.name.toLowerCase().includes(text.toLowerCase())) {
+              result.push(temp);
+            } else if (temp._id === text) {
+              result.push(temp);
+            }
+          });
+        }
+        sort(result);
+        if (fav) setStores(displayFav(result));
+      });
+  }, [waitTime, fav, text]);
 
   function toggleWait() {
     setWait((prev) => !prev);
@@ -155,22 +113,15 @@ export default function StoreSearchPage() {
   function sortByWait(stores) {
     const sorted = [...stores];
     sorted.sort((a, b) => {
-      if (a.wait < b.wait) {
-        return -1;
-      }
+      return a.wait - b.wait;
     });
     return sorted;
   }
 
   function sortByDist(stores) {
     const sorted = [...stores];
-    for (let i = 0; i < sorted.length; i++) {
-      sorted[i].distance = getDistance(sorted[i].name);
-    }
     sorted.sort((a, b) => {
-      if (a.distance < b.distance) {
-        return -1;
-      }
+      return a.distance - b.distance;
     });
     return sorted;
   }
@@ -179,43 +130,9 @@ export default function StoreSearchPage() {
     const result = [];
     const favs = getUserInfo().fav;
     for (let i = 0; i < stores.length; i++) {
-      if (favs.includes(stores[i].ID)) {
+      if (favs.includes(stores[i]._id)) {
         result.push(stores[i]);
       }
-    }
-    return result;
-  }
-
-  function markerClicked(store) {
-    setText(store.ID);
-    searchBarText(store.ID);
-  }
-
-  function searchBarText(query) {
-    const filteredResult = filter(query);
-    sort(filteredResult);
-  }
-
-  function filter(query) {
-    let result = [];
-    const temp = getStores();
-    console.log(userLoc);
-
-    if (query === "") result = temp;
-    else {
-      for (let i = 0; i < temp.length; i++) {
-        if (isNaN(query)) {
-          if (temp[i].name.toLowerCase().includes(query.toLowerCase())) {
-            result.push(temp[i]);
-          }
-        } else if (temp[i].ID === parseInt(query)) {
-          result.push(temp[i]);
-          break;
-        }
-      }
-    }
-    if (fav) {
-      result = displayFav(result);
     }
     return result;
   }
@@ -239,10 +156,13 @@ export default function StoreSearchPage() {
 
           {stores.slice(0, number).map((store) => (
             <Marker
-              key={store.ID}
-              position={[store.latitude, store.longitude]}
+              key={store._id}
+              position={[
+                typeof store.lat !== "undefined" && store.lat,
+                typeof store.lat !== "undefined" && store.long,
+              ]}
               onclick={() => {
-                markerClicked(store);
+                setText(store._id);
               }}
             ></Marker>
           ))}
@@ -262,32 +182,31 @@ export default function StoreSearchPage() {
             filterClick={(e) => {
               setAnchor(e.currentTarget);
             }}
-            searchClick={searchBarText}
+            searchClick={setText}
             clearClick={() => {
               setText("");
-              searchBarText("");
             }}
             onChangedSync={(e) => setText(e)}
             text={text}
           />
         </ListItem>
         {stores.slice(0, number).map((store) => (
-          <ListItem key={store.ID}>
+          <ListItem key={store._id}>
             <StoreCard
               title={store.name}
               min={store.wait}
-              dist={getDistance(store.name)}
-              verified={store.isVerified}
-              favorited={Boolean(getUserInfo().fav.includes(store.ID))}
+              dist={store.distance}
+              verified={store.verified}
+              favorited={Boolean(getUserInfo().fav.includes(store._id))}
               joinClick={() => {
                 joinedQueue(store);
                 setViewPage("/queue-status");
               }}
               viewClick={() => {
                 viewData(store);
-                setAnalyticsPage("/store-analytics/" + store.ID);
+                setAnalyticsPage("/store-analytics/" + store._id);
               }}
-              updateUserFav={(fav) => updateUserFavStores(store.ID, fav)}
+              updateUserFav={(fav) => updateUserFavStores(store._id, fav)}
               address={store.address}
             ></StoreCard>
           </ListItem>

@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
 
 export default makeStyles((theme) => ({
   root: {
@@ -10,6 +9,7 @@ export default makeStyles((theme) => ({
     position: "fixed",
     maxHeight: "calc(100% - 64px)",
     overflow: "auto",
+    width: "400px",
     backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
   popup: {

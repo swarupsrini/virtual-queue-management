@@ -8,15 +8,17 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "date-and-time": "^0.14.0",
     "framer": "^1.2.4",
     "leaflet": "^1.6.0",
     "leaflet-extra-markers": "^1.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",
+    "react-qr-reader": "^2.2.1",
     "react-qr-scanner": "0.0.9",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.2"
+    "react-scripts": "^3.4.3"
   },
   "scripts": {
     "start": "react-scripts start",

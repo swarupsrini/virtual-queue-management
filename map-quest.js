@@ -17,7 +17,6 @@ const getLatLong = (address) => {
           reject("Issue with getting resource");
         } else {
           const result = body.results[0].locations[0].latLng;
-          log(result);
           resolve({
             lat: result.lat,
             long: result.lng,
@@ -28,4 +27,27 @@ const getLatLong = (address) => {
   });
 };
 
-module.exports = { getLatLong };
+const getDistance = (fromLat, fromLong, toLat, toLong) => {
+  return new Promise((resolve, reject) => {
+    request(
+      {
+        url: `http://www.mapquestapi.com/directions/v2/route?key=${process.env.MAP_QUEST_API_KEY}&from=${fromLat},${fromLong}&to=${toLat},${toLong}`,
+        json: true,
+      },
+      (error, response, body) => {
+        if (error) {
+          reject("Can't connect to server");
+        } else if (response.statusCode !== 200) {
+          reject("Issue with getting resource");
+        } else {
+          const result = body.route.distance;
+          resolve({
+            dist: Math.round(result * 1.609 * 100) / 100,
+          });
+        }
+      }
+    );
+  });
+};
+
+module.exports = { getLatLong, getDistance };

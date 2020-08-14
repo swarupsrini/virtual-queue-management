@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 import {
   Paper,
@@ -19,6 +18,9 @@ import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import SaveButton from "../../components/SaveButton";
 import Header from "../../components/Header";
+
+import StoreSettingsPopup from "../../components/StoreSettingsPopup";
+import UserSettingsPopup from "../../components/UserSettingsPopup";
 
 import useStyles from "./styles";
 
@@ -48,17 +50,30 @@ function UserSettings() {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   function saveUserSettings() {
-    let updated = []
+    let updated = [];
     // call server to get all the current info about user
     // call server to change any of them if it's different
-    if (!userError && userName !== "" && userName !=="user") updated.push("username");
-    if (!phoneError && phone !== "" && phone !=="123456789") updated.push("phone");
-    if (!emailError && email !== "" && email !=="user@user.com") updated.push("email");
-    if (!passError && !newPassError && !newConfirmPassError && password !== newPassword) updated.push("password");
+    if (!userError && userName !== "" && userName !== "user")
+      updated.push("username");
+    if (!phoneError && phone !== "" && phone !== "123456789")
+      updated.push("phone");
+    if (!emailError && email !== "" && email !== "user@user.com")
+      updated.push("email");
+    if (
+      !passError &&
+      !newPassError &&
+      !newConfirmPassError &&
+      password !== newPassword
+    )
+      updated.push("password");
     if (updated.length > 0) {
-      alert("The following fields have been updated: ".concat(updated.join(", ")));
+      alert(
+        "The following fields have been updated: ".concat(updated.join(", "))
+      );
     } else {
-      alert("No fields have been updated! Please make sure all fields are valid and are different from the current fields!");
+      alert(
+        "No fields have been updated! Please make sure all fields are valid and are different from the current fields!"
+      );
     }
   }
 
@@ -201,16 +216,16 @@ function UserSettings() {
         ></TextField>
       </div>
 
-      <Link to="/" className={classes.linkButton}>
-        <Button
-          color="primary"
-          variant="contained"
-          className={classes.topLeftMargin}
-          onClick={deactivateAccount}
-        >
-          Deactivate Account
-        </Button>
-      </Link>
+      {/* <Link to="/" className={classes.linkButton}> */}
+      <Button
+        color="primary"
+        variant="contained"
+        className={classes.topLeftMargin}
+        onClick={deactivateAccount}
+      >
+        Deactivate Account
+      </Button>
+      {/* </Link> */}
     </Paper>
   );
 }
@@ -231,10 +246,11 @@ function StoreSettings() {
   const [employees, setEmployees] = useState([]);
 
   function saveStoreSettings() {
-    let updated = []
+    let updated = [];
     // call server to get all the current info about user
     // call server to change any of them if it's different
-    if (!storeError && storeName !== "" && storeName !=="user") updated.push("store name");
+    if (!storeError && storeName !== "" && storeName !== "user")
+      updated.push("store name");
   }
 
   function addEmployee() {
@@ -353,8 +369,10 @@ export default function SettingsPage() {
   return (
     <div className={classes.root}>
       <Header></Header>
-      <UserSettings />
-      <StoreSettings />
+      <UserSettingsPopup isAdmin={false} close={() => {}} />
+      <StoreSettingsPopup isAdmin={false} close={() => {}} />
+      {/* <UserSettings />
+      <StoreSettings /> */}
     </div>
   );
 }
