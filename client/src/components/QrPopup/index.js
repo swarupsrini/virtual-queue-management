@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import QrReader from "react-qr-reader";
 
-import {
-  Paper,
-  Typography,
-  TextField,
-  InputAdornment,
-  IconButton,
-} from "@material-ui/core";
+import { Paper, IconButton } from "@material-ui/core";
 
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import CheckIcon from "@material-ui/icons/Check";

@@ -1,0 +1,72 @@
+import { makeStyles } from "@material-ui/core/styles";
+
+export default makeStyles((theme) => ({
+  root: {
+    backgroundColor: "rgba(163, 163, 163, 0.7)",
+    height: "100%",
+    width: "100%",
+    position: "fixed",
+    left: "0px",
+    top: "0px",
+    zIndex: 2,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  paper: {
+    width: "520px",
+    height: "150px",
+    padding: "25px",
+  },
+  btnBack: {
+    backgroundColor: "#BDBDBD",
+    height: "45px",
+    width: "45px",
+    float: "right",
+    marginTop: "-15px",
+    marginRight: "-5px",
+  },
+  iconBack: {
+    height: "200%",
+    width: "200%",
+  },
+  title: {
+    fontSize: "22px",
+    margin: "0px",
+    marginBottom: "25px",
+  },
+  input: {
+    fontSize: "22px",
+    fontFamily: "inherit",
+    width: "419px",
+    height: "92px",
+    padding: "10px",
+    boxSizing: "border-box",
+    resize: "none",
+    border: "none",
+    backgroundColor: "rgba(184, 184, 184, 0.5)",
+    float: "left",
+  },
+  btnP: {
+    fontSize: "25px",
+    width: "205px",
+    height: "65px",
+    color: "white",
+    display: "table-cell",
+    verticalAlign: "middle",
+    textAlign: "center",
+  },
+  btnDiv: {
+    borderRadius: "5px",
+    display: "table",
+    cursor: "pointer",
+  },
+  btnSend: {
+    backgroundColor: "rgb(59, 145, 237)",
+    height: "92px",
+    width: "92px",
+    float: "left",
+    marginLeft: "5px",
+    outlineColor: "blue",
+  },
+}));

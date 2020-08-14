@@ -18,6 +18,7 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import { NavLink } from "react-router-dom";
 import QrPopup from "../../components/QrPopup";
+import AnnouncementPopup from "../../components/AnnouncementPopup";
 
 function InfoCard(props) {
   return (
@@ -154,13 +155,15 @@ export default function QueueDashboard(props) {
       <Header />
       {showQr && (
         <QrPopup
-          validData={showQr}
+          validData={qrData}
           accept={qrAccept}
           reject={qrReject}
           close={() => setShowQr(false)}
         />
       )}
-
+      {showAnn && (
+        <AnnouncementPopup store={showAnn} close={() => setShowAnn(false)} />
+      )}
       <div className={classes.root}>
         <StoreHeader
           title={getStoreName()}
@@ -228,7 +231,7 @@ export default function QueueDashboard(props) {
           <p className={classes.currentSectionTitle}>Currently Waiting</p>
           <Button
             className={classes.btnSendAnnouncement}
-            onClick={null}
+            onClick={() => setShowAnn(store)}
             text="Send Announcement"
           />
         </div>

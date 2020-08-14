@@ -171,3 +171,7 @@ export const getDistance = (userLat, userLong, storeLat, storeLong) => {
 
   return fetch(url);
 };
+
+export const sendAnnouncement = (store, msg) => {
+  // call backend to send announcement for the store
+};
