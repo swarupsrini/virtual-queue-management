@@ -147,7 +147,7 @@ export default function QueueStatus(props) {
               typeof userLoc.long !== "undefined" && (
                 <Marker
                   key={122121212}
-                  icon={best}
+                  icon={iconPerson}
                   position={[userLoc.lat, userLoc.long]}
                 ></Marker>
               )}
