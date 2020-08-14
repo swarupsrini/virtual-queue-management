@@ -8,8 +8,76 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
 import useInterval from "../../utils/useInterval";
-import { REFRESH_INTERVAL,getUserStore, getNumVisitsToday, getAvgAdmissions, getLeastBusyTime, getMostBusyTime, getQueue, getForeCastWaitTime, updateStore } from "../../utils/actions";
+import { REFRESH_INTERVAL,getUserStore, getQueue, getForeCastWaitTime } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
+
+function getNumVisitsToday (store) {
+  const dayStart = new Date();
+  dayStart.setHours(0);
+  dayStart.setMinutes(0);
+  dayStart.setSeconds(0);
+
+  let num_visits_today = 0;
+  while (
+    num_visits_today + store.queue.length < store.customer_visits.length &&
+    dayStart <
+      store.customer_visits[num_visits_today + store.queue.length].exit_time
+  ) {
+    num_visits_today += 1;
+  }
+  return num_visits_today;
+};
+
+function getAvgAdmissions (store)  {
+  const num_admissions = new Array(
+    store.close_time.getHours() - store.open_time.getHours()
+  ).fill(0);
+
+  let num_days = 0;
+  let last_day = 0;
+  let last_month = 0;
+  let last_year = 0;
+  for (let i = store.queue.length; i < store.customer_visits.length; i++) {
+    const visit = store.customer_visits[i].exit_time;
+
+    if (
+      visit.getDay() != last_day ||
+      visit.getMonth() != last_month ||
+      visit.getYear() != last_year
+    ) {
+      last_day = visit.getDay();
+      last_month = visit.getMonth();
+      last_year = visit.getYear();
+      num_days += 1;
+    }
+    num_admissions[visit.getHours() - store.open_time.getHours()] += 1;
+  }
+  const avg_num_admissions = num_admissions.map((n) => n / num_days);
+  return avg_num_admissions
+};
+
+function getLeastBusyTime (store) {
+  const min_num_admissions = Math.min.apply(null, store.avg_num_admissions);
+  const least_busy_time =
+    store.avg_num_admissions.indexOf(min_num_admissions) +
+    store.open_time.getHours();
+  return least_busy_time
+};
+
+function getMostBusyTime (store) {
+  const max_num_admissions = Math.max.apply(null, store.avg_num_admissions);
+  const most_busy_time =
+    store.avg_num_admissions.indexOf(max_num_admissions) +
+    store.open_time.getHours();
+  return most_busy_time
+};
+
+function updateStore (store) {
+  store.num_visits_today = getNumVisitsToday(store);
+  store.avg_num_admissions = getAvgAdmissions(store);
+  store.least_busy_time = getLeastBusyTime(store);
+  store.most_busy_time = getMostBusyTime(store);
+}
 
 export default function StoreAnalytics(props) {
   const classes = useStyles();
@@ -17,17 +85,27 @@ export default function StoreAnalytics(props) {
   const [store, setStore] = useState(
     {
       open_time:new Date(0,0,0,3),
+      close_time:new Date(0,0,0,20),
       avg_num_admissions:[],
+      queue:[],
+      customer_visits:[]
     }
   )
   const [viewPage, setViewPage] = useState(null);
 
   useEffect(() => {
-    getUserStore(setUser, setStore);
+    getUserStore(setUser, (store) => {
+      updateStore(store)
+      setStore(store)
+    });
+    
   }, []);
   
   useInterval(async () => {
-    getUserStore(setUser, setStore)
+    getUserStore(setUser, (store) => {
+      updateStore(store)
+      setStore(store)
+    });
   }, REFRESH_INTERVAL);
 
   return (
