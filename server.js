@@ -16,7 +16,12 @@ const { Owner } = require("./models/user");
 const { Event } = require("./models/events");
 const { getLatLong, getDistance } = require("./third-party-api");
 const { ObjectID } = require("mongodb");
-const { getStoreByID, getAllStores } = require("./basic._mongo");
+const {
+  getStoreByID,
+  getAllStores,
+  getAllUsers,
+  getUserByID,
+} = require("./basic._mongo");
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -27,9 +32,19 @@ app.use(express.static(__dirname + "/client/build"));
 /*************************************************/
 // MiddleWares for checking Mongo Stuff
 
-const mongoIDChecker = (req, res, next) => {
+const mongoStoreIDChecker = (req, res, next) => {
   // check mongoose connection established.
   if (!ObjectID.isValid(req.query.store_id)) {
+    res.status(500).send("Wrong Mongo ID");
+    return;
+  } else {
+    next();
+  }
+};
+
+const mongoUserIDChecker = (req, res, next) => {
+  // check mongoose connection established.
+  if (!ObjectID.isValid(req.query.user_id)) {
     res.status(500).send("Wrong Mongo ID");
     return;
   } else {
@@ -160,7 +175,30 @@ app.get("/getAllStores", (req, res) => {
   );
 });
 
-app.get("/getStoreById", mongoIDChecker, (req, res) => {
+app.get("/getAllUsers", (req, res) => {
+  getAllUsers(
+    (result) => {
+      res.send(result);
+    },
+    (error) => {
+      res.status(400).send(error);
+    }
+  );
+});
+
+app.get("/getUserById", mongoUserIDChecker, (req, res) => {
+  getUserByID(
+    (result) => {
+      res.send(result);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.query.user_id
+  );
+});
+
+app.get("/getStoreById", mongoStoreIDChecker, (req, res) => {
   getStoreByID(
     (result) => {
       res.send(result);

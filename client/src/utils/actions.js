@@ -231,6 +231,11 @@ export const getAllStores = () => {
   return fetch(url);
 };
 
+export const getAllUsers = () => {
+  const url = "http://localhost:5000/getAllUsers";
+  return fetch(url);
+};
+
 export const getDistance = (userLat, userLong, storeLat, storeLong) => {
   const url = `http://localhost:5000/getDistance?fromLat=${userLat}&fromLong=${userLong}&toLat=${storeLat}&toLong=${storeLong}`;
 
