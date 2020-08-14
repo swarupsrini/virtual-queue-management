@@ -64,23 +64,23 @@ export const getUserStore = async (setUser, setStore) => {
     open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
     close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
     customer_visits: [
-      { user_id: "1001", entry_time: new Date(2020, 7, 13, 18), exit_time: "" },
-      { user_id: "1001", entry_time: new Date(2020, 7, 13, 17), exit_time: "" },
-      { user_id: "1001", entry_time: new Date(2020, 7, 13, 16), exit_time: "" },
+      { user_id: "1001", entry_time: datetime.parse("Aug 14 2020 06:00:00 PM", "MMM D YYYY hh:mm:ss A"), exit_time: "" },
+      { user_id: "1001", entry_time: datetime.parse("Aug 14 2020 05:00:00 PM", "MMM D YYYY hh:mm:ss A"), exit_time: "" },
+      { user_id: "1001", entry_time: datetime.parse("Aug 14 2020 04:00:00 PM", "MMM D YYYY hh:mm:ss A"), exit_time: "" },
       {
         user_id: "1001",
-        entry_time: new Date(2020, 7, 13, 15),
-        exit_time: new Date(2020, 7, 13, 15, 10),
+        entry_time: datetime.parse("Aug 14 2020 03:00:00 PM", "MMM D YYYY hh:mm:ss A"),
+        exit_time: datetime.parse("Aug 14 2020 03:10:00 PM", "MMM D YYYY hh:mm:ss A"),
       },
       {
         user_id: "1001",
-        entry_time: new Date(2020, 7, 12, 14),
-        exit_time: new Date(2020, 7, 12, 14, 10),
+        entry_time: datetime.parse("Aug 14 2020 02:00:00 PM", "MMM D YYYY hh:mm:ss A"),
+        exit_time: datetime.parse("Aug 14 2020 02:10:00 PM", "MMM D YYYY hh:mm:ss A"),
       },
       {
         user_id: "1001",
-        entry_time: new Date(2020, 7, 11, 13),
-        exit_time: new Date(2020, 7, 11, 13, 10),
+        entry_time: datetime.parse("Aug 14 2020 01:00:00 PM", "MMM D YYYY hh:mm:ss A"),
+        exit_time: datetime.parse("Aug 14 2020 01:10:00 PM", "MMM D YYYY hh:mm:ss A"),
       },
     ],
   };

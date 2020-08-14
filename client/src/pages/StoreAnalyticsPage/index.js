@@ -8,7 +8,7 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
 import useInterval from "../../utils/useInterval";
-import { REFRESH_INTERVAL,getUserStore, getQueue, getForeCastWaitTime, getAllStores } from "../../utils/actions";
+import { REFRESH_INTERVAL,getUserStore, getQueue, getForeCastWaitTime } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
 import datetime from "date-and-time";
@@ -95,10 +95,6 @@ export default function StoreAnalytics(props) {
   )
   const [viewPage, setViewPage] = useState(null);
 
-  //datetime.format(reservation.time, datetime.compile("MMM D YYYY, h:mm aa"))
-  //const a = datetime.parse("09:00:00 AM", "hh:mm:ss A");
-  //console.log(a.getHours())
-
   useEffect(() => {
     getUserStore(setUser, (store) => {
       updateStore(store)
@@ -112,7 +108,6 @@ export default function StoreAnalytics(props) {
       updateStore(store)
       setStore(store)
     });
-    console.log(getAllStores())
   }, REFRESH_INTERVAL);
 
   return (
