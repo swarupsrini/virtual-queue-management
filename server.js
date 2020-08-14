@@ -16,7 +16,7 @@ const { Owner } = require("./models/user");
 const { Event } = require("./models/events");
 const { getLatLong, getDistance } = require("./third-party-api");
 const { ObjectID } = require("mongodb");
-const { getStoreByID, getAllStores } = require("./basic._mongo");
+const { getStoreByID, getAllStores, getEventsByStoreID } = require("./basic._mongo");
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -162,6 +162,37 @@ app.get("/getAllStores", (req, res) => {
 
 app.get("/getStoreById", mongoIDChecker, (req, res) => {
   getStoreByID(
+    (result) => {
+      res.send(result);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.query.store_id
+  );
+});
+
+app.post("/newEvent", (req, res) => {
+  // Create a new Event
+  const event = new Event({
+    store_id: req.body.store_id,
+    user_id: req.body.user_id,
+    entry_time: req.body.entry_time, 
+    exit_time: req.body.exit_time
+  });
+
+  event.save().then(
+    (event) => {
+      res.send(event);
+    },
+    (error) => {
+      res.status(400).send(error); // 400 for bad request
+    }
+  );
+});
+
+app.get("/getEventsByStoreId", mongoIDChecker, (req, res) => {
+  getEventsByStoreID(
     (result) => {
       res.send(result);
     },

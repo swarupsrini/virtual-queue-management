@@ -8,7 +8,7 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
 import useInterval from "../../utils/useInterval";
-import { REFRESH_INTERVAL,getUserStore, getQueue, getForeCastWaitTime } from "../../utils/actions";
+import { REFRESH_INTERVAL,getUserStore, getQueue, getForeCastWaitTime, getAllStores } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
 import datetime from "date-and-time";
@@ -112,6 +112,7 @@ export default function StoreAnalytics(props) {
       updateStore(store)
       setStore(store)
     });
+    console.log(getAllStores())
   }, REFRESH_INTERVAL);
 
   return (
