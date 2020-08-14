@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router";
 import StoreHeader from "../../components/StoreHeader";
 import LineGraph from "../../components/LineGraph";
 import DataCard from "../../components/DataCard";
@@ -12,6 +13,7 @@ import { REFRESH_INTERVAL,getUserStore, getQueue, getForeCastWaitTime } from "..
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
 import datetime from "date-and-time";
+import { Router } from "@material-ui/icons";
 
 function getNumVisitsToday (store) {
   const dayStart = new Date();
@@ -82,6 +84,7 @@ function updateStore (store) {
 }
 
 export default function StoreAnalytics(props) {
+  const { store_id } = useParams()
   const classes = useStyles();
   const [user, setUser] = useState({})
   const [store, setStore] = useState(
