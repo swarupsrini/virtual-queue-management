@@ -416,15 +416,15 @@ export const getUserStoreId = () => {
     .then((res) => {
       return res;
     });
-};
-export const getCurrentUser = () => {
+}
+export const getCurrentUser = (setUser) => {
   const url = `http://localhost:5000/getCurrentUser`;
   fetch(url, {
     ...fetchOptions,
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res);
-      return res;
+      console.log(res)
+      setUser(res);
     });
 };

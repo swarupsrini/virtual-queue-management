@@ -465,7 +465,13 @@ app.patch("/updateStore", (req, res) => {
 app.get("/getCurrentUser", authenticate, (req, res) => {
   getUserByID(
     (result) => {
-      res.send(result);
+      res.send({
+        id: result.id,
+        username: result.username,
+        email: result.email,
+        phone_number: result.phone_number,
+        fav_stores: result.fav_stores
+      });
     },
     (error) => {
       res.status(400).send(error);
