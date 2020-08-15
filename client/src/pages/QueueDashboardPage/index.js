@@ -10,6 +10,8 @@ import {
   deactivateQueueCall,
   emptyQueueCall,
   customerExitedCall,
+  getQueue,
+  getEventsByStoreId,
 } from "../../utils/actions";
 
 import StoreHeader from "../../components/StoreHeader";
@@ -59,23 +61,30 @@ export default function QueueDashboard(props) {
   const [user, setUser] = useState({});
   const [store, setStore] = useState({});
 
-  const [inQueue, setInQueue] = useState(0);
+  const [recent, setRecent] = useState({});
+  const [current, setCurrent] = useState([]);
 
   useEffect(() => {
     getUserStore(setUser, setStore);
-    // console.log("store:", JSON.stringify(store));
   }, []);
 
   useInterval(async () => {
-    getUserStore(setUser, setStore);
-    // get queue from backend, remove from waiting if user exited queue
-    // console.log("store:", JSON.stringify(store));
+    // update current based on store.queue
+    getUserStore(setUser, (store) => {
+      getEventsByStoreId(store, (store) => {
+        getQueue(store, setStore);
+      });
+    });
   }, REFRESH_INTERVAL);
+
+  useEffect(() => {
+    console.log("store changed:", JSON.stringify(store));
+  }, [store]);
 
   const getStoreId = () => store.id;
   const getStoreName = () => store.name;
   const getStoreAddress = () => store.address;
-  const getStoreInQueue = () => inQueue;
+  const getStoreInQueue = () => (store.queue ? store.queue.length : 0);
   const getStoreInStore = () => store.in_store;
   const deactivateQueue = () => deactivateQueueCall(store, setStore);
   const emptyQueue = () => emptyQueueCall(setStore);
@@ -83,36 +92,26 @@ export default function QueueDashboard(props) {
     customerExitedCall(setStore);
   };
 
-  const [recent, setRecent] = useState({
-    id: "1",
-    username: "eryk123",
-    time: 10,
-    notified: true,
-  });
-  const [current, setCurrent] = useState([
-    {
-      id: "1",
-      username: "srini140",
-      time: 10,
-      notified: true,
-    },
-    {
-      id: "2",
-      username: "bhanothe",
-      time: 20,
-      notified: false,
-    },
-    {
-      id: "1",
-      username: "bob123",
-      time: 20,
-      notified: false,
-    },
-  ]);
-
-  useEffect(() => {
-    setInQueue(current.length);
-  }, [current]);
+  // const [current, setCurrent] = useState([
+  //   {
+  //     id: "1",
+  //     username: "srini140",
+  //     time: 10,
+  //     notified: true,
+  //   },
+  //   {
+  //     id: "2",
+  //     username: "bhanothe",
+  //     time: 20,
+  //     notified: false,
+  //   },
+  //   {
+  //     id: "1",
+  //     username: "bob123",
+  //     time: 20,
+  //     notified: false,
+  //   },
+  // ]);
 
   const removeFromCurrent = (item) =>
     setCurrent(
