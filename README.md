@@ -1,15 +1,7 @@
-Note: The commit for this `README` document including instructions has been submitted half an hour late, although the app itself has been completed on time. All the commits for the code have been made on time. Apologies for the inconvenience caused.
+This application is a virtual Queue Management system. 
 
-## Running the app
-
-### `npm i`
-Installs dependencies.
-
-### `npm start`
-Runs the app in development mode.
-
-## Usage Instructions
-Note that both types of users have access to all pages as of now. The normal user is not restricted from any pages. This is because we've omitted the use of a global state or a backend to retreive information about the user in each component of the app. In addition, the "Scan QR" functionality has not yet been implemented because it requires access to the backend database.
+## Users
+Below are details about the various classes of users and their functionality.
 
 ### Normal User
 Username: `user`

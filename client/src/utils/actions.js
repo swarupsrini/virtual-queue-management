@@ -540,3 +540,18 @@ export const getFancyQueue = (callback) => {
       callback([]);
     });
 };
+
+export const deleteUser = () => {
+  const url = base + `/deleteUser`;
+  console.log("a")
+  fetch(url, {
+    method: "delete",
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
