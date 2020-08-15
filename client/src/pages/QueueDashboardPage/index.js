@@ -10,6 +10,8 @@ import {
   deactivateQueueCall,
   emptyQueueCall,
   customerExitedCall,
+  getQueue,
+  getEventsByStoreId,
 } from "../../utils/actions";
 
 import StoreHeader from "../../components/StoreHeader";
@@ -19,6 +21,7 @@ import useStyles from "./styles";
 import { NavLink } from "react-router-dom";
 import QrPopup from "../../components/QrPopup";
 import AnnouncementPopup from "../../components/AnnouncementPopup";
+import StoreDnePopup from "../../components/StoreDnePopup";
 
 function InfoCard(props) {
   return (
@@ -58,61 +61,57 @@ export default function QueueDashboard(props) {
   const [user, setUser] = useState({});
   const [store, setStore] = useState({});
 
+  const [recent, setRecent] = useState({});
+  const [current, setCurrent] = useState([]);
+
   useEffect(() => {
     getUserStore(setUser, setStore);
   }, []);
 
   useInterval(async () => {
-    getUserStore(setUser, setStore);
-    // get queue from backend, remove from waiting if user exited queue
+    // update current based on store.queue
+    getUserStore(setUser, (store) => {
+      getEventsByStoreId(store, (store) => {
+        getQueue(store, setStore);
+      });
+    });
   }, REFRESH_INTERVAL);
+
+  useEffect(() => {
+    console.log("store changed:", JSON.stringify(store));
+  }, [store]);
 
   const getStoreId = () => store.id;
   const getStoreName = () => store.name;
   const getStoreAddress = () => store.address;
-  const getStoreInQueue = () => store.in_queue;
+  const getStoreInQueue = () => (store.queue ? store.queue.length : 0);
   const getStoreInStore = () => store.in_store;
   const deactivateQueue = () => deactivateQueueCall(store, setStore);
   const emptyQueue = () => emptyQueueCall(setStore);
   const customerExited = () => {
     customerExitedCall(setStore);
-    console.log(store);
   };
 
-  const [recent, setRecent] = useState({
-    id: "1",
-    username: "eryk123",
-    others: 5,
-    time: 10,
-    notified: true,
-  });
-  const [current, setCurrent] = useState([
-    {
-      id: "1",
-      username: "srini140",
-      others: 2,
-      time: 10,
-      notified: true,
-    },
-    {
-      id: "2",
-      username: "bhanothe",
-      others: 0,
-      time: 20,
-      notified: false,
-    },
-    {
-      id: "1",
-      username: "bob123",
-      others: 100,
-      time: 20,
-      notified: false,
-    },
-  ]);
-
-  useEffect(() => {
-    setStore((old) => ({ ...old, in_queue: current.length }));
-  }, [current]);
+  // const [current, setCurrent] = useState([
+  //   {
+  //     id: "1",
+  //     username: "srini140",
+  //     time: 10,
+  //     notified: true,
+  //   },
+  //   {
+  //     id: "2",
+  //     username: "bhanothe",
+  //     time: 20,
+  //     notified: false,
+  //   },
+  //   {
+  //     id: "1",
+  //     username: "bob123",
+  //     time: 20,
+  //     notified: false,
+  //   },
+  // ]);
 
   const removeFromCurrent = (item) =>
     setCurrent(
@@ -123,9 +122,7 @@ export default function QueueDashboard(props) {
     setCurrent((old) => [recent, ...current]);
     setRecent({});
   };
-  // const scanQr = (item, i) => {
-  //   setShowQr(item.id);
-  // };
+
   const reject = (item, i) => {
     removeFromCurrent(item);
   };
@@ -153,6 +150,7 @@ export default function QueueDashboard(props) {
   return (
     <div>
       <Header />
+      {JSON.stringify(store) === "{}" && <StoreDnePopup />}
       {showQr && (
         <QrPopup
           validData={qrData}
@@ -221,9 +219,7 @@ export default function QueueDashboard(props) {
         <p className={classes.recentSectionTitle}>Recently Accepted</p>
         {recent.username !== undefined && (
           <Paper className={classes.recentSection}>
-            <p className={classes.recentTitle}>
-              {recent.username}, {recent.others} others
-            </p>
+            <p className={classes.recentTitle}>{recent.username}</p>
             <Button className={classes.undo} onClick={undo} text="Undo" />
           </Paper>
         )}
@@ -241,9 +237,7 @@ export default function QueueDashboard(props) {
               <div className={classes.currentLeftStuff}>
                 <p className={classes.currentNumber}>{i + 1}</p>
                 <div className={classes.currentInfo}>
-                  <p className={classes.currentTitle}>
-                    {item.username}, {item.others} others
-                  </p>
+                  <p className={classes.currentTitle}>{item.username}</p>
                   <p className={classes.currentSubtitle}>
                     {item.notified
                       ? `Notified ${item.time} minutes ago`

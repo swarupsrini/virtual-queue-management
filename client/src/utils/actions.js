@@ -84,8 +84,9 @@ export const signup = (setUser, data) => {
         fetch(url1, {
           method: "post",
           body: JSON.stringify({
-            name: "Default Store",
-            address: "Default Address",
+            name: "Default",
+            address:
+              "Please visit the settings page to set your store's settings.",
             verified: false,
             owner_id: res._id,
             employee_ids: [],
@@ -98,11 +99,14 @@ export const signup = (setUser, data) => {
           },
         })
           .then((res) => res.json())
-          .then((res) => console.log("created store:", res));
+          .then((res) => console.log("created store:", res))
+          .catch((err) => {
+            console.error(err);
+          });
       }
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 };
 
@@ -142,7 +146,6 @@ export const getUserStore = async (setUser, setStore) => {
     .then((res) => {
       setUser(res.user);
       if (res.store) setStore(res.store);
-      console.log("set user, store", res);
     })
     .catch((e) => console.error(e));
 
@@ -238,15 +241,7 @@ export const resetStoreCall = async (setStore) => {
   });
 };
 
-export const saveUserSettingsCall = async (
-  user,
-  setUser,
-  setUserError,
-  setPhoneError,
-  setEmailError,
-  setPassError,
-  setNewPassError
-) => {
+export const saveUserSettingsCall = async (user, setUser) => {
   const url = `http://localhost:5000/updateUser`;
   fetch(
     url,
@@ -254,9 +249,13 @@ export const saveUserSettingsCall = async (
       method: "PATCH",
       body: JSON.stringify(user),
     })
-  );
-  // call backend to set 'user', if any errors set them
-  return [];
+  ).then((res) => {
+    if (res.status === 200) alert("Your settings have been updated!");
+    if (res.status === 403) {
+      alert("These credentials have been taken!");
+      throw "Signup credentials have been taken!";
+    }
+  });
 };
 
 export const saveStoreSettingsCall = async (
@@ -269,7 +268,7 @@ export const saveStoreSettingsCall = async (
 ) => {
   console.log(store);
   const store_id = getUserStoreId();
-  const url = `http://localhost:5000/updateStore?store_id=${store.id}`;
+  const url = `http://localhost:5000/updateStore?store_id=${store_id}`;
   fetch(
     url,
     Object.assign({}, fetchOptions, {
@@ -298,15 +297,15 @@ export const customerExitedCall = async (setStore) => {
 };
 
 export const getQueue = async (store, setStore) => {
-  let i = 0;
+  let i = store.customer_visits.length - 1;
   while (
-    i < store.customer_visits.length &&
-    (store.customer_visits[i].exit_time == "" ||
-      store.customer_visits[i].exit_time == null)
+    i >= 0 &&
+    (store.customer_visits[i].exit_time === "" ||
+      store.customer_visits[i].exit_time === null)
   ) {
-    i++;
+    i--;
   }
-  store.queue = store.customer_visits.slice(0, i);
+  store.queue = store.customer_visits.slice(i + 1);
   store.in_queue = store.queue.length;
   setStore(store);
 };
@@ -362,27 +361,7 @@ export const getEventsByStoreId = (store, setStore) => {
     });
 };
 
-export const getEventsByStoreIdSync = (storeID) => {
-  const url = base + `/getEventsByStoreId?store_id=${storeID}`;
-  return fetch(url, {
-    ...fetchOptions,
-  });
-  // .then((res) => res.json())
-  // .then((res) => {
-  //   res.map((n) => {
-  //     n.entry_time = datetime.parse(n.entry_time, "MMM D YYYY hh:mm:ss A");
-  //     n.exit_time =
-  //       n.exit_time != ""
-  //         ? datetime.parse(n.exit_time, "MMM D YYYY hh:mm:ss A")
-  //         : null;
-  //     return n;
-  //   });
-  //   store.customer_visits = res;
-  //   setStore(store);
-  // });
-};
-
-export const joinQueue = (user_id, store_id) => {
+export const joinQueue = (store_id) => {
   const url = `http://localhost:5000/newEvent`;
   fetch(
     url,
@@ -390,12 +369,18 @@ export const joinQueue = (user_id, store_id) => {
       method: "POST",
       body: JSON.stringify({
         store_id: store_id,
-        user_id: user_id,
         entry_time: datetime.format(new Date(), "MMM D YYYY hh:mm:ss A"),
         exit_time: "",
       }),
     })
   );
+};
+
+export const getEventsByStoreIdSync = (storeID) => {
+  const url = base + `/getEventsByStoreId?store_id=${storeID}`;
+  return fetch(url, {
+    ...fetchOptions,
+  });
 };
 
 export const getDistance = (userLat, userLong, storeLat, storeLong) => {
@@ -432,5 +417,17 @@ export const getUserStoreId = () => {
     .then((res) => res.json())
     .then((res) => {
       return res;
+    });
+};
+
+export const getCurrentUser = (setUser) => {
+  const url = `http://localhost:5000/getCurrentUser`;
+  fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res);
+      setUser(res);
     });
 };
