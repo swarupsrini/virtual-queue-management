@@ -244,12 +244,7 @@ export const resetStoreCall = async (setStore) => {
 
 export const saveUserSettingsCall = async (
   user,
-  setUser,
-  setUserError,
-  setPhoneError,
-  setEmailError,
-  setPassError,
-  setNewPassError
+  setUser
 ) => {
   const url = `http://localhost:5000/updateUser`;
   fetch(
@@ -258,9 +253,13 @@ export const saveUserSettingsCall = async (
       method: "PATCH",
       body: JSON.stringify(user),
     })
-  );
-  // call backend to set 'user', if any errors set them
-  return [];
+  ).then((res) => {
+    if (res.status === 200) alert("Your settings have been updated!")
+    if (res.status === 403) {
+      alert("These credentials have been taken!");
+      throw "Signup credentials have been taken!";
+    }
+  })
 };
 
 export const saveStoreSettingsCall = async (
@@ -305,8 +304,8 @@ export const getQueue = async (store, setStore) => {
   let i = 0;
   while (
     i < store.customer_visits.length &&
-    (store.customer_visits[i].exit_time == "" ||
-      store.customer_visits[i].exit_time == null)
+    (store.customer_visits[i].exit_time === "" ||
+      store.customer_visits[i].exit_time === null)
   ) {
     i++;
   }

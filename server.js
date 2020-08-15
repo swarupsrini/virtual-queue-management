@@ -422,15 +422,25 @@ app.get(
   }
 );
 
-app.patch("/updateUser", (req, res) => {
-  updateUser(
-    () => {},
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.session.user,
-    req.body
-  );
+app.patch("/updateUser", userExists, (req, res) => {
+  const username = req.session.user;
+  const password = req.body.password;
+  User.findByUsernamePassword(username, password)
+    .then((user) => {
+      /*updateUser(
+        () => {},
+        (error) => {
+          res.status(400).send(error);
+        },
+        req.session.user,
+        req.body
+      );*/
+    })
+    .catch((error) => {
+      res.status(400).send();
+    });
+  
+  /*
   getUserByID(
     (result) => {
       res.send(result);
@@ -439,7 +449,7 @@ app.patch("/updateUser", (req, res) => {
       res.status(400).send(error);
     },
     req.session.user
-  );
+  );*/
 });
 
 app.patch("/updateStore", (req, res) => {
