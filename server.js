@@ -399,7 +399,6 @@ app.post("/joinQueue", (req, res) => {
 
   getJoinedEventByUserID(
     (result) => {
-      console.log(result);
       if (result.length > 0) {
         res.send(result);
       } else {
@@ -418,6 +417,15 @@ app.post("/joinQueue", (req, res) => {
     },
     req.session.user
   );
+});
+
+app.post("/exitQueue", (req, res) => {
+  const update = { exit_time: req.body.exit_time };
+  const filter = { user_id: req.session.user, exit_time: "" };
+  Event.findOneAndUpdate(filter, update, (error, result) => {
+    console.log(result);
+    res.send(result);
+  });
 });
 
 app.get(
@@ -508,7 +516,6 @@ app.get("/getCurrentUser", authenticate, (req, res) => {
 app.get("/getStoreIdFromJoinedQueue", authenticate, (req, res) => {
   getJoinedEventByUserID(
     (result) => {
-      console.log(result[0].store_id);
       res.send({ store_id: result[0].store_id });
     },
     (error) => {

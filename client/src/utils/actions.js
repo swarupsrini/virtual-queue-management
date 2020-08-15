@@ -375,6 +375,19 @@ export const joinQueue = (store_id) => {
   );
 };
 
+export const exitQueue = () => {
+  const url = base + "/exitQueue";
+  fetch(
+    url,
+    Object.assign({}, fetchOptions, {
+      method: "POST",
+      body: JSON.stringify({
+        exit_time: datetime.format(new Date(), "MMM D YYYY hh:mm:ss A"),
+      }),
+    })
+  );
+};
+
 export const getEventsByStoreIdSync = (storeID) => {
   const url = base + `/getEventsByStoreId?store_id=${storeID}`;
   return fetch(url, {

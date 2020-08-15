@@ -11,10 +11,12 @@ import {
   getEventsByStoreId,
   getQueue,
   getForeCastWaitTime,
+  exitQueue,
 } from "../../utils/actions";
 import useInterval from "../../utils/useInterval";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import "./index.css";
+import { Redirect } from "react-router-dom";
 
 function getPosition() {
   return new Promise((res) => {
@@ -45,7 +47,7 @@ export default function QueueStatus(props) {
   const [userInfo, setUserInfo] = useState({ id: "ewdw" });
   const [userQueue, setUserQueue] = useState([]);
   const [msg, setMsg] = useState("");
-
+  const [storeSearch, setStoreSearch] = useState(null);
   useInterval(async () => {
     getStoreIdFromJoinedQueue((store_id) => {
       getStoreById(store_id, (store) => {
@@ -67,6 +69,8 @@ export default function QueueStatus(props) {
 
   return (
     <div>
+      {storeSearch && <Redirect to={storeSearch} />}
+
       <Header></Header>
       <div className={classes.root}>
         <StoreHeader title={storeInfo.name} subtitle={storeInfo.address} />
@@ -83,7 +87,10 @@ export default function QueueStatus(props) {
           size="large"
           className={classes.exitQueue}
           variant="contained"
-          onClick={() => {}}
+          onClick={() => {
+            exitQueue();
+            setStoreSearch("/store-search");
+          }}
         >
           Exit Queue
         </Button>
