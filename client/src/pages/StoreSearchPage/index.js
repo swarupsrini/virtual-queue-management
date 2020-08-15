@@ -26,24 +26,6 @@ import {
 import { getCurLocation } from "../../utils/location";
 const STORE_SHOW_LIMIT = 20;
 
-function joinedQueue(storeInfo) {
-  // there will be a backend call to update user's queue status
-}
-function viewData(storeInfo) {
-  // there will be a backend call to update user's currrently "viewing" store
-}
-function updateUserFavStores(storeID, value) {
-  // there will be a backend call to update user's favourited stores
-}
-
-function getUserInfo() {
-  // Get user info from server
-  // code below requires backend call
-  return {
-    fav: [0, 2],
-  };
-}
-
 export default function StoreSearchPage() {
   const classes = useStyles();
   const [waitTime, setWait] = useState(false);
@@ -65,6 +47,8 @@ export default function StoreSearchPage() {
       setUserFavs(res);
     });
   }, []);
+
+  function getWaitTime(store) {}
 
   useEffect(() => {
     getCurLocation()
@@ -207,17 +191,15 @@ export default function StoreSearchPage() {
           <ListItem key={store._id}>
             <StoreCard
               title={store.name}
-              min={0}
+              min={getWaitTime(store)}
               dist={store.distance}
               storeID={store._id}
               verified={store.verified}
               favorited={userFavs}
               joinClick={() => {
-                joinedQueue(store);
                 setViewPage("/queue-status");
               }}
               viewClick={() => {
-                viewData(store);
                 setAnalyticsPage("/store-analytics/" + store._id);
               }}
               updateUserFav={(bool, store_id) => {
