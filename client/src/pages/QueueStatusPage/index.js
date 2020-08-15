@@ -49,6 +49,7 @@ export default function QueueStatus(props) {
   const [userInfo, setUserInfo] = useState({ id: "ewdw" });
   const [userQueue, setUserQueue] = useState([]);
   const [msg, setMsg] = useState("");
+  const [announcement, setAnnouncement] = useState("");
   const [storeSearch, setStoreSearch] = useState(null);
   const [displayQR, setDisplayQR] = useState(false);
 
@@ -62,10 +63,16 @@ export default function QueueStatus(props) {
         setStoreSearch("/store-search");
       } else {
         getStoreById(store_id, (store) => {
+          setAnnouncement(store.announcement);
           getEventsByStoreId(store, (store) => {
             getQueue(store, () => {});
             getForeCastWaitTime(store, () => {});
             setStoreInfo(store);
+            if (store.notified === true) {
+              setMsg(
+                "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
+              );
+            }
           });
         });
       }
@@ -73,9 +80,6 @@ export default function QueueStatus(props) {
     getFancyQueue((res) => {
       setUserQueue(res);
     });
-    setMsg(
-      "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
-    );
   }, []);
 
   useInterval(async () => {
@@ -88,10 +92,16 @@ export default function QueueStatus(props) {
         setStoreSearch("/store-search");
       } else {
         getStoreById(store_id, (store) => {
+          setAnnouncement(store.announcement);
           getEventsByStoreId(store, (store) => {
             getQueue(store, () => {});
             getForeCastWaitTime(store, () => {});
             setStoreInfo(store);
+            if (store.notified === true) {
+              setMsg(
+                "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
+              );
+            }
           });
         });
       }
@@ -99,9 +109,6 @@ export default function QueueStatus(props) {
     getFancyQueue((res) => {
       setUserQueue(res);
     });
-    setMsg(
-      "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
-    );
   }, REFRESH_INTERVAL);
 
   useEffect(() => {
@@ -189,6 +196,14 @@ export default function QueueStatus(props) {
               </Grid>
             </Grid>
           </Grid>
+        </Paper>
+        <Paper className={classes.paper2}>
+          <Typography variant="h6" className={classes.message}>
+            Announcement:
+          </Typography>
+          <Typography variant="h6" className={classes.storeMsg}>
+            {announcement}
+          </Typography>
         </Paper>
         <Paper className={classes.paper2}>
           <Typography variant="h6" className={classes.message}>
