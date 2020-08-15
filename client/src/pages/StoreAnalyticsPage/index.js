@@ -174,24 +174,28 @@ export default function StoreAnalytics(props) {
               <p className={classes.typeSubtitle3}> min</p>
             </div>
           </Grid>
+          <div className={classes.border}></div>
           <Grid item>
             <div className={classes.divElem}>
               <p className={classes.typeTitle}>In Queue</p>
               <p className={classes.typeSubtitle}>{store.in_queue}</p>
             </div>
           </Grid>
+          <div className={classes.border}></div>
           <Grid item>
             <div className={classes.divElem}>
               <p className={classes.typeTitle}>In Store</p>
               <p className={classes.typeSubtitle}>{store.in_store}</p>
             </div>
           </Grid>
+          <div className={classes.border}></div>
           <Grid item>
             <div className={classes.divElem}>
               <p className={classes.typeTitle}>Visits today</p>
               <p className={classes.typeSubtitle}>{store.num_visits_today}</p>
             </div>
           </Grid>
+          <div className={classes.border}></div>
           <Grid item>
             <div className={classes.divElem}>
               <p className={classes.typeTitle}>Least busy time</p>
@@ -203,6 +207,7 @@ export default function StoreAnalytics(props) {
               </p>
             </div>
           </Grid>
+          <div className={classes.border}></div>
           <Grid item>
             <div className={classes.divElem2}>
               <p className={classes.typeTitle}>Most busy time</p>

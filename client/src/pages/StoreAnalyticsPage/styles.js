@@ -47,7 +47,7 @@ export default makeStyles({
     height: "135px",
   },
   grid: {
-    justifyContent: "center"
+    justifyContent: "space-evenly"
 
   },
   typeTitle: {
@@ -71,9 +71,8 @@ export default makeStyles({
   },
   divElem: {
     marginTop: "10px",
-    width: "156px",
+    width: "150px",
     textAlign: "center",
-    borderRight: "3px solid lightgray",
     height: "100px",
   },
   divElem2: {
@@ -86,5 +85,11 @@ export default makeStyles({
     marginLeft: "30px",
     marginRight: "30px",
     marginTop: "10px"
+  },
+  border: {
+    borderRight: "3px solid lightgray",
+    width:"10px",
+    height: "100px",
+    marginTop: "15px"
   }
 });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import StoreHeader from "../../components/StoreHeader";
 import DisplayQrPopup from "../../components/DisplayQrPopup";
 import Header from "../../components/Header";
@@ -51,6 +51,29 @@ export default function QueueStatus(props) {
   const [storeSearch, setStoreSearch] = useState(null);
   const [displayQR, setDisplayQR] = useState(false);
 
+  useEffect(() => {
+    getStoreIdFromJoinedQueue((store_id) => {
+      if (store_id === "exited") {
+        setStoreInfo({
+          lat: 0,
+          long: 0,
+        });
+        setStoreSearch("/store-search");
+      } else {
+        getStoreById(store_id, (store) => {
+          getEventsByStoreId(store, (store) => {
+            getQueue(store, () => {});
+            getForeCastWaitTime(store, () => {});
+            setStoreInfo(store);
+          });
+        });
+      }
+    });
+    setMsg(
+      "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
+    );
+  }, []);
+
   useInterval(async () => {
     getStoreIdFromJoinedQueue((store_id) => {
       if (store_id === "exited") {
@@ -59,14 +82,15 @@ export default function QueueStatus(props) {
           long: 0,
         });
         setStoreSearch("/store-search");
-      }
-      getStoreById(store_id, (store) => {
-        getEventsByStoreId(store, (store) => {
-          getQueue(store, () => {});
-          getForeCastWaitTime(store, () => {});
-          setStoreInfo(store);
+      } else {
+        getStoreById(store_id, (store) => {
+          getEventsByStoreId(store, (store) => {
+            getQueue(store, () => {});
+            getForeCastWaitTime(store, () => {});
+            setStoreInfo(store);
+          });
         });
-      });
+      }
     });
     setMsg(
       "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
