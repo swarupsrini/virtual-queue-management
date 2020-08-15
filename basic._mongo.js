@@ -5,7 +5,9 @@ const { User } = require("./models/user");
 const { Event } = require("./models/events");
 
 function getAllStores(thenCallBack, errorCallback) {
-  Store.find().then(thenCallBack).catch(errorCallback);
+  Store.find({ lat: { $ne: 100 } })
+    .then(thenCallBack)
+    .catch(errorCallback);
 }
 
 function getAllUsers(thenCallBack, errorCallback) {
@@ -27,7 +29,9 @@ function updateUser(thenCallBack, errorCallback, user_id, user) {
   User.findByIdAndUpdate(user_id, user).then(thenCallBack).catch(errorCallback);
 }
 function updateStore(thenCallBack, errorCallback, store_id, store) {
-  Store.findByIdAndUpdate(store_id, store).then(thenCallBack).catch(errorCallback);
+  Store.findByIdAndUpdate(store_id, store)
+    .then(thenCallBack)
+    .catch(errorCallback);
 }
 
 module.exports = {

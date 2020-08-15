@@ -84,8 +84,9 @@ export const signup = (setUser, data) => {
         fetch(url1, {
           method: "post",
           body: JSON.stringify({
-            name: "Default Store",
-            address: "Default Address",
+            name: "Default",
+            address:
+              "Please visit the settings page to set your store's settings.",
             verified: false,
             owner_id: res._id,
             employee_ids: [],
@@ -98,11 +99,14 @@ export const signup = (setUser, data) => {
           },
         })
           .then((res) => res.json())
-          .then((res) => console.log("created store:", res));
+          .then((res) => console.log("created store:", res))
+          .catch((err) => {
+            console.error(err);
+          });
       }
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 };
 
@@ -268,7 +272,7 @@ export const saveStoreSettingsCall = async (
   closeTimeError
 ) => {
   console.log(store);
-  const store_id = getUserStoreId()
+  const store_id = getUserStoreId();
   const url = `http://localhost:5000/updateStore?store_id=${store_id}`;
   fetch(
     url,
@@ -424,4 +428,4 @@ export const getCurrentUser = (setUser) => {
       console.log(res)
       setUser(res);
     });
-}
+};
