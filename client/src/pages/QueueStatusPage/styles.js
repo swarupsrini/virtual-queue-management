@@ -1,6 +1,4 @@
 import { makeStyles } from "@material-ui/core/styles";
-import L from "leaflet";
-import ExtraMarkers from "leaflet-extra-markers";
 
 const useStyles = makeStyles({
   root: {

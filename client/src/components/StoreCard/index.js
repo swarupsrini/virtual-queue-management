@@ -22,7 +22,7 @@ Example:
 </StoreCard>
 */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardActions,
@@ -40,9 +40,16 @@ export default function StoreCard(props) {
   const classes = useStyles();
   const [favorited, setFavorited] = useState(props.favorited);
 
-  function favoriteClick(e) {
-    props.updateUserFav(!favorited);
-    setFavorited(!favorited);
+  useEffect(() => {
+    setFavorited(props.favorited);
+  }, [props.favorited]);
+
+  function favoriteClick() {
+    if (Boolean(favorited.includes(props.storeID))) {
+      props.updateUserFav(false, props.storeID);
+    } else {
+      props.updateUserFav(true, props.storeID);
+    }
   }
 
   return (
@@ -72,7 +79,7 @@ export default function StoreCard(props) {
           <strong>View Data</strong>
         </Button>
         <IconButton onClick={favoriteClick} aria-label="favorite">
-          {favorited ? (
+          {favorited.includes(props.storeID) ? (
             <StarIcon></StarIcon>
           ) : (
             <StarBorderIcon></StarBorderIcon>

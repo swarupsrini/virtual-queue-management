@@ -16,8 +16,13 @@ import Popover from "@material-ui/core/Popover";
 import Header from "../../components/Header";
 import useStyles from "./styles";
 import "./index.css";
-import { iconPerson, best } from "./icon";
-import { getAllStores, getDistance } from "../../utils/actions";
+import { iconPerson } from "./icon";
+import {
+  getAllStores,
+  getDistance,
+  getUserFavStores,
+  updateUserFavs,
+} from "../../utils/actions";
 import { getCurLocation } from "../../utils/location";
 const STORE_SHOW_LIMIT = 20;
 
@@ -48,12 +53,18 @@ export default function StoreSearchPage() {
 
   const [anchor, setAnchor] = useState(null);
   const [stores, setStores] = useState([]);
-
+  const [userFavs, setUserFavs] = useState([]);
   const [text, setText] = useState("");
   const [number, setNumber] = useState(10);
   const [viewPage, setViewPage] = useState(null);
 
   const [analyticsPage, setAnalyticsPage] = useState(null);
+
+  useEffect(() => {
+    getUserFavStores((res) => {
+      setUserFavs(res);
+    });
+  }, []);
 
   useEffect(() => {
     getCurLocation()
@@ -90,9 +101,9 @@ export default function StoreSearchPage() {
           });
         }
         sort(result);
-        if (fav) setStores(displayFav(result));
+        if (fav) displayFav(result);
       });
-  }, [waitTime, fav, text]);
+  }, [waitTime, text, fav]);
 
   function toggleWait() {
     setWait((prev) => !prev);
@@ -127,14 +138,16 @@ export default function StoreSearchPage() {
   }
 
   function displayFav(stores) {
-    const result = [];
-    const favs = getUserInfo().fav;
-    for (let i = 0; i < stores.length; i++) {
-      if (favs.includes(stores[i]._id)) {
-        result.push(stores[i]);
-      }
-    }
-    return result;
+    getUserFavStores((res) => {
+      setUserFavs(res);
+      let result = [];
+      stores.map((temp) => {
+        if (res.includes(temp._id)) {
+          result.push(temp);
+        }
+      });
+      setStores(result);
+    });
   }
 
   return (
@@ -196,8 +209,9 @@ export default function StoreSearchPage() {
               title={store.name}
               min={store.wait}
               dist={store.distance}
+              storeID={store._id}
               verified={store.verified}
-              favorited={Boolean(getUserInfo().fav.includes(store._id))}
+              favorited={userFavs}
               joinClick={() => {
                 joinedQueue(store);
                 setViewPage("/queue-status");
@@ -206,7 +220,15 @@ export default function StoreSearchPage() {
                 viewData(store);
                 setAnalyticsPage("/store-analytics/" + store._id);
               }}
-              updateUserFav={(fav) => updateUserFavStores(store._id, fav)}
+              updateUserFav={(bool, store_id) => {
+                updateUserFavs(
+                  (res) => {
+                    setUserFavs(res);
+                  },
+                  bool,
+                  store_id
+                );
+              }}
               address={store.address}
             ></StoreCard>
           </ListItem>

@@ -45,7 +45,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 60000,
+      expires: 4 * 60000,
       httpOnly: true,
       // secure: false,
     },
@@ -308,6 +308,43 @@ app.get("/getUserById", authenticate, mongoUserIDChecker, (req, res) => {
     req.query.user_id
   );
 });
+
+app.get("/getUserFavStores", authenticate, (req, res) => {
+  getUserByID(
+    (result) => {
+      res.send(result.fav_stores);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
+app.post(
+  "/updateUserFavStores",
+  authenticate,
+  mongoStoreIDChecker,
+  (req, res) => {
+    User.findById(req.session.user)
+      .then((rest) => {
+        if (!rest) {
+          res.status(404).send("Resource not found");
+        } else {
+          if (req.query.bool === "true") {
+            rest.fav_stores.push(req.query.store_id);
+          } else if (req.query.bool === "false") {
+            rest.fav_stores.pull(req.query.store_id);
+          }
+          rest.save();
+          res.send(rest.fav_stores);
+        }
+      })
+      .catch((error) => {
+        res.status(400).send("Bad Request");
+      });
+  }
+);
 
 app.get("/getStoreById", authenticate, mongoStoreIDChecker, (req, res) => {
   getStoreByID(

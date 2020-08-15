@@ -1,5 +1,4 @@
 import L from "leaflet";
-import ExtraMarkers from "leaflet-extra-markers";
 
 const iconPerson = new L.Icon({
   iconUrl:
@@ -12,11 +11,4 @@ const iconPerson = new L.Icon({
   shadowSize: [41, 41],
 });
 
-const best = L.ExtraMarkers.icon({
-  icon: "fa-map-pin",
-  iconColor: "black",
-  markerColor: "black",
-  shape: "square",
-  prefix: "fa",
-});
-export { iconPerson, best };
+export { iconPerson };
