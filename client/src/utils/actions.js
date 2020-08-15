@@ -56,6 +56,13 @@ export const login = (setUser, data) => {
     });
 };
 
+export const logout = () => {
+  const url = base + "/logout";
+  fetch(url, {
+    ...fetchOptions,
+  });
+};
+
 export const signup = (setUser, data) => {
   let url = base;
   if (data.__t === "visitor") url += "/newCustomer";
@@ -451,7 +458,19 @@ export const updateUserFavs = (callback, bool, store_id) => {
 };
 
 export const sendAnnouncement = (store, msg) => {
-  // call backend to send announcement for the store
+  const url = base + `/updateStore?store_id=${store._id}`;
+  console.log({ ...store, announcement: msg });
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify({ ...store, announcement: msg }),
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // REMOVE IF BUILDING
+  })
+    .then((res) => res.json())
+    .catch((error) => console.log(error));
 };
 
 export const getUserStoreId = () => {
@@ -504,6 +523,21 @@ export const getUserId = (callback) => {
     .catch((error) => {
       callback("default");
       console.log(error);
+    });
+};
+
+export const getFancyQueue = (callback) => {
+  const url = base + "/getFancyQueue";
+  fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      callback(res.queue);
+    })
+    .catch((error) => {
+      console.log(error);
+      callback([]);
     });
 };
 

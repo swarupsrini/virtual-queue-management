@@ -25,6 +25,12 @@ function getEventsByStoreID(thenCallBack, errorCallback, storeID) {
   Event.find({ store_id: storeID }).then(thenCallBack).catch(errorCallback);
 }
 
+function getInQueueEventsByStoreID(thenCallBack, errorCallback, storeID) {
+  Event.find({ store_id: storeID, exit_time: "" })
+    .then(thenCallBack)
+    .catch(errorCallback);
+}
+
 function updateUser(thenCallBack, errorCallback, user_id, user) {
   User.findByIdAndUpdate(user_id, user).then(thenCallBack).catch(errorCallback);
 }
@@ -49,4 +55,5 @@ module.exports = {
   updateUser,
   updateStore,
   getJoinedEventByUserID,
+  getInQueueEventsByStoreID,
 };
