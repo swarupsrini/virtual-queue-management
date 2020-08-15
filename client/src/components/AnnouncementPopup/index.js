@@ -25,7 +25,10 @@ export default function AnnouncementPopup(props) {
 
   const [msg, setMsg] = useState("");
 
-  const submit = () => sendAnnouncement(props.store, msg);
+  const submit = () => {
+    sendAnnouncement(props.store, msg);
+    props.close();
+  };
 
   return (
     <div className={classes.root}>

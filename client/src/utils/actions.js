@@ -451,7 +451,19 @@ export const updateUserFavs = (callback, bool, store_id) => {
 };
 
 export const sendAnnouncement = (store, msg) => {
-  // call backend to send announcement for the store
+  const url = base + `/updateStore?store_id=${store._id}`;
+  console.log({ ...store, announcement: msg });
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify({ ...store, announcement: msg }),
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // REMOVE IF BUILDING
+  })
+    .then((res) => res.json())
+    .catch((error) => console.log(error));
 };
 
 export const getUserStoreId = () => {
