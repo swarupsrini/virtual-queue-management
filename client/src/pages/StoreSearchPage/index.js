@@ -24,6 +24,7 @@ import {
   updateUserFavs,
   getEventsByStoreIdSync,
   AVG_WAIT_TIME_SCALE,
+  joinQueue,
 } from "../../utils/actions";
 import datetime from "date-and-time";
 import { getCurLocation } from "../../utils/location";
@@ -236,6 +237,7 @@ export default function StoreSearchPage() {
               verified={store.verified}
               favorited={userFavs}
               joinClick={() => {
+                joinQueue(store._id);
                 setViewPage("/queue-status");
               }}
               viewClick={() => {
