@@ -2,6 +2,8 @@ import React from "react";
 import { AppBar, Toolbar, Button, Typography } from "@material-ui/core";
 import { Link, useLocation } from "react-router-dom";
 
+import { logout } from "../../utils/actions";
+
 import useStyles from "./styles";
 
 function getPageTitle(location) {
@@ -24,6 +26,12 @@ export default function Header(props) {
         <Toolbar variant="dense">
           <Typography variant="h4" className={classes.title}>
             {getPageTitle(location.pathname)}
+          </Typography>
+
+          <Typography variant="h4" className={classes.linkTypo}>
+            <Button color="inherit" onClick={logout}>
+              Log out
+            </Button>
           </Typography>
 
           <Typography variant="h4" className={classes.linkTypo}>

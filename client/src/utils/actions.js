@@ -21,6 +21,7 @@ export const readCookie = (setCurrentUser) => {
   fetch(url, { ...fetchOptions })
     .then((res) => {
       if (res.status === 200) return res.json();
+      else throw "Check session failed";
     })
     .then((res) => {
       if (res && res.currentUser) {
@@ -29,6 +30,7 @@ export const readCookie = (setCurrentUser) => {
     })
     .catch((error) => {
       console.log(error);
+      setCurrentUser(null);
     });
 };
 
@@ -52,6 +54,13 @@ export const login = (setUser, data) => {
     .catch((err) => {
       console.log(err);
     });
+};
+
+export const logout = () => {
+  const url = base + "/logout";
+  fetch(url, {
+    ...fetchOptions,
+  });
 };
 
 export const signup = (setUser, data) => {
@@ -388,6 +397,24 @@ export const joinQueue = (store_id) => {
   );
 };
 
+export const updateEvent = (event) => {
+  const url = base + "/updateEvent";
+  const event1 = {
+    ...event,
+    entry_time: datetime.format(event.entry_time, "MMM D YYYY hh:mm:ss A"),
+    exit_time:
+      event.exit_time === null
+        ? ""
+        : datetime.format(event.exit_time, "MMM D YYYY hh:mm:ss A"),
+  };
+  console.log(JSON.stringify(event1));
+  fetch(url, {
+    method: "post",
+    body: JSON.stringify(event1),
+    ...fetchOptions,
+  });
+};
+
 export const exitQueue = () => {
   const url = base + "/exitQueue";
   fetch(
@@ -431,7 +458,19 @@ export const updateUserFavs = (callback, bool, store_id) => {
 };
 
 export const sendAnnouncement = (store, msg) => {
-  // call backend to send announcement for the store
+  const url = base + `/updateStore?store_id=${store._id}`;
+  console.log({ ...store, announcement: msg });
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify({ ...store, announcement: msg }),
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // REMOVE IF BUILDING
+  })
+    .then((res) => res.json())
+    .catch((error) => console.log(error));
 };
 
 export const getUserStoreId = () => {

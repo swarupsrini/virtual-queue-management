@@ -26,6 +26,7 @@ export default function App() {
     readCookie(setCurrentUser);
   }, [REFRESH_INTERVAL]);
 
+  // for debugging
   useEffect(() => {
     console.log("changed current user:", currentUser);
   }, [currentUser]);

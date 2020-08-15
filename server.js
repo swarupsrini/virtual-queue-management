@@ -15,7 +15,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 // import mongoose models
 const { Store } = require("./models/store");
-const { User, Employee, Owner } = require("./models/user");
+const { User, Employee, Owner, Admin } = require("./models/user");
 const { Event } = require("./models/events");
 const { getLatLong, getDistance } = require("./third-party-api");
 const { ObjectID } = require("mongodb");
@@ -245,6 +245,26 @@ app.post("/newEmployee", userExists, (req, res) => {
   );
 });
 
+app.post("/newAdmin", (req, res) => {
+  log("new admin");
+  const user = new Admin({
+    password: req.body.password,
+    email: req.body.email,
+    username: req.body.username,
+    phone_number: req.body.phone_number,
+  });
+
+  // Save the user
+  user.save().then(
+    (user) => {
+      res.send({ _id: user._id });
+    },
+    (error) => {
+      res.status(400).send(error);
+    }
+  );
+});
+
 app.post("/newStore", (req, res) => {
   // Create a new Store
   const store = new Store({
@@ -258,6 +278,7 @@ app.post("/newStore", (req, res) => {
     in_store: 0,
     open_time: req.body.open_time,
     close_time: req.body.close_time,
+    announcement: "",
   });
   User.findById(req.body.owner_id).then((user) => {
     store.save().then(
@@ -410,13 +431,14 @@ app.get("/getUserStore", authenticate, (req, res) => {
 });
 
 app.post("/joinQueue", (req, res) => {
-  // Create a new Event
   const event = new Event({
     store_id: req.body.store_id,
     user_id: req.session.user,
     username: req.session.username,
     entry_time: req.body.entry_time,
     exit_time: req.body.exit_time,
+    accepted: false,
+    notified: false,
   });
 
   getJoinedEventByUserID(
@@ -439,6 +461,14 @@ app.post("/joinQueue", (req, res) => {
     },
     req.session.user
   );
+});
+
+app.post("/updateEvent", (req, res) => {
+  const event = req.body;
+  Event.findOneAndUpdate({ _id: event._id }, event, (error, result) => {
+    log(result);
+    res.send(result);
+  });
 });
 
 app.post("/exitQueue", (req, res) => {
