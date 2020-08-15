@@ -22,7 +22,10 @@ import {
   getDistance,
   getUserFavStores,
   updateUserFavs,
+  getEventsByStoreIdSync,
+  AVG_WAIT_TIME_SCALE,
 } from "../../utils/actions";
+import datetime from "date-and-time";
 import { getCurLocation } from "../../utils/location";
 const STORE_SHOW_LIMIT = 20;
 
@@ -47,8 +50,6 @@ export default function StoreSearchPage() {
       setUserFavs(res);
     });
   }, []);
-
-  function getWaitTime(store) {}
 
   useEffect(() => {
     getCurLocation()
@@ -84,9 +85,47 @@ export default function StoreSearchPage() {
             }
           });
         }
-        sort(result);
-        if (fav) displayFav(result);
+        result = sort(result);
+        return result.map((eachStore) => {
+          return getEventsByStoreIdSync(eachStore._id)
+            .then((res) => res.json())
+            .then((res) => {
+              res.map((n) => {
+                n.entry_time = datetime.parse(
+                  n.entry_time,
+                  "MMM D YYYY hh:mm:ss A"
+                );
+                n.exit_time =
+                  n.exit_time != ""
+                    ? datetime.parse(n.exit_time, "MMM D YYYY hh:mm:ss A")
+                    : null;
+                return n;
+              });
+              eachStore.customer_visits = res;
+              let i = 0;
+              while (
+                i < eachStore.customer_visits.length &&
+                (eachStore.customer_visits[i].exit_time == "" ||
+                  eachStore.customer_visits[i].exit_time == null)
+              ) {
+                i++;
+              }
+              eachStore.queue = eachStore.customer_visits.slice(0, i);
+              eachStore.in_queue = eachStore.queue.length;
+              eachStore.forecast_wait_time =
+                eachStore.queue.length * AVG_WAIT_TIME_SCALE;
+              return eachStore;
+            });
+        });
+      })
+      .then((arr) => Promise.all(arr))
+      .then((result) => {
+        if (fav) {
+          displayFav(result);
+        } else setStores(result);
       });
+
+    // });
   }, [waitTime, text, fav]);
 
   function toggleWait() {
@@ -99,9 +138,9 @@ export default function StoreSearchPage() {
 
   function sort(stores) {
     if (waitTime) {
-      setStores(sortByWait(stores));
+      return sortByWait(stores);
     } else {
-      setStores(sortByDist(stores));
+      return sortByDist(stores);
     }
   }
 
@@ -191,7 +230,7 @@ export default function StoreSearchPage() {
           <ListItem key={store._id}>
             <StoreCard
               title={store.name}
-              min={getWaitTime(store)}
+              min={store.forecast_wait_time}
               dist={store.distance}
               storeID={store._id}
               verified={store.verified}

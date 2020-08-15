@@ -53,7 +53,7 @@ export default function QueueStatus(props) {
     setMsg(
       "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
     );
-  }, 0);
+  }, REFRESH_INTERVAL);
 
   useEffect(() => {
     getCurrentLocation(setUserLoc);

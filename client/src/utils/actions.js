@@ -4,7 +4,7 @@ import datetime from "date-and-time";
 
 export const REFRESH_INTERVAL = 3000;
 // In minutes
-export const AVG_WAIT_TIME = 3;
+export const AVG_WAIT_TIME_SCALE = 3;
 
 const base = "http://localhost:5000";
 
@@ -268,7 +268,7 @@ export const saveStoreSettingsCall = async (
   closeTimeError
 ) => {
   console.log(store);
-  const store_id = getUserStoreId()
+  const store_id = getUserStoreId();
   const url = `http://localhost:5000/updateStore?store_id=${store.id}`;
   fetch(
     url,
@@ -313,7 +313,7 @@ export const getQueue = async (store, setStore) => {
 
 export const getForeCastWaitTime = async (store, setStore) => {
   const queue_size = store.queue.length;
-  store.forecast_wait_time = queue_size * AVG_WAIT_TIME;
+  store.forecast_wait_time = queue_size * AVG_WAIT_TIME_SCALE;
   setStore(store);
 };
 
@@ -360,6 +360,26 @@ export const getEventsByStoreId = (store, setStore) => {
       store.customer_visits = res;
       setStore(store);
     });
+};
+
+export const getEventsByStoreIdSync = (storeID) => {
+  const url = base + `/getEventsByStoreId?store_id=${storeID}`;
+  return fetch(url, {
+    ...fetchOptions,
+  });
+  // .then((res) => res.json())
+  // .then((res) => {
+  //   res.map((n) => {
+  //     n.entry_time = datetime.parse(n.entry_time, "MMM D YYYY hh:mm:ss A");
+  //     n.exit_time =
+  //       n.exit_time != ""
+  //         ? datetime.parse(n.exit_time, "MMM D YYYY hh:mm:ss A")
+  //         : null;
+  //     return n;
+  //   });
+  //   store.customer_visits = res;
+  //   setStore(store);
+  // });
 };
 
 export const joinQueue = (user_id, store_id) => {
@@ -413,4 +433,4 @@ export const getUserStoreId = () => {
     .then((res) => {
       return res;
     });
-}
+};
