@@ -6,7 +6,8 @@ import {
   getUserStore,
   saveUserSettingsCall,
   getCurrentUser,
-  deleteUser
+  deleteUser,
+  logout
 } from "../../utils/actions";
 
 import {
@@ -113,6 +114,7 @@ export default function UserSettingsPopup(props) {
     // send a server call to deactivate the account
     alert("Account deactivated!");
     deleteUser()
+    logout()
     props.close();
   }
 
