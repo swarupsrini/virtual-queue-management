@@ -28,6 +28,8 @@ const {
   updateStore,
 } = require("./basic._mongo");
 
+const bcrypt = require("bcryptjs");
+
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -157,6 +159,24 @@ const userExists = (req, res, next) => {
     }
   );
   if (!invalid) next();
+};
+
+const userExistsExcludingCurrentUser = (req, res, next) => {
+  getUserByID(
+    (result) => {
+      if(result.username !== req.body.username){
+        userExists(req, res, next)
+      }
+      else{
+        next()
+      }
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+  
 };
 
 /*************************************************/
@@ -422,34 +442,40 @@ app.get(
   }
 );
 
-app.patch("/updateUser", userExists, (req, res) => {
-  const username = req.session.user;
-  const password = req.body.password;
-  User.findByUsernamePassword(username, password)
-    .then((user) => {
-      /*updateUser(
-        () => {},
-        (error) => {
-          res.status(400).send(error);
-        },
-        req.session.user,
-        req.body
-      );*/
-    })
-    .catch((error) => {
-      res.status(400).send();
+app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
+  const fields = req.body
+  new Promise((resolve, reject) => {
+    getUserByID(
+      (result) => {
+        resolve(result.password)
+      },
+      (error) => {
+        res.status(400).send(error);
+      },
+      req.session.user
+    );
+  }).then((password) => {
+    console.log("1:" + password)
+    
+    console.log("2:" + fields.password)
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash("a", salt, (err, hash) => {
+        console.log("3:" + hash)
+        return(hash);
+      });
     });
-  
-  /*
-  getUserByID(
-    (result) => {
-      res.send(result);
-    },
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.session.user
-  );*/
+  }).then((hash) => {
+    console.log("4:" + hash)
+    fields.password = hash
+    /*updateUser(
+      () => {},
+      (error) => {
+        res.status(400).send(error);
+      },
+      req.session.user,
+      fields
+    );*/
+  })
 });
 
 app.patch("/updateStore", (req, res) => {

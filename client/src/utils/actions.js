@@ -245,6 +245,7 @@ export const saveUserSettingsCall = async (
   user,
   setUser
 ) => {
+  
   const url = `http://localhost:5000/updateUser`;
   fetch(
     url,

@@ -45,7 +45,6 @@ export default function UserSettingsPopup(props) {
       user.password = "a"
       setUser(user)
     })
-    console.log(user)
     //getUserById(props.id, setUser);
   }, [props.id]);
 
@@ -59,8 +58,6 @@ export default function UserSettingsPopup(props) {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   function saveUserSettings() {
-    console.log(user)
-    console.log(newConfirmPassError)
     if(newConfirmPassError){
       alert("New Password and Confirm Password are different");
     }
