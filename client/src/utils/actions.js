@@ -293,8 +293,6 @@ export const saveStoreSettingsCall = async (store, setStore) => {
       });
     }
   );
-
-  // call backend to set 'store', if any errors set them
   return [];
 };
 
@@ -315,6 +313,24 @@ export const customerChangedCall = async (store, setStore, inc) => {
   const newStore = {
     ...store,
     in_store: store.in_store + inc < 0 ? 0 : store.in_store + inc,
+  };
+  console.log(newStore);
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify(newStore),
+    ...fetchOptions,
+  })
+    .then((res) => {
+      setStore(newStore);
+    })
+    .catch((error) => console.log(error));
+};
+
+export const grantVerificationCall = async (store, setStore) => {
+  const url = base + `/updateStore?store_id=${store._id}`;
+  const newStore = {
+    ...store,
+    verified: true,
   };
   console.log(newStore);
   fetch(url, {
@@ -553,15 +569,14 @@ export const getFancyQueue = (callback) => {
 
 export const deleteUser = () => {
   const url = base + `/deleteUser`;
-  console.log("a")
+  console.log("a");
   fetch(url, {
     method: "delete",
     ...fetchOptions,
   })
     .then((res) => res.json())
-    .then((res) => {
-    })
+    .then((res) => {})
     .catch((error) => {
       console.log(error);
     });
-}
+};
