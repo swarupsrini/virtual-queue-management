@@ -535,3 +535,33 @@ export const getUserId = (callback) => {
       console.log(error);
     });
 };
+
+export const getFancyQueue = (callback) => {
+  const url = base + "/getFancyQueue";
+  fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      callback(res.queue);
+    })
+    .catch((error) => {
+      console.log(error);
+      callback([]);
+    });
+};
+
+export const deleteUser = () => {
+  const url = base + `/deleteUser`;
+  console.log("a")
+  fetch(url, {
+    method: "delete",
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}

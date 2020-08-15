@@ -13,6 +13,7 @@ import {
   getQueue,
   getForeCastWaitTime,
   exitQueue,
+  getFancyQueue,
 } from "../../utils/actions";
 import useInterval from "../../utils/useInterval";
 import { Map, TileLayer, Marker } from "react-leaflet";
@@ -69,6 +70,9 @@ export default function QueueStatus(props) {
         });
       }
     });
+    getFancyQueue((res) => {
+      setUserQueue(res);
+    });
     setMsg(
       "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
     );
@@ -91,6 +95,9 @@ export default function QueueStatus(props) {
           });
         });
       }
+    });
+    getFancyQueue((res) => {
+      setUserQueue(res);
     });
     setMsg(
       "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
@@ -161,15 +168,19 @@ export default function QueueStatus(props) {
               </div>
               <Grid container spacing={1} className={classes.positionQueue}>
                 {userQueue.map((elem, index) => (
-                  <Grid item key={elem}>
-                    {userInfo.id !== elem && (
+                  <Grid item key={elem.user_id}>
+                    {!elem.isUser && (
                       <div className={classes.notUserQueue}>
-                        <p className={classes.queueTextNotUser}>{index}</p>
+                        <p className={classes.queueTextNotUser}>
+                          {elem.position + 1}
+                        </p>
                       </div>
                     )}
-                    {userInfo.id === elem && (
+                    {elem.isUser && (
                       <div className={classes.userQueue}>
-                        <p className={classes.queueTextUser}>{index}</p>
+                        <p className={classes.queueTextUser}>
+                          {elem.position + 1}
+                        </p>
                         <p className={classes.queueTextUser2}>You</p>
                       </div>
                     )}

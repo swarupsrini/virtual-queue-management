@@ -5,6 +5,7 @@ log("Express server");
 
 const express = require("express");
 const { mongoose } = require("./db/mongoose");
+const datetime = require("date-and-time");
 mongoose.set("useFindAndModify", false); // for some deprecation issues
 const cors = require("cors");
 const app = express();
@@ -27,6 +28,7 @@ const {
   updateUser,
   updateStore,
   getJoinedEventByUserID,
+  getInQueueEventsByStoreID,
 } = require("./basic._mongo");
 
 const bcrypt = require("bcryptjs");
@@ -364,7 +366,7 @@ app.get("/getUserFavStores", authenticate, (req, res) => {
   );
 });
 
-app.get("/getUserStoreId", (req, res) => {
+app.get("/getUserStoreId", authenticate, (req, res) => {
   console.log("ccc");
   getUserByID(
     (result) => {
@@ -495,7 +497,7 @@ app.get(
   }
 );
 
-app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
+app.patch("/updateUser", authenticate, userExistsExcludingCurrentUser, (req, res) => {
   const fields = req.body;
   const updatePassword = fields.password !== "" && fields.new_password !== "";
   console.log(fields);
@@ -537,7 +539,7 @@ app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
   });
 });
 
-app.patch("/updateStore", (req, res) => {
+app.patch("/updateStore", authenticate, (req, res) => {
   console.log(req.body);
   updateStore(
     () => {
@@ -549,16 +551,6 @@ app.patch("/updateStore", (req, res) => {
     req.query.store_id,
     req.body
   );
-  /*
-  getStoreByID(
-    (result) => {
-      res.send(result);
-    },
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.query.store_id
-  );*/
 });
 
 app.get("/getCurrentUser", authenticate, (req, res) => {
@@ -595,14 +587,71 @@ app.get("/getStoreIdFromJoinedQueue", authenticate, (req, res) => {
   );
 });
 
+app.get("/getFancyQueue", authenticate, (req, res) => {
+  getJoinedEventByUserID(
+    (result) => {
+      let fancy = [];
+      if (result.length === 0) {
+        res.send({ queue: fancy });
+      } else {
+        getInQueueEventsByStoreID(
+          (allEvents) => {
+            const sorted = allEvents;
+            sorted.sort((a, b) => {
+              return datetime
+                .subtract(
+                  datetime.parse(a.entry_time, "MMM D YYYY hh:mm:ss A"),
+                  datetime.parse(b.entry_time, "MMM D YYYY hh:mm:ss A")
+                )
+                .toSeconds();
+            });
+
+            sorted.map((each, i) => {
+              sorted[i] = { ...sorted[i].toObject(), position: i };
+            });
+            const index = sorted.findIndex((elem) => {
+              return elem.user_id === req.session.user;
+            });
+            if (index === -1) {
+              res.send({ queue: [] });
+            } else {
+              sorted[index] = { ...sorted[index], isUser: "True" };
+              console.log(sorted.slice(0, index + 1));
+              res.send({ queue: sorted.slice(0, index + 1) });
+            }
+          },
+          (error) => {
+            console.log(error);
+          },
+          result[0].store_id
+        );
+      }
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
 app.get("/getUserId", authenticate, (req, res) => {
   res.send({ user_id: req.session.user });
 });
+
+app.delete("/deleteUser", authenticate, (req, res) => {
+  User.deleteOne({_id:req.session.user}).then(()=>{
+    res.status(400).send();
+  }).catch(()=>{
+    res.status(400).send();
+  });
+})
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/client/build/index.html");
 });
+
+
 
 /*************************************************/
 // Express server listening...
