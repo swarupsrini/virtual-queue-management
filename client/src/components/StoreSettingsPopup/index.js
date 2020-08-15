@@ -31,7 +31,6 @@ import useStyles from "./styles";
 export default function StoreSettings(props) {
   const classes = useStyles();
 
-  console.log(props.id)
   // call backend to get user's store existing status and its properties
 
   const [store, setStore] = useState({
@@ -46,7 +45,6 @@ export default function StoreSettings(props) {
   const setStoreVal = (key, value) => setStore({ ...store, [key]: value });
 
   useEffect(() => {
-    console.log(store);
   }, [store]);
 
   /*
@@ -56,7 +54,7 @@ export default function StoreSettings(props) {
   }, [props.id]);*/
 
   useEffect(() => {
-    getStoreById(props.id, setStore)
+    //getStoreById(props.id, setStore)
   }, []);
 
   const [storeError, setStoreError] = useState(false);

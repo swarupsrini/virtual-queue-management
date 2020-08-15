@@ -461,6 +461,18 @@ app.patch("/updateStore", (req, res) => {
   );
 });
 
+app.get("/getCurrentUser", authenticate, (req, res) => {
+  getUserByID(
+    (result) => {
+      res.send(result);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/client/build/index.html");

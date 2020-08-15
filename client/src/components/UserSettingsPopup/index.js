@@ -39,10 +39,10 @@ export default function UserSettingsPopup(props) {
   const setUserVal = (key, value) =>
     setUser((user) => ({ ...user, [key]: value }));
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (props.id) getUserById(props.id, setUser);
     else getUserStore(setUser, () => {});
-  }, [props.id]);
+  }, [props.id]);*/
 
   const [newPassError, setNewPassError] = useState(false);
 

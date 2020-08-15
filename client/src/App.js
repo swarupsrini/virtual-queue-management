@@ -74,7 +74,7 @@ export default function App() {
     <Route path="/queue-dashboard" render={() => <QueueDashboard />} />
   );
   const settings = (
-    <Route path="/settings" render={() => <SettingsPage setUser={setUser} />} />
+    <Route path="/settings" render={() => <SettingsPage currentUser={currentUser} setUser={setUser} />} />
   );
   return (
     <div className="App">

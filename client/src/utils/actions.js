@@ -269,7 +269,7 @@ export const saveStoreSettingsCall = async (
 ) => {
   console.log(store);
   const store_id = getUserStoreId()
-  const url = `http://localhost:5000/updateStore?store_id=${store.id}`;
+  const url = `http://localhost:5000/updateStore?store_id=${store_id}`;
   fetch(
     url,
     Object.assign({}, fetchOptions, {
@@ -411,6 +411,17 @@ export const getUserStoreId = () => {
   })
     .then((res) => res.json())
     .then((res) => {
+      return res;
+    });
+}
+export const getCurrentUser = () => {
+  const url = `http://localhost:5000/getCurrentUser`;
+  fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res)
       return res;
     });
 }
