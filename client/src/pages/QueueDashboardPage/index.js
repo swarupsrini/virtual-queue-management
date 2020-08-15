@@ -24,6 +24,7 @@ import { NavLink } from "react-router-dom";
 import QrPopup from "../../components/QrPopup";
 import AnnouncementPopup from "../../components/AnnouncementPopup";
 import StoreDnePopup from "../../components/StoreDnePopup";
+import { PhoneCallback } from "@material-ui/icons";
 
 function InfoCard(props) {
   return (
@@ -64,7 +65,6 @@ export default function QueueDashboard(props) {
   const [store, setStore] = useState({ queue: [] });
 
   const [recent, setRecent] = useState({});
-  const [current, setCurrent] = useState([]);
 
   const updateQueue = () => {
     getUserStore(setUser, (store) => {
@@ -78,10 +78,10 @@ export default function QueueDashboard(props) {
 
   // for testing
   useEffect(() => {
-    console.log("store changed:", JSON.stringify(store));
+    // console.log("store changed:", JSON.stringify(store));
   }, [store]);
 
-  const getStoreId = () => store.id;
+  const getStoreId = () => store._id;
   const getStoreName = () => store.name;
   const getStoreAddress = () => store.address;
   const getStoreInQueue = () => (store.queue ? store.queue.length : 0);
@@ -92,26 +92,20 @@ export default function QueueDashboard(props) {
     customerExitedCall(setStore);
   };
 
-  // const [current, setCurrent] = useState([
-  //   {
-  //     id: "1",
-  //     username: "srini140",
-  //     time: 10,
-  //     notified: true,
-  //   },
-  //   {
-  //     id: "2",
-  //     username: "bhanothe",
-  //     time: 20,
-  //     notified: false,
-  //   },
-  //   {
-  //     id: "1",
-  //     username: "bob123",
-  //     time: 20,
-  //     notified: false,
-  //   },
-  // ]);
+  const updateStores = (old, new_store) => {
+    old.queue.forEach((item) => {
+      if (![...new_store.queue, recent].some((obj) => obj._id == item._id)) {
+        console.log("reject");
+      }
+    });
+  };
+
+  const setCurrent = (callback) => {
+    const old = Object.assign({}, store);
+    const new_store = { ...store, queue: callback(store.queue) };
+    setStore(new_store);
+    updateStores(old, new_store);
+  };
 
   const removeFromCurrent = (item) =>
     setCurrent((current) =>
@@ -119,7 +113,7 @@ export default function QueueDashboard(props) {
     );
 
   const undo = () => {
-    setCurrent((old) => [recent, ...current]);
+    setCurrent((old) => [recent, ...old]);
     setRecent({});
   };
 

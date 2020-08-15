@@ -30,6 +30,7 @@ export const readCookie = (setCurrentUser) => {
     })
     .catch((error) => {
       console.log(error);
+      setCurrentUser(null);
     });
 };
 

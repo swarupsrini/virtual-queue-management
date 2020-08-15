@@ -394,6 +394,7 @@ app.post("/newEvent", (req, res) => {
     username: req.session.username,
     entry_time: req.body.entry_time,
     exit_time: req.body.exit_time,
+    accepted: false,
   });
 
   event.save().then(
