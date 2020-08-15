@@ -54,7 +54,19 @@ export default function StoreSettings(props) {
   }, [props.id]);*/
 
   useEffect(() => {
-    //getStoreById(props.id, setStore)
+    /*getUserStore(()=>{},(store1)=>{
+      console.log(store1)
+      setStore(
+        {
+          name: store1.name,
+          address:store1.address,
+          open_time: datetime.parse(store1.open_time, "hh:mm:ss A"),
+          close_time: datetime.parse(store1.close_time, "hh:mm:ss A"),
+          owner_id: store1.owner_id,
+          employee_ids: store1.employee_ids
+        }
+      )
+    })*/
   }, []);
 
   const [storeError, setStoreError] = useState(false);
@@ -63,21 +75,10 @@ export default function StoreSettings(props) {
   const [closeTimeError, setCloseTimeError] = useState(false);
 
   function saveStoreSettings() {
-    const errors = saveStoreSettingsCall(
+    saveStoreSettingsCall(
       store,
       setStore,
-      storeError,
-      addressError,
-      openTimeError,
-      closeTimeError
     );
-
-    if (errors.length > 0)
-      alert(
-        "No fields have been updated! Please make sure all fields are valid!"
-      );
-    else alert("Your settings have been updated!");
-    props.close();
 
     // put in backend
     //   let updated = [];

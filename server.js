@@ -29,6 +29,8 @@ const {
   getJoinedEventByUserID,
 } = require("./basic._mongo");
 
+const bcrypt = require("bcryptjs");
+
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -158,6 +160,24 @@ const userExists = (req, res, next) => {
     }
   );
   if (!invalid) next();
+};
+
+const userExistsExcludingCurrentUser = (req, res, next) => {
+  getUserByID(
+    (result) => {
+      if(result.username !== req.body.username){
+        userExists(req, res, next)
+      }
+      else{
+        next()
+      }
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+  
 };
 
 /*************************************************/
@@ -325,10 +345,12 @@ app.get("/getUserFavStores", authenticate, (req, res) => {
   );
 });
 
-app.get("/getUserStoreId", authenticate, (req, res) => {
+app.get("/getUserStoreId", (req, res) => {
+  console.log("ccc")
   getUserByID(
     (result) => {
-      res.send(result.store_id);
+      //res.send(result.store_id);
+      res.send("wow");
     },
     (error) => {
       res.status(400).send(error);
@@ -489,14 +511,18 @@ app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
 });
 
 app.patch("/updateStore", (req, res) => {
+  console.log(req.body)
   updateStore(
-    () => {},
+    () => {
+      res.status(200).send()
+    },
     (error) => {
       res.status(400).send(error);
     },
     req.query.store_id,
     req.body
   );
+  /*
   getStoreByID(
     (result) => {
       res.send(result);
@@ -505,7 +531,7 @@ app.patch("/updateStore", (req, res) => {
       res.status(400).send(error);
     },
     req.query.store_id
-  );
+  );*/
 });
 
 app.get("/getCurrentUser", authenticate, (req, res) => {

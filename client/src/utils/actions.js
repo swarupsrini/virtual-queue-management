@@ -264,21 +264,29 @@ export const saveUserSettingsCall = async (user, setUser) => {
 export const saveStoreSettingsCall = async (
   store,
   setStore,
-  storeError,
-  addressError,
-  openTimeError,
-  closeTimeError
 ) => {
-  console.log(store);
-  const store_id = getUserStoreId();
-  const url = base + `/updateStore?store_id=${store_id}`;
-  fetch(
-    url,
-    Object.assign({}, fetchOptions, {
-      method: "PATCH",
-      body: JSON.stringify(store),
+  getUserStore(()=>{},(backEndStore)=>{
+    const url = base + `/updateStore?store_id=${backEndStore._id}`;
+    fetch(
+      url,
+      Object.assign({}, fetchOptions, {
+        method: "PATCH",
+        body: JSON.stringify({
+          name: store.name,
+          address:store.address,
+          open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+          close_time: datetime.format(store.close_time, "hh:mm:ss A"),
+          owner_id: store.owner_id,
+          employee_ids: store.employee_ids
+          //lat long verified in store
+        }),
+      })
+    ).then((res) => {
+      if (res.status === 200) alert("Your settings have been updated!")
     })
-  );
+  })
+  
+  
   // call backend to set 'store', if any errors set them
   return [];
 };
@@ -334,7 +342,8 @@ export const getUserFavStores = (callback) => {
     .then((res) => res.json())
     .then((res) => {
       callback(res);
-    });
+    })
+    .catch((error)=>{console.log("ERRORRR")})
 };
 
 export const getAllUsers = () => {
