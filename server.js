@@ -391,6 +391,7 @@ app.post("/newEvent", (req, res) => {
   const event = new Event({
     store_id: req.body.store_id,
     user_id: req.session.user,
+    username: req.session.username,
     entry_time: req.body.entry_time,
     exit_time: req.body.exit_time,
   });
@@ -439,7 +440,7 @@ app.patch("/updateUser", userExists, (req, res) => {
     .catch((error) => {
       res.status(400).send();
     });
-  
+
   /*
   getUserByID(
     (result) => {
