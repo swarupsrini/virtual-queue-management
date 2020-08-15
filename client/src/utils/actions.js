@@ -56,6 +56,13 @@ export const login = (setUser, data) => {
     });
 };
 
+export const logout = () => {
+  const url = base + "/logout";
+  fetch(url, {
+    ...fetchOptions,
+  });
+};
+
 export const signup = (setUser, data) => {
   let url = base;
   if (data.__t === "visitor") url += "/newCustomer";
