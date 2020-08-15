@@ -372,6 +372,19 @@ app.get("/getStoreById", authenticate, mongoStoreIDChecker, (req, res) => {
   );
 });
 
+app.get("/getUserStore", authenticate, (req, res) => {
+  User.findById(req.session.user)
+    .then((user) => {
+      if (user.store_id === "") res.send({ user });
+      else {
+        Store.findById(user.store_id)
+          .then((store) => res.send({ user, store }))
+          .catch((e) => res.status(400).send(e));
+      }
+    })
+    .catch((e) => res.status(400).send(e));
+});
+
 app.post("/newEvent", (req, res) => {
   // Create a new Event
   const event = new Event({
