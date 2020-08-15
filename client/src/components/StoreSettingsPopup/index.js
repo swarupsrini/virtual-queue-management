@@ -31,6 +31,7 @@ import useStyles from "./styles";
 export default function StoreSettings(props) {
   const classes = useStyles();
 
+  console.log(props.id)
   // call backend to get user's store existing status and its properties
 
   const [store, setStore] = useState({

@@ -71,14 +71,14 @@ export default makeStyles({
   },
   divElem: {
     marginTop: "10px",
-    maxWidth: "156px",
+    width: "156px",
     textAlign: "center",
     borderRight: "3px solid lightgray",
     height: "100px",
   },
   divElem2: {
     marginTop: "10px",
-    maxWidth: "156px",
+    width: "156px",
     textAlign: "center",
     height: "100px",
   },

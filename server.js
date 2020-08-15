@@ -47,7 +47,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 60000,
+      expires: 6000000,
       httpOnly: true,
       // secure: false,
     },
@@ -365,7 +365,7 @@ app.patch("/updateUser", (req, res) => {
     (error) => {
       res.status(400).send(error);
     },
-    req.query.username,
+    req.session.user,
     req.body
   );
   getUserByID(
@@ -375,7 +375,7 @@ app.patch("/updateUser", (req, res) => {
     (error) => {
       res.status(400).send(error);
     },
-    req.query.store_id
+    req.session.user
   );
 });
 

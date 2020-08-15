@@ -234,7 +234,7 @@ export const saveUserSettingsCall = async (
   setPassError,
   setNewPassError
 ) => {
-  const url = `http://localhost:5000/updateUser?username=${user.username}`;
+  const url = `http://localhost:5000/updateUser`;
   fetch(url, Object.assign({}, fetchOptions, {
     method: 'PATCH',
     body: JSON.stringify(user)
@@ -251,6 +251,12 @@ export const saveStoreSettingsCall = async (
   openTimeError,
   closeTimeError
 ) => {
+  console.log(store)
+  const url = `http://localhost:5000/updateStore?store_id=${store.id}`;
+  fetch(url, Object.assign({}, fetchOptions, {
+    method: 'PATCH',
+    body: JSON.stringify(store)
+  }))
   // call backend to set 'store', if any errors set them
   return [];
 };

@@ -23,8 +23,8 @@ function getEventsByStoreID(thenCallBack, errorCallback, storeID) {
   Event.find({ store_id: storeID }).then(thenCallBack).catch(errorCallback);
 }
 
-function updateUser(thenCallBack, errorCallback, username, user) {
-  User.findOneAndUpdate({ username: username }, user).then(thenCallBack).catch(errorCallback);
+function updateUser(thenCallBack, errorCallback, user_id, user) {
+  User.findByIdAndUpdate(user_id, user).then(thenCallBack).catch(errorCallback);
 }
 function updateStore(thenCallBack, errorCallback, store_id, store) {
   Store.findByIdAndUpdate(store_id, store).then(thenCallBack).catch(errorCallback);
