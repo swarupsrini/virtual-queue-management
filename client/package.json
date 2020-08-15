@@ -12,6 +12,7 @@
     "framer": "^1.2.4",
     "leaflet": "^1.6.0",
     "leaflet-extra-markers": "^1.2.1",
+    "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",

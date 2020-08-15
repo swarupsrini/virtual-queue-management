@@ -42,7 +42,7 @@ export default function UserSettingsPopup(props) {
 
   useEffect(() => {
     getCurrentUser((user)=>{
-      user.password = "a"
+      user.password = ""
       setUser(user)
     })
     console.log(user)

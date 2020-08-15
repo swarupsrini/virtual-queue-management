@@ -26,7 +26,10 @@ const {
   getEventsByStoreID,
   updateUser,
   updateStore,
+  getJoinedEventByUserID,
 } = require("./basic._mongo");
+
+const bcrypt = require("bcryptjs");
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 const bodyParser = require("body-parser");
@@ -157,6 +160,24 @@ const userExists = (req, res, next) => {
     }
   );
   if (!invalid) next();
+};
+
+const userExistsExcludingCurrentUser = (req, res, next) => {
+  getUserByID(
+    (result) => {
+      if(result.username !== req.body.username){
+        userExists(req, res, next)
+      }
+      else{
+        next()
+      }
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+  
 };
 
 /*************************************************/
@@ -324,10 +345,12 @@ app.get("/getUserFavStores", authenticate, (req, res) => {
   );
 });
 
-app.get("/getUserStoreId", authenticate, (req, res) => {
+app.get("/getUserStoreId", (req, res) => {
+  console.log("ccc")
   getUserByID(
     (result) => {
-      res.send(result.store_id);
+      //res.send(result.store_id);
+      res.send("wow");
     },
     (error) => {
       res.status(400).send(error);
@@ -386,7 +409,7 @@ app.get("/getUserStore", authenticate, (req, res) => {
     .catch((e) => res.status(400).send(e));
 });
 
-app.post("/newEvent", (req, res) => {
+app.post("/joinQueue", (req, res) => {
   // Create a new Event
   const event = new Event({
     store_id: req.body.store_id,
@@ -397,14 +420,35 @@ app.post("/newEvent", (req, res) => {
     accepted: false,
   });
 
-  event.save().then(
-    (event) => {
-      res.send(event);
+  getJoinedEventByUserID(
+    (result) => {
+      if (result.length > 0) {
+        res.send(result);
+      } else {
+        event.save().then(
+          (event) => {
+            res.send(event);
+          },
+          (error) => {
+            res.status(400).send(error); // 400 for bad request
+          }
+        );
+      }
     },
     (error) => {
-      res.status(400).send(error); // 400 for bad request
-    }
+      res.status(400).send(error);
+    },
+    req.session.user
   );
+});
+
+app.post("/exitQueue", (req, res) => {
+  const update = { exit_time: req.body.exit_time };
+  const filter = { user_id: req.session.user, exit_time: "" };
+  Event.findOneAndUpdate(filter, update, (error, result) => {
+    console.log(result);
+    res.send(result);
+  });
 });
 
 app.get(
@@ -424,45 +468,62 @@ app.get(
   }
 );
 
-app.patch("/updateUser", userExists, (req, res) => {
-  const username = req.session.user;
-  const password = req.body.password;
-  User.findByUsernamePassword(username, password)
-    .then((user) => {
-      /*updateUser(
-        () => {},
-        (error) => {
-          res.status(400).send(error);
-        },
-        req.session.user,
-        req.body
-      );*/
-    })
-    .catch((error) => {
-      res.status(400).send();
+app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
+  const fields = req.body
+  const updatePassword = fields.password !== "" && fields.new_password !== ""
+  console.log(fields)
+  new Promise((resolve, reject) => {
+    getUserByID(
+      (result) => {
+        resolve(result.password)
+      },
+      (error) => {
+        res.status(400).send(error);
+      },
+      req.session.user
+    );
+  }).then((password) => {
+    bcrypt.compare(fields.password, password, (err, result) => {
+      if (!result && updatePassword) {
+        res.status(402).send();
+      }
+      else{
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(fields.new_password, salt, (err, hash) => {
+            fields.password = hash
+            if(!updatePassword){
+              delete fields.password
+            }
+            updateUser(
+              () => {
+                res.status(200).send();
+              },
+              (error) => {
+                res.status(400).send(error);
+              },
+              req.session.user,
+              fields
+            );
+          });
+        });
+      }
     });
-
-  /*
-  getUserByID(
-    (result) => {
-      res.send(result);
-    },
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.session.user
-  );*/
+  })
 });
 
 app.patch("/updateStore", (req, res) => {
+  console.log(req.body)
   updateStore(
-    () => {},
+    () => {
+      res.status(200).send()
+    },
     (error) => {
       res.status(400).send(error);
     },
     req.query.store_id,
     req.body
   );
+  /*
   getStoreByID(
     (result) => {
       res.send(result);
@@ -471,7 +532,7 @@ app.patch("/updateStore", (req, res) => {
       res.status(400).send(error);
     },
     req.query.store_id
-  );
+  );*/
 });
 
 app.get("/getCurrentUser", authenticate, (req, res) => {
@@ -490,6 +551,26 @@ app.get("/getCurrentUser", authenticate, (req, res) => {
     },
     req.session.user
   );
+});
+
+app.get("/getStoreIdFromJoinedQueue", authenticate, (req, res) => {
+  getJoinedEventByUserID(
+    (result) => {
+      if (result.length === 0) {
+        res.send({ store_id: "exited" });
+      } else {
+        res.send({ store_id: result[0].store_id });
+      }
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
+app.get("/getUserId", authenticate, (req, res) => {
+  res.send({ user_id: req.session.user });
 });
 
 // All routes other than above will go to index.html

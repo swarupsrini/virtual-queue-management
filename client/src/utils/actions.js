@@ -1,5 +1,4 @@
 /* Utility functions to help with back-end calls and global information. */
-
 import datetime from "date-and-time";
 
 export const REFRESH_INTERVAL = 3000;
@@ -112,7 +111,7 @@ export const signup = (setUser, data) => {
 };
 
 export const getUserById = async (id, setUser) => {
-  const url = `http://localhost:5000/getUserById?user_id=${id}`;
+  const url = base + `/getUserById?user_id=${id}`;
   fetch(url, {
     ...fetchOptions,
   })
@@ -123,7 +122,7 @@ export const getUserById = async (id, setUser) => {
 };
 
 export const getStoreById = async (id, setStore) => {
-  const url = `http://localhost:5000/getStoreById?store_id=${id}`;
+  const url = base + `/getStoreById?store_id=${id}`;
   fetch(url, {
     ...fetchOptions,
   })
@@ -243,7 +242,7 @@ export const resetStoreCall = async (setStore) => {
 };
 
 export const saveUserSettingsCall = async (user, setUser) => {
-  const url = `http://localhost:5000/updateUser`;
+  const url = base + `/updateUser`;
   fetch(
     url,
     Object.assign({}, fetchOptions, {
@@ -251,8 +250,12 @@ export const saveUserSettingsCall = async (user, setUser) => {
       body: JSON.stringify(user),
     })
   ).then((res) => {
-    if (res.status === 200) alert("Your settings have been updated!");
-    if (res.status === 403) {
+    if (res.status === 200) alert("Your settings have been updated!")
+    else if (res.status === 402) {
+      alert("Wrong password");
+      throw "Wrong password";
+    }
+    else if (res.status === 403) {
       alert("These credentials have been taken!");
       throw "Signup credentials have been taken!";
     }
@@ -262,21 +265,29 @@ export const saveUserSettingsCall = async (user, setUser) => {
 export const saveStoreSettingsCall = async (
   store,
   setStore,
-  storeError,
-  addressError,
-  openTimeError,
-  closeTimeError
 ) => {
-  console.log(store);
-  const store_id = getUserStoreId();
-  const url = `http://localhost:5000/updateStore?store_id=${store_id}`;
-  fetch(
-    url,
-    Object.assign({}, fetchOptions, {
-      method: "PATCH",
-      body: JSON.stringify(store),
+  getUserStore(()=>{},(backEndStore)=>{
+    const url = base + `/updateStore?store_id=${backEndStore._id}`;
+    fetch(
+      url,
+      Object.assign({}, fetchOptions, {
+        method: "PATCH",
+        body: JSON.stringify({
+          name: store.name,
+          address:store.address,
+          open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+          close_time: datetime.format(store.close_time, "hh:mm:ss A"),
+          owner_id: store.owner_id,
+          employee_ids: store.employee_ids
+          //lat long verified in store
+        }),
+      })
+    ).then((res) => {
+      if (res.status === 200) alert("Your settings have been updated!")
     })
-  );
+  })
+  
+  
   // call backend to set 'store', if any errors set them
   return [];
 };
@@ -332,7 +343,8 @@ export const getUserFavStores = (callback) => {
     .then((res) => res.json())
     .then((res) => {
       callback(res);
-    });
+    })
+    .catch((error)=>{console.log("ERRORRR")})
 };
 
 export const getAllUsers = () => {
@@ -363,7 +375,7 @@ export const getEventsByStoreId = (store, setStore) => {
 };
 
 export const joinQueue = (store_id) => {
-  const url = `http://localhost:5000/newEvent`;
+  const url = base + "/joinQueue";
   fetch(
     url,
     Object.assign({}, fetchOptions, {
@@ -372,6 +384,19 @@ export const joinQueue = (store_id) => {
         store_id: store_id,
         entry_time: datetime.format(new Date(), "MMM D YYYY hh:mm:ss A"),
         exit_time: "",
+      }),
+    })
+  );
+};
+
+export const exitQueue = () => {
+  const url = base + "/exitQueue";
+  fetch(
+    url,
+    Object.assign({}, fetchOptions, {
+      method: "POST",
+      body: JSON.stringify({
+        exit_time: datetime.format(new Date(), "MMM D YYYY hh:mm:ss A"),
       }),
     })
   );
@@ -411,7 +436,7 @@ export const sendAnnouncement = (store, msg) => {
 };
 
 export const getUserStoreId = () => {
-  const url = `http://localhost:5000/getUserStoreId`;
+  const url = base + `/getUserStoreId`;
   fetch(url, {
     ...fetchOptions,
   })
@@ -422,7 +447,7 @@ export const getUserStoreId = () => {
 };
 
 export const getCurrentUser = (setUser) => {
-  const url = `http://localhost:5000/getCurrentUser`;
+  const url = base + `/getCurrentUser`;
   fetch(url, {
     ...fetchOptions,
   })
@@ -430,5 +455,35 @@ export const getCurrentUser = (setUser) => {
     .then((res) => {
       console.log(res);
       setUser(res);
+    });
+};
+
+export const getStoreIdFromJoinedQueue = (callback) => {
+  const url = base + "/getStoreIdFromJoinedQueue";
+  fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      callback(res.store_id);
+    })
+    .catch((error) => {
+      callback("exited");
+      console.log(error);
+    });
+};
+
+export const getUserId = (callback) => {
+  const url = base + "/getUserId";
+  fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      callback(res.user_id);
+    })
+    .catch((error) => {
+      callback("default");
+      console.log(error);
     });
 };

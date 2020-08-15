@@ -34,6 +34,12 @@ function updateStore(thenCallBack, errorCallback, store_id, store) {
     .catch(errorCallback);
 }
 
+function getJoinedEventByUserID(thenCallBack, errorCallback, userID) {
+  Event.find({ user_id: userID, exit_time: "" })
+    .then(thenCallBack)
+    .catch(errorCallback);
+}
+
 module.exports = {
   getStoreByID,
   getAllStores,
@@ -42,4 +48,5 @@ module.exports = {
   getUserByID,
   updateUser,
   updateStore,
+  getJoinedEventByUserID,
 };

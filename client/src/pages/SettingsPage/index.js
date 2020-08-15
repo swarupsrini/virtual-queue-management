@@ -16,7 +16,7 @@ export default function SettingsPage(props) {
     <div className={classes.root}>
       <Header></Header>
       {(userType === "visitor" || userType === "admin" ) ? <UserSettingsPopup isAdmin={false} close={() => {}} currentUser = {props.currentUser} /> : null}
-      {(userType === "owner" || userType === "employee")  ? <StoreSettingsPopup isAdmin={false} close={() => {}} currentUser = {props.currentUser}/> : null}
+      {(userType === "owner")  ? <StoreSettingsPopup isAdmin={false} close={() => {}} currentUser = {props.currentUser}/> : null}
     </div>
   );
 }
