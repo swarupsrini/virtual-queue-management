@@ -445,34 +445,47 @@ app.get(
   }
 );
 
-app.patch("/updateUser", userExists, (req, res) => {
-  const username = req.session.user;
-  const password = req.body.password;
-  User.findByUsernamePassword(username, password)
-    .then((user) => {
-      /*updateUser(
-        () => {},
-        (error) => {
-          res.status(400).send(error);
-        },
-        req.session.user,
-        req.body
-      );*/
-    })
-    .catch((error) => {
-      res.status(400).send();
+app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
+  const fields = req.body
+  const updatePassword = fields.password !== "" && fields.new_password !== ""
+  console.log(fields)
+  new Promise((resolve, reject) => {
+    getUserByID(
+      (result) => {
+        resolve(result.password)
+      },
+      (error) => {
+        res.status(400).send(error);
+      },
+      req.session.user
+    );
+  }).then((password) => {
+    bcrypt.compare(fields.password, password, (err, result) => {
+      if (!result && updatePassword) {
+        res.status(402).send();
+      }
+      else{
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(fields.new_password, salt, (err, hash) => {
+            fields.password = hash
+            if(!updatePassword){
+              delete fields.password
+            }
+            updateUser(
+              () => {
+                res.status(200).send();
+              },
+              (error) => {
+                res.status(400).send(error);
+              },
+              req.session.user,
+              fields
+            );
+          });
+        });
+      }
     });
-
-  /*
-  getUserByID(
-    (result) => {
-      res.send(result);
-    },
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.session.user
-  );*/
+  })
 });
 
 app.patch("/updateStore", (req, res) => {
