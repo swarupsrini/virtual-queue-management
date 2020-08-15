@@ -5,6 +5,7 @@ log("Express server");
 
 const express = require("express");
 const { mongoose } = require("./db/mongoose");
+const datetime = require("date-and-time");
 mongoose.set("useFindAndModify", false); // for some deprecation issues
 const cors = require("cors");
 const app = express();
@@ -27,6 +28,7 @@ const {
   updateUser,
   updateStore,
   getJoinedEventByUserID,
+  getInQueueEventsByStoreID,
 } = require("./basic._mongo");
 
 const bcrypt = require("bcryptjs");
@@ -165,11 +167,10 @@ const userExists = (req, res, next) => {
 const userExistsExcludingCurrentUser = (req, res, next) => {
   getUserByID(
     (result) => {
-      if(result.username !== req.body.username){
-        userExists(req, res, next)
-      }
-      else{
-        next()
+      if (result.username !== req.body.username) {
+        userExists(req, res, next);
+      } else {
+        next();
       }
     },
     (error) => {
@@ -177,7 +178,6 @@ const userExistsExcludingCurrentUser = (req, res, next) => {
     },
     req.session.user
   );
-  
 };
 
 /*************************************************/
@@ -346,7 +346,7 @@ app.get("/getUserFavStores", authenticate, (req, res) => {
 });
 
 app.get("/getUserStoreId", (req, res) => {
-  console.log("ccc")
+  console.log("ccc");
   getUserByID(
     (result) => {
       //res.send(result.store_id);
@@ -468,13 +468,13 @@ app.get(
 );
 
 app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
-  const fields = req.body
-  const updatePassword = fields.password !== "" && fields.new_password !== ""
-  console.log(fields)
+  const fields = req.body;
+  const updatePassword = fields.password !== "" && fields.new_password !== "";
+  console.log(fields);
   new Promise((resolve, reject) => {
     getUserByID(
       (result) => {
-        resolve(result.password)
+        resolve(result.password);
       },
       (error) => {
         res.status(400).send(error);
@@ -485,13 +485,12 @@ app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
     bcrypt.compare(fields.password, password, (err, result) => {
       if (!result && updatePassword) {
         res.status(402).send();
-      }
-      else{
+      } else {
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(fields.new_password, salt, (err, hash) => {
-            fields.password = hash
-            if(!updatePassword){
-              delete fields.password
+            fields.password = hash;
+            if (!updatePassword) {
+              delete fields.password;
             }
             updateUser(
               () => {
@@ -507,14 +506,14 @@ app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
         });
       }
     });
-  })
+  });
 });
 
 app.patch("/updateStore", (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   updateStore(
     () => {
-      res.status(200).send()
+      res.status(200).send();
     },
     (error) => {
       res.status(400).send(error);
@@ -559,6 +558,53 @@ app.get("/getStoreIdFromJoinedQueue", authenticate, (req, res) => {
         res.send({ store_id: "exited" });
       } else {
         res.send({ store_id: result[0].store_id });
+      }
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
+app.get("/getFancyQueue", authenticate, (req, res) => {
+  getJoinedEventByUserID(
+    (result) => {
+      let fancy = [];
+      if (result.length === 0) {
+        res.send({ queue: fancy });
+      } else {
+        getInQueueEventsByStoreID(
+          (allEvents) => {
+            const sorted = allEvents;
+            sorted.sort((a, b) => {
+              return datetime
+                .subtract(
+                  datetime.parse(a.entry_time, "MMM D YYYY hh:mm:ss A"),
+                  datetime.parse(b.entry_time, "MMM D YYYY hh:mm:ss A")
+                )
+                .toSeconds();
+            });
+
+            sorted.map((each, i) => {
+              sorted[i] = { ...sorted[i].toObject(), position: i };
+            });
+            const index = sorted.findIndex((elem) => {
+              return elem.user_id === req.session.user;
+            });
+            if (index === -1) {
+              res.send({ queue: [] });
+            } else {
+              sorted[index] = { ...sorted[index], isUser: "True" };
+              console.log(sorted.slice(0, index + 1));
+              res.send({ queue: sorted.slice(0, index + 1) });
+            }
+          },
+          (error) => {
+            console.log(error);
+          },
+          result[0].store_id
+        );
       }
     },
     (error) => {

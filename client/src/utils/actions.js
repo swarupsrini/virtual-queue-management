@@ -249,44 +249,42 @@ export const saveUserSettingsCall = async (user, setUser) => {
       body: JSON.stringify(user),
     })
   ).then((res) => {
-    if (res.status === 200) alert("Your settings have been updated!")
+    if (res.status === 200) alert("Your settings have been updated!");
     else if (res.status === 402) {
       alert("Wrong password");
       throw "Wrong password";
-    }
-    else if (res.status === 403) {
+    } else if (res.status === 403) {
       alert("These credentials have been taken!");
       throw "Signup credentials have been taken!";
     }
   });
 };
 
-export const saveStoreSettingsCall = async (
-  store,
-  setStore,
-) => {
-  getUserStore(()=>{},(backEndStore)=>{
-    const url = base + `/updateStore?store_id=${backEndStore._id}`;
-    fetch(
-      url,
-      Object.assign({}, fetchOptions, {
-        method: "PATCH",
-        body: JSON.stringify({
-          name: store.name,
-          address:store.address,
-          open_time: datetime.format(store.open_time, "hh:mm:ss A"),
-          close_time: datetime.format(store.close_time, "hh:mm:ss A"),
-          owner_id: store.owner_id,
-          employee_ids: store.employee_ids
-          //lat long verified in store
-        }),
-      })
-    ).then((res) => {
-      if (res.status === 200) alert("Your settings have been updated!")
-    })
-  })
-  
-  
+export const saveStoreSettingsCall = async (store, setStore) => {
+  getUserStore(
+    () => {},
+    (backEndStore) => {
+      const url = base + `/updateStore?store_id=${backEndStore._id}`;
+      fetch(
+        url,
+        Object.assign({}, fetchOptions, {
+          method: "PATCH",
+          body: JSON.stringify({
+            name: store.name,
+            address: store.address,
+            open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+            close_time: datetime.format(store.close_time, "hh:mm:ss A"),
+            owner_id: store.owner_id,
+            employee_ids: store.employee_ids,
+            //lat long verified in store
+          }),
+        })
+      ).then((res) => {
+        if (res.status === 200) alert("Your settings have been updated!");
+      });
+    }
+  );
+
   // call backend to set 'store', if any errors set them
   return [];
 };
@@ -343,7 +341,9 @@ export const getUserFavStores = (callback) => {
     .then((res) => {
       callback(res);
     })
-    .catch((error)=>{console.log("ERRORRR")})
+    .catch((error) => {
+      console.log("ERRORRR");
+    });
 };
 
 export const getAllUsers = () => {
@@ -484,5 +484,20 @@ export const getUserId = (callback) => {
     .catch((error) => {
       callback("default");
       console.log(error);
+    });
+};
+
+export const getFancyQueue = (callback) => {
+  const url = base + "/getFancyQueue";
+  fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      callback(res.queue);
+    })
+    .catch((error) => {
+      console.log(error);
+      callback([]);
     });
 };
