@@ -555,13 +555,21 @@ app.get("/getCurrentUser", authenticate, (req, res) => {
 app.get("/getStoreIdFromJoinedQueue", authenticate, (req, res) => {
   getJoinedEventByUserID(
     (result) => {
-      res.send({ store_id: result[0].store_id });
+      if (result.length === 0) {
+        res.send({ store_id: "exited" });
+      } else {
+        res.send({ store_id: result[0].store_id });
+      }
     },
     (error) => {
       res.status(400).send(error);
     },
     req.session.user
   );
+});
+
+app.get("/getUserId", authenticate, (req, res) => {
+  res.send({ user_id: req.session.user });
 });
 
 // All routes other than above will go to index.html
