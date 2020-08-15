@@ -251,8 +251,9 @@ export const saveStoreSettingsCall = async (
   openTimeError,
   closeTimeError
 ) => {
-  console.log(store)
-  const url = `http://localhost:5000/updateStore?store_id=${store.id}`;
+  const store_id = getUserStoreId()
+  console.log(store_id)
+  const url = `http://localhost:5000/updateStore?store_id=${store_id}`;
   fetch(url, Object.assign({}, fetchOptions, {
     method: 'PATCH',
     body: JSON.stringify(store)
@@ -380,3 +381,14 @@ export const updateUserFavs = (callback, bool, store_id) => {
 export const sendAnnouncement = (store, msg) => {
   // call backend to send announcement for the store
 };
+
+export const getUserStoreId = () => {
+  const url = `http://localhost:5000/getUserStoreId`;
+  fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      return res;
+    });
+}

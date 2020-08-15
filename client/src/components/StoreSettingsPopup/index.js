@@ -49,10 +49,15 @@ export default function StoreSettings(props) {
     console.log(store);
   }, [store]);
 
+  /*
   useEffect(() => {
     if (props.id) getStoreById(props.id, setStore);
     else getUserStore(() => {}, setStore);
-  }, [props.id]);
+  }, [props.id]);*/
+
+  useEffect(() => {
+    getStoreById(props.id, setStore)
+  }, []);
 
   const [storeError, setStoreError] = useState(false);
   const [addressError, setAddressError] = useState(false);
