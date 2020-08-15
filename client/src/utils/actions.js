@@ -298,21 +298,32 @@ export const getForeCastWaitTime = async (store, setStore) => {
 };
 
 export const getAllStores = () => {
-  const url = "http://localhost:5000/getAllStores";
+  const url = base + "/getAllStores";
   return fetch(url, {
     ...fetchOptions,
   });
 };
 
+export const getUserFavStores = (callback) => {
+  const url = base + "/getUserFavStores";
+  return fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      callback(res);
+    });
+};
+
 export const getAllUsers = () => {
-  const url = "http://localhost:5000/getAllUsers";
+  const url = base + "/getAllUsers";
   return fetch(url, {
     ...fetchOptions,
   });
 };
 
 export const getEventsByStoreId = (store, setStore) => {
-  const url = `http://localhost:5000/getEventsByStoreId?store_id=${store._id}`;
+  const url = base + `/getEventsByStoreId?store_id=${store._id}`;
   fetch(url, {
     ...fetchOptions,
   })
@@ -345,11 +356,25 @@ export const joinQueue = (user_id, store_id) => {
 };
 
 export const getDistance = (userLat, userLong, storeLat, storeLong) => {
-  const url = `http://localhost:5000/getDistance?fromLat=${userLat}&fromLong=${userLong}&toLat=${storeLat}&toLong=${storeLong}`;
+  const url =
+    base +
+    `/getDistance?fromLat=${userLat}&fromLong=${userLong}&toLat=${storeLat}&toLong=${storeLong}`;
 
   return fetch(url, {
     ...fetchOptions,
   });
+};
+
+export const updateUserFavs = (callback, bool, store_id) => {
+  const url = base + `/updateUserFavStores?bool=${bool}&store_id=${store_id}`;
+  fetch(url, {
+    method: "post",
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      callback(res);
+    });
 };
 
 export const sendAnnouncement = (store, msg) => {

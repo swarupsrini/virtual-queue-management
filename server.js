@@ -47,7 +47,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 6000000,
+      expires: 4 * 60000,
       httpOnly: true,
       // secure: false,
     },
@@ -311,6 +311,55 @@ app.get("/getUserById", authenticate, mongoUserIDChecker, (req, res) => {
   );
 });
 
+app.get("/getUserFavStores", authenticate, (req, res) => {
+  getUserByID(
+    (result) => {
+      res.send(result.fav_stores);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
+app.get("/getUserStoreId", authenticate, (req, res) => {
+  getUserByID(
+    (result) => {
+      res.send(result.store_id);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
+app.post(
+  "/updateUserFavStores",
+  authenticate,
+  mongoStoreIDChecker,
+  (req, res) => {
+    User.findById(req.session.user)
+      .then((rest) => {
+        if (!rest) {
+          res.status(404).send("Resource not found");
+        } else {
+          if (req.query.bool === "true") {
+            rest.fav_stores.push(req.query.store_id);
+          } else if (req.query.bool === "false") {
+            rest.fav_stores.pull(req.query.store_id);
+          }
+          rest.save();
+          res.send(rest.fav_stores);
+        }
+      })
+      .catch((error) => {
+        res.status(400).send("Bad Request");
+      });
+  }
+);
+
 app.get("/getStoreById", authenticate, mongoStoreIDChecker, (req, res) => {
   getStoreByID(
     (result) => {
@@ -398,7 +447,6 @@ app.patch("/updateStore", (req, res) => {
     req.query.store_id
   );
 });
-
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
