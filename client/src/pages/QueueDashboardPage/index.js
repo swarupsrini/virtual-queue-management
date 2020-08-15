@@ -1,3 +1,5 @@
+import datetime from "date-and-time";
+
 import React, { useState, useEffect } from "react";
 import { Paper } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -59,24 +61,22 @@ export default function QueueDashboard(props) {
   const [showAnn, setShowAnn] = useState(false);
 
   const [user, setUser] = useState({});
-  const [store, setStore] = useState({});
+  const [store, setStore] = useState({ queue: [] });
 
   const [recent, setRecent] = useState({});
   const [current, setCurrent] = useState([]);
 
-  useEffect(() => {
-    getUserStore(setUser, setStore);
-  }, []);
-
-  useInterval(async () => {
-    // update current based on store.queue
+  const updateQueue = () => {
     getUserStore(setUser, (store) => {
       getEventsByStoreId(store, (store) => {
         getQueue(store, setStore);
       });
     });
-  }, REFRESH_INTERVAL);
+  };
+  useEffect(() => updateQueue(), []);
+  useInterval(async () => updateQueue(), REFRESH_INTERVAL);
 
+  // for testing
   useEffect(() => {
     console.log("store changed:", JSON.stringify(store));
   }, [store]);
@@ -114,7 +114,7 @@ export default function QueueDashboard(props) {
   // ]);
 
   const removeFromCurrent = (item) =>
-    setCurrent(
+    setCurrent((current) =>
       current.filter((x) => JSON.stringify(x) !== JSON.stringify(item))
     );
 
@@ -127,7 +127,7 @@ export default function QueueDashboard(props) {
     removeFromCurrent(item);
   };
   const notify = (item, i) => {
-    setCurrent(
+    setCurrent((current) =>
       current.map((x) =>
         JSON.stringify(x) === JSON.stringify(item)
           ? { ...x, notified: true }
@@ -232,47 +232,51 @@ export default function QueueDashboard(props) {
           />
         </div>
         <Paper className={classes.currentSection}>
-          {current.map((item, i) => (
-            <div key={"currentWait" + i} className={classes.currentMember}>
-              <div className={classes.currentLeftStuff}>
-                <p className={classes.currentNumber}>{i + 1}</p>
-                <div className={classes.currentInfo}>
-                  <p className={classes.currentTitle}>{item.username}</p>
-                  <p className={classes.currentSubtitle}>
-                    {item.notified
-                      ? `Notified ${item.time} minutes ago`
-                      : `Waiting for ${item.time} minutes`}
-                  </p>
+          {store.queue &&
+            store.queue.length > 0 &&
+            store.queue.map((item, i) => (
+              <div key={"currentWait" + i} className={classes.currentMember}>
+                <div className={classes.currentLeftStuff}>
+                  <p className={classes.currentNumber}>{i + 1}</p>
+                  <div className={classes.currentInfo}>
+                    <p className={classes.currentTitle}>{item.username}</p>
+                    <p className={classes.currentSubtitle}>
+                      {`Waiting for ${Math.trunc(
+                        datetime
+                          .subtract(new Date(), item.entry_time)
+                          .toMinutes()
+                      )} minutes`}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className={classes.currentRightStuff}>
-                {/* <Button
+                <div className={classes.currentRightStuff}>
+                  {/* <Button
                   className={classes.btnScanQr}
                   onClick={() => scanQr(item, i)}
                   text="Scan QR"
                 /> */}
-                {item.notified ? (
-                  <Button
-                    className={classes.btnAccept}
-                    onClick={() => accept(item, i)}
-                    text="Accept"
-                  />
-                ) : (
-                  <Button
-                    className={classes.btnNotify}
-                    onClick={() => notify(item, i)}
-                    text="Notify"
-                  />
-                )}
+                  {item.notified ? (
+                    <Button
+                      className={classes.btnAccept}
+                      onClick={() => accept(item, i)}
+                      text="Accept"
+                    />
+                  ) : (
+                    <Button
+                      className={classes.btnNotify}
+                      onClick={() => notify(item, i)}
+                      text="Notify"
+                    />
+                  )}
 
-                <Button
-                  className={classes.btnReject}
-                  onClick={() => reject(item, i)}
-                  text="Reject"
-                />
+                  <Button
+                    className={classes.btnReject}
+                    onClick={() => reject(item, i)}
+                    text="Reject"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </Paper>
       </div>
     </div>

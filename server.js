@@ -470,7 +470,7 @@ app.get("/getCurrentUser", authenticate, (req, res) => {
         username: result.username,
         email: result.email,
         phone_number: result.phone_number,
-        fav_stores: result.fav_stores
+        fav_stores: result.fav_stores,
       });
     },
     (error) => {
