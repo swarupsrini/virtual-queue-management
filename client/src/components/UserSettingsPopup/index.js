@@ -5,6 +5,7 @@ import {
   getUserById,
   getUserStore,
   saveUserSettingsCall,
+  getCurrentUser,
 } from "../../utils/actions";
 
 import {
@@ -43,6 +44,14 @@ export default function UserSettingsPopup(props) {
     if (props.id) getUserById(props.id, setUser);
     else getUserStore(setUser, () => {});
   }, [props.id]);*/
+  useEffect(() => {
+    getCurrentUser((user)=>{
+      user.password = ""
+      setUser(user)
+    })
+    console.log(user)
+    //getUserById(props.id, setUser);
+  }, [props.id]);
 
   const [newPassError, setNewPassError] = useState(false);
 

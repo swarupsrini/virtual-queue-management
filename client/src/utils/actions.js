@@ -414,7 +414,7 @@ export const getUserStoreId = () => {
       return res;
     });
 }
-export const getCurrentUser = () => {
+export const getCurrentUser = (setUser) => {
   const url = `http://localhost:5000/getCurrentUser`;
   fetch(url, {
     ...fetchOptions,
@@ -422,6 +422,6 @@ export const getCurrentUser = () => {
     .then((res) => res.json())
     .then((res) => {
       console.log(res)
-      return res;
+      setUser(res);
     });
 }
