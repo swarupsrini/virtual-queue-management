@@ -98,11 +98,14 @@ export const signup = (setUser, data) => {
           },
         })
           .then((res) => res.json())
-          .then((res) => console.log("created store:", res));
+          .then((res) => console.log("created store:", res))
+          .catch((err) => {
+            console.error(err);
+          });
       }
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 };
 

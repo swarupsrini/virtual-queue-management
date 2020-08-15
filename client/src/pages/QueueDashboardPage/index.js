@@ -82,7 +82,6 @@ export default function QueueDashboard(props) {
   const [recent, setRecent] = useState({
     id: "1",
     username: "eryk123",
-    others: 5,
     time: 10,
     notified: true,
   });
@@ -90,21 +89,18 @@ export default function QueueDashboard(props) {
     {
       id: "1",
       username: "srini140",
-      others: 2,
       time: 10,
       notified: true,
     },
     {
       id: "2",
       username: "bhanothe",
-      others: 0,
       time: 20,
       notified: false,
     },
     {
       id: "1",
       username: "bob123",
-      others: 100,
       time: 20,
       notified: false,
     },
@@ -221,9 +217,7 @@ export default function QueueDashboard(props) {
         <p className={classes.recentSectionTitle}>Recently Accepted</p>
         {recent.username !== undefined && (
           <Paper className={classes.recentSection}>
-            <p className={classes.recentTitle}>
-              {recent.username}, {recent.others} others
-            </p>
+            <p className={classes.recentTitle}>{recent.username}</p>
             <Button className={classes.undo} onClick={undo} text="Undo" />
           </Paper>
         )}
@@ -241,9 +235,7 @@ export default function QueueDashboard(props) {
               <div className={classes.currentLeftStuff}>
                 <p className={classes.currentNumber}>{i + 1}</p>
                 <div className={classes.currentInfo}>
-                  <p className={classes.currentTitle}>
-                    {item.username}, {item.others} others
-                  </p>
+                  <p className={classes.currentTitle}>{item.username}</p>
                   <p className={classes.currentSubtitle}>
                     {item.notified
                       ? `Notified ${item.time} minutes ago`
