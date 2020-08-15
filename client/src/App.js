@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
-import { readCookie } from "./utils/actions";
+import { readCookie, REFRESH_INTERVAL } from "./utils/actions";
+import useInterval from "./utils/useInterval";
 
 // importing all the pages
 import LoginPage from "./pages/LoginPage";
@@ -20,6 +21,10 @@ export default function App() {
   useEffect(() => {
     readCookie(setCurrentUser);
   }, []);
+
+  useInterval(() => {
+    readCookie(setCurrentUser);
+  }, [REFRESH_INTERVAL]);
 
   useEffect(() => {
     console.log("changed current user:", currentUser);
@@ -61,7 +66,7 @@ export default function App() {
   const storeAnalytics = (
     <Route
       path="/store-analytics/:store_id"
-      render={() => <StoreAnalytics currentUser={currentUser}/>}
+      render={() => <StoreAnalytics currentUser={currentUser} />}
     />
   );
   const queueStatus = (
@@ -74,7 +79,12 @@ export default function App() {
     <Route path="/queue-dashboard" render={() => <QueueDashboard />} />
   );
   const settings = (
-    <Route path="/settings" render={() => <SettingsPage currentUser={currentUser} setUser={setUser} />} />
+    <Route
+      path="/settings"
+      render={() => (
+        <SettingsPage currentUser={currentUser} setUser={setUser} />
+      )}
+    />
   );
   return (
     <div className="App">

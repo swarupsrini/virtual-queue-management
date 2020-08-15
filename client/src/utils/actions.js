@@ -146,7 +146,6 @@ export const getUserStore = async (setUser, setStore) => {
     .then((res) => {
       setUser(res.user);
       if (res.store) setStore(res.store);
-      console.log("set user, store", res);
     })
     .catch((e) => console.error(e));
 

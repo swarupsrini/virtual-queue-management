@@ -7,15 +7,29 @@ import { Frame } from "framer";
 import Grid from "@material-ui/core/Grid";
 import Header from "../../components/Header";
 import useStyles from "./styles";
-import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
+import {
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Paper,
+} from "@material-ui/core";
 import useInterval from "../../utils/useInterval";
-import { REFRESH_INTERVAL,getUserStore, getStoreById, getEventsByStoreId, getQueue, getForeCastWaitTime, joinQueue } from "../../utils/actions";
+import {
+  REFRESH_INTERVAL,
+  getUserStore,
+  getStoreById,
+  getEventsByStoreId,
+  getQueue,
+  getForeCastWaitTime,
+  joinQueue,
+} from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
 import datetime from "date-and-time";
 import { Router } from "@material-ui/icons";
 
-function getNumVisitsToday (store) {
+function getNumVisitsToday(store) {
   const dayStart = new Date();
   dayStart.setHours(0);
   dayStart.setMinutes(0);
@@ -30,9 +44,9 @@ function getNumVisitsToday (store) {
     num_visits_today += 1;
   }
   return num_visits_today;
-};
+}
 
-function getAvgAdmissions (store)  {
+function getAvgAdmissions(store) {
   const num_admissions = new Array(
     store.close_time.getHours() - store.open_time.getHours()
   ).fill(0);
@@ -56,26 +70,26 @@ function getAvgAdmissions (store)  {
     num_admissions[visit.getHours() - store.open_time.getHours()] += 1;
   }
   const avg_num_admissions = num_admissions.map((n) => n / num_days);
-  return avg_num_admissions
-};
+  return avg_num_admissions;
+}
 
-function getLeastBusyTime (store) {
+function getLeastBusyTime(store) {
   const min_num_admissions = Math.min.apply(null, store.avg_num_admissions);
   const least_busy_time =
     store.avg_num_admissions.indexOf(min_num_admissions) +
     store.open_time.getHours();
-  return least_busy_time
-};
+  return least_busy_time;
+}
 
-function getMostBusyTime (store) {
+function getMostBusyTime(store) {
   const max_num_admissions = Math.max.apply(null, store.avg_num_admissions);
   const most_busy_time =
     store.avg_num_admissions.indexOf(max_num_admissions) +
     store.open_time.getHours();
-  return most_busy_time
-};
+  return most_busy_time;
+}
 
-function updateStore (store, setStore) {
+function updateStore(store, setStore) {
   getEventsByStoreId(store, (store) => {
     getQueue(store, () => {});
     getForeCastWaitTime(store, () => {});
@@ -83,37 +97,33 @@ function updateStore (store, setStore) {
     store.avg_num_admissions = getAvgAdmissions(store);
     store.least_busy_time = getLeastBusyTime(store);
     store.most_busy_time = getMostBusyTime(store);
-    setStore(store)
-  })
-  
+    setStore(store);
+  });
 }
 
 export default function StoreAnalytics(props) {
-  const { store_id } = useParams()
+  const { store_id } = useParams();
   const classes = useStyles();
-  const [user, setUser] = useState({})
-  const [store, setStore] = useState(
-    {
-      open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
-      close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
-      avg_num_admissions:[],
-      queue:[],
-      customer_visits:[]
-    }
-  )
+  const [user, setUser] = useState({});
+  const [store, setStore] = useState({
+    open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
+    close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
+    avg_num_admissions: [],
+    queue: [],
+    customer_visits: [],
+  });
   const [viewPage, setViewPage] = useState(null);
-  const currentUser = props.currentUser
+  const currentUser = props.currentUser;
 
   useEffect(() => {
     getStoreById(store_id, (store) => {
-      updateStore(store, setStore)
+      updateStore(store, setStore);
     });
-    
   }, []);
-  
+
   useInterval(async () => {
     getStoreById(store_id, (store) => {
-      updateStore(store, setStore)
+      updateStore(store, setStore);
     });
   }, REFRESH_INTERVAL);
 
@@ -121,16 +131,15 @@ export default function StoreAnalytics(props) {
     <div className={classes.root}>
       {viewPage && <Redirect to={viewPage} />}
       <Header></Header>
-      <StoreHeader
-          title={store.name}
-          subtitle={store.address}
-        />
+      <StoreHeader title={store.name} subtitle={store.address} />
       <Button
         size="large"
         className={classes.backButton}
         color="primary"
         variant="contained"
-        onClick={()=>{setViewPage("/store-search")}}
+        onClick={() => {
+          setViewPage("/store-search");
+        }}
       >
         Back
       </Button>
@@ -139,9 +148,9 @@ export default function StoreAnalytics(props) {
         className={classes.joinQueueButton}
         color="primary"
         variant="contained"
-        onClick={()=>{
-          joinQueue(currentUser.currentUser)
-          setViewPage("/queue-status")
+        onClick={() => {
+          joinQueue(currentUser.currentUser, store._id);
+          setViewPage("/queue-status");
         }}
       >
         Join Queue
@@ -151,7 +160,9 @@ export default function StoreAnalytics(props) {
           <Grid item>
             <div className={classes.divElem}>
               <p className={classes.typeTitle}>Forecast Wait</p>
-              <p className={classes.typeSubtitle2}>{store.forecast_wait_time}</p>
+              <p className={classes.typeSubtitle2}>
+                {store.forecast_wait_time}
+              </p>
               <p className={classes.typeSubtitle3}> min</p>
             </div>
           </Grid>
@@ -176,21 +187,32 @@ export default function StoreAnalytics(props) {
           <Grid item>
             <div className={classes.divElem}>
               <p className={classes.typeTitle}>Least busy time</p>
-              <p className={classes.typeSubtitle2}>{store.least_busy_time%12}</p>
-              <p className={classes.typeSubtitle3}>{(store.least_busy_time < 12) ? "am" : "pm"}</p>
+              <p className={classes.typeSubtitle2}>
+                {store.least_busy_time % 12}
+              </p>
+              <p className={classes.typeSubtitle3}>
+                {store.least_busy_time < 12 ? "am" : "pm"}
+              </p>
             </div>
           </Grid>
           <Grid item>
             <div className={classes.divElem2}>
               <p className={classes.typeTitle}>Most busy time</p>
-              <p className={classes.typeSubtitle2}>{store.most_busy_time%12}</p>
-              <p className={classes.typeSubtitle3}>{(store.most_busy_time < 12) ? "am" : "pm"}</p>
+              <p className={classes.typeSubtitle2}>
+                {store.most_busy_time % 12}
+              </p>
+              <p className={classes.typeSubtitle3}>
+                {store.most_busy_time < 12 ? "am" : "pm"}
+              </p>
             </div>
           </Grid>
         </Grid>
       </Paper>
       <div className={classes.linegraph}>
-        <LineGraph yValues={store.avg_num_admissions} startTime={store.open_time.getHours()} />
+        <LineGraph
+          yValues={store.avg_num_admissions}
+          startTime={store.open_time.getHours()}
+        />
       </div>
     </div>
   );
