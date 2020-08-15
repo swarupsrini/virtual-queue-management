@@ -390,7 +390,7 @@ app.post("/newEvent", (req, res) => {
   // Create a new Event
   const event = new Event({
     store_id: req.body.store_id,
-    user_id: req.body.user_id,
+    user_id: req.session.user,
     entry_time: req.body.entry_time,
     exit_time: req.body.exit_time,
   });

@@ -37,9 +37,9 @@ function getNumVisitsToday(store) {
 
   let num_visits_today = 0;
   while (
-    num_visits_today + store.queue.length < store.customer_visits.length &&
+    num_visits_today < store.customer_admissions.length &&
     dayStart <
-      store.customer_visits[num_visits_today + store.queue.length].exit_time
+      store.customer_admissions[store.customer_admissions.length - num_visits_today - 1].exit_time
   ) {
     num_visits_today += 1;
   }
@@ -55,8 +55,8 @@ function getAvgAdmissions(store) {
   let last_day = 0;
   let last_month = 0;
   let last_year = 0;
-  for (let i = store.queue.length; i < store.customer_visits.length; i++) {
-    const visit = store.customer_visits[i].exit_time;
+  for (let i = 0; i < store.customer_admissions.length; i++) {
+    const visit = store.customer_admissions[i].exit_time;
     if (
       visit.getDay() != last_day ||
       visit.getMonth() != last_month ||
@@ -92,8 +92,11 @@ function getMostBusyTime(store) {
 function updateStore(store, setStore) {
   getEventsByStoreId(store, (store) => {
     getQueue(store, () => {});
+    console.log(store)
+    store.customer_admissions = store.customer_visits.slice(0, store.customer_visits.length - store.queue.length);
     getForeCastWaitTime(store, () => {});
     store.num_visits_today = getNumVisitsToday(store);
+    
     store.avg_num_admissions = getAvgAdmissions(store);
     store.least_busy_time = getLeastBusyTime(store);
     store.most_busy_time = getMostBusyTime(store);
@@ -149,7 +152,7 @@ export default function StoreAnalytics(props) {
         color="primary"
         variant="contained"
         onClick={() => {
-          joinQueue(currentUser.currentUser, store._id);
+          joinQueue(store._id);
           setViewPage("/queue-status");
         }}
       >

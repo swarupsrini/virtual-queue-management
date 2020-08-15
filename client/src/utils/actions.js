@@ -300,15 +300,15 @@ export const customerExitedCall = async (setStore) => {
 };
 
 export const getQueue = async (store, setStore) => {
-  let i = 0;
+  let i = store.customer_visits.length - 1;
   while (
-    i < store.customer_visits.length &&
+    i >= 0 &&
     (store.customer_visits[i].exit_time === "" ||
       store.customer_visits[i].exit_time === null)
   ) {
-    i++;
+    i--;
   }
-  store.queue = store.customer_visits.slice(0, i);
+  store.queue = store.customer_visits.slice(i + 1);
   store.in_queue = store.queue.length;
   setStore(store);
 };
@@ -364,7 +364,7 @@ export const getEventsByStoreId = (store, setStore) => {
     });
 };
 
-export const joinQueue = (user_id, store_id) => {
+export const joinQueue = (store_id) => {
   const url = `http://localhost:5000/newEvent`;
   fetch(
     url,
@@ -372,7 +372,6 @@ export const joinQueue = (user_id, store_id) => {
       method: "POST",
       body: JSON.stringify({
         store_id: store_id,
-        user_id: user_id,
         entry_time: datetime.format(new Date(), "MMM D YYYY hh:mm:ss A"),
         exit_time: "",
       }),
