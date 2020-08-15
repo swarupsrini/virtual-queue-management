@@ -454,6 +454,22 @@ export const getStoreIdFromJoinedQueue = (callback) => {
       callback(res.store_id);
     })
     .catch((error) => {
+      callback("exited");
+      console.log(error);
+    });
+};
+
+export const getUserId = (callback) => {
+  const url = base + "/getUserId";
+  fetch(url, {
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      callback(res.user_id);
+    })
+    .catch((error) => {
+      callback("default");
       console.log(error);
     });
 };

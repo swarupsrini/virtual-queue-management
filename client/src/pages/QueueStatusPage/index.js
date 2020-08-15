@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import StoreHeader from "../../components/StoreHeader";
+import DisplayQrPopup from "../../components/DisplayQrPopup";
 import Header from "../../components/Header";
 import { Button, Grid, Paper, Typography } from "@material-ui/core";
 import { useStyles } from "./styles";
@@ -48,8 +49,17 @@ export default function QueueStatus(props) {
   const [userQueue, setUserQueue] = useState([]);
   const [msg, setMsg] = useState("");
   const [storeSearch, setStoreSearch] = useState(null);
+  const [displayQR, setDisplayQR] = useState(false);
+
   useInterval(async () => {
     getStoreIdFromJoinedQueue((store_id) => {
+      if (store_id === "exited") {
+        setStoreInfo({
+          lat: 0,
+          long: 0,
+        });
+        setStoreSearch("/store-search");
+      }
       getStoreById(store_id, (store) => {
         getEventsByStoreId(store, (store) => {
           getQueue(store, () => {});
@@ -70,7 +80,9 @@ export default function QueueStatus(props) {
   return (
     <div>
       {storeSearch && <Redirect to={storeSearch} />}
-
+      {displayQR && (
+        <DisplayQrPopup close={() => setDisplayQR(false)}></DisplayQrPopup>
+      )}
       <Header></Header>
       <div className={classes.root}>
         <StoreHeader title={storeInfo.name} subtitle={storeInfo.address} />
@@ -79,7 +91,9 @@ export default function QueueStatus(props) {
           className={classes.displayQR}
           color="primary"
           variant="contained"
-          onClick={() => {}}
+          onClick={() => {
+            setDisplayQR(true);
+          }}
         >
           Display QR
         </Button>
