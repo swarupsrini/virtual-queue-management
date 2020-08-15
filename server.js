@@ -390,7 +390,7 @@ app.post("/newEvent", (req, res) => {
   // Create a new Event
   const event = new Event({
     store_id: req.body.store_id,
-    user_id: req.body.user_id,
+    user_id: req.session.user,
     entry_time: req.body.entry_time,
     exit_time: req.body.exit_time,
   });
@@ -422,15 +422,25 @@ app.get(
   }
 );
 
-app.patch("/updateUser", (req, res) => {
-  updateUser(
-    () => {},
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.session.user,
-    req.body
-  );
+app.patch("/updateUser", userExists, (req, res) => {
+  const username = req.session.user;
+  const password = req.body.password;
+  User.findByUsernamePassword(username, password)
+    .then((user) => {
+      /*updateUser(
+        () => {},
+        (error) => {
+          res.status(400).send(error);
+        },
+        req.session.user,
+        req.body
+      );*/
+    })
+    .catch((error) => {
+      res.status(400).send();
+    });
+  
+  /*
   getUserByID(
     (result) => {
       res.send(result);
@@ -439,7 +449,7 @@ app.patch("/updateUser", (req, res) => {
       res.status(400).send(error);
     },
     req.session.user
-  );
+  );*/
 });
 
 app.patch("/updateStore", (req, res) => {

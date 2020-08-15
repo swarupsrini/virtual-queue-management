@@ -40,13 +40,9 @@ export default function UserSettingsPopup(props) {
   const setUserVal = (key, value) =>
     setUser((user) => ({ ...user, [key]: value }));
 
-  /*useEffect(() => {
-    if (props.id) getUserById(props.id, setUser);
-    else getUserStore(setUser, () => {});
-  }, [props.id]);*/
   useEffect(() => {
     getCurrentUser((user)=>{
-      user.password = ""
+      user.password = "a"
       setUser(user)
     })
     console.log(user)
@@ -63,7 +59,15 @@ export default function UserSettingsPopup(props) {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   function saveUserSettings() {
-    const errors = saveUserSettingsCall(
+    console.log(user)
+    console.log(newConfirmPassError)
+    if(newConfirmPassError){
+      alert("New Password and Confirm Password are different");
+    }
+    else{
+      saveUserSettingsCall(user, setUser)
+    }
+    /*const errors = saveUserSettingsCall(
       user,
       setUser,
       setUserError,
@@ -71,12 +75,7 @@ export default function UserSettingsPopup(props) {
       setEmailError,
       setPassError,
       setNewPassError
-    );
-    if (errors.length > 0)
-      alert(
-        "No fields have been updated! Please make sure all fields are valid!"
-      );
-    else alert("Your settings have been updated!");
+    );*/
 
     // all this stuff must go to backend
     // let updated = [];

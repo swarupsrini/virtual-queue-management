@@ -4,7 +4,7 @@ import datetime from "date-and-time";
 
 export const REFRESH_INTERVAL = 3000;
 // In minutes
-export const AVG_WAIT_TIME = 3;
+export const AVG_WAIT_TIME_SCALE = 3;
 
 const base = "http://localhost:5000";
 
@@ -241,15 +241,7 @@ export const resetStoreCall = async (setStore) => {
   });
 };
 
-export const saveUserSettingsCall = async (
-  user,
-  setUser,
-  setUserError,
-  setPhoneError,
-  setEmailError,
-  setPassError,
-  setNewPassError
-) => {
+export const saveUserSettingsCall = async (user, setUser) => {
   const url = `http://localhost:5000/updateUser`;
   fetch(
     url,
@@ -257,9 +249,13 @@ export const saveUserSettingsCall = async (
       method: "PATCH",
       body: JSON.stringify(user),
     })
-  );
-  // call backend to set 'user', if any errors set them
-  return [];
+  ).then((res) => {
+    if (res.status === 200) alert("Your settings have been updated!");
+    if (res.status === 403) {
+      alert("These credentials have been taken!");
+      throw "Signup credentials have been taken!";
+    }
+  });
 };
 
 export const saveStoreSettingsCall = async (
@@ -301,22 +297,22 @@ export const customerExitedCall = async (setStore) => {
 };
 
 export const getQueue = async (store, setStore) => {
-  let i = 0;
+  let i = store.customer_visits.length - 1;
   while (
-    i < store.customer_visits.length &&
-    (store.customer_visits[i].exit_time == "" ||
-      store.customer_visits[i].exit_time == null)
+    i >= 0 &&
+    (store.customer_visits[i].exit_time === "" ||
+      store.customer_visits[i].exit_time === null)
   ) {
-    i++;
+    i--;
   }
-  store.queue = store.customer_visits.slice(0, i);
+  store.queue = store.customer_visits.slice(i + 1);
   store.in_queue = store.queue.length;
   setStore(store);
 };
 
 export const getForeCastWaitTime = async (store, setStore) => {
   const queue_size = store.queue.length;
-  store.forecast_wait_time = queue_size * AVG_WAIT_TIME;
+  store.forecast_wait_time = queue_size * AVG_WAIT_TIME_SCALE;
   setStore(store);
 };
 
@@ -365,7 +361,7 @@ export const getEventsByStoreId = (store, setStore) => {
     });
 };
 
-export const joinQueue = (user_id, store_id) => {
+export const joinQueue = (store_id) => {
   const url = `http://localhost:5000/newEvent`;
   fetch(
     url,
@@ -373,12 +369,18 @@ export const joinQueue = (user_id, store_id) => {
       method: "POST",
       body: JSON.stringify({
         store_id: store_id,
-        user_id: user_id,
         entry_time: datetime.format(new Date(), "MMM D YYYY hh:mm:ss A"),
         exit_time: "",
       }),
     })
   );
+};
+
+export const getEventsByStoreIdSync = (storeID) => {
+  const url = base + `/getEventsByStoreId?store_id=${storeID}`;
+  return fetch(url, {
+    ...fetchOptions,
+  });
 };
 
 export const getDistance = (userLat, userLong, storeLat, storeLong) => {
@@ -416,7 +418,8 @@ export const getUserStoreId = () => {
     .then((res) => {
       return res;
     });
-}
+};
+
 export const getCurrentUser = (setUser) => {
   const url = `http://localhost:5000/getCurrentUser`;
   fetch(url, {
@@ -424,7 +427,7 @@ export const getCurrentUser = (setUser) => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res)
+      console.log(res);
       setUser(res);
     });
 };
