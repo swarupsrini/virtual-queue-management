@@ -63,14 +63,13 @@ export default function QueueDashboard(props) {
 
   useEffect(() => {
     getUserStore(setUser, setStore);
-    console.log("store:", JSON.stringify(store));
-    console.log(JSON.stringify(store) === "{}");
+    // console.log("store:", JSON.stringify(store));
   }, []);
 
   useInterval(async () => {
     getUserStore(setUser, setStore);
     // get queue from backend, remove from waiting if user exited queue
-    console.log("store:", JSON.stringify(store));
+    // console.log("store:", JSON.stringify(store));
   }, REFRESH_INTERVAL);
 
   const getStoreId = () => store.id;
@@ -82,7 +81,6 @@ export default function QueueDashboard(props) {
   const emptyQueue = () => emptyQueueCall(setStore);
   const customerExited = () => {
     customerExitedCall(setStore);
-    console.log(store);
   };
 
   const [recent, setRecent] = useState({
