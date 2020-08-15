@@ -49,7 +49,6 @@ export default function QueueStatus(props) {
   useInterval(async () => {
     getStoreIdFromJoinedQueue((store_id) => {
       getStoreById(store_id, (store) => {
-        // console.log(store);
         getEventsByStoreId(store, (store) => {
           getQueue(store, () => {});
           getForeCastWaitTime(store, () => {});
