@@ -23,8 +23,6 @@ const getLatLong = (address) => {
         } else if (response.statusCode !== 200) {
           reject("Issue with getting resource");
         } else {
-          // const result = body.l;
-          console.log(body);
           resolve({
             lat: body.results[0].geometry.location.lat,
             long: body.results[0].geometry.location.lng,
