@@ -249,8 +249,12 @@ export const saveUserSettingsCall = async (user, setUser) => {
       body: JSON.stringify(user),
     })
   ).then((res) => {
-    if (res.status === 200) alert("Your settings have been updated!");
-    if (res.status === 403) {
+    if (res.status === 200) alert("Your settings have been updated!")
+    else if (res.status === 402) {
+      alert("Wrong password");
+      throw "Wrong password";
+    }
+    else if (res.status === 403) {
       alert("These credentials have been taken!");
       throw "Signup credentials have been taken!";
     }
