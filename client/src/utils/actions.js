@@ -310,8 +310,22 @@ export const emptyQueueCall = async (setStore) => {
   });
 };
 
-export const customerExitedCall = async (setStore) => {
-  setStore((store) => ({ ...store, in_store: store.in_store - 1 }));
+export const customerChangedCall = async (store, setStore, inc) => {
+  const url = base + `/updateStore?store_id=${store._id}`;
+  const newStore = {
+    ...store,
+    in_store: store.in_store + inc < 0 ? 0 : store.in_store + inc,
+  };
+  console.log(newStore);
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify(newStore),
+    ...fetchOptions,
+  })
+    .then((res) => {
+      setStore(newStore);
+    })
+    .catch((error) => console.log(error));
 };
 
 export const getQueue = async (store, setStore) => {
@@ -463,11 +477,7 @@ export const sendAnnouncement = (store, msg) => {
   fetch(url, {
     method: "PATCH",
     body: JSON.stringify({ ...store, announcement: msg }),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    },
-    credentials: "include", // REMOVE IF BUILDING
+    ...fetchOptions,
   })
     .then((res) => res.json())
     .catch((error) => console.log(error));

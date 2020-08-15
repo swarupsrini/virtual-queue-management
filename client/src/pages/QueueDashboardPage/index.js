@@ -11,7 +11,7 @@ import {
   getUserStore,
   deactivateQueueCall,
   emptyQueueCall,
-  customerExitedCall,
+  customerChangedCall,
   getQueue,
   getEventsByStoreId,
   updateEvent,
@@ -89,7 +89,7 @@ export default function QueueDashboard(props) {
   const deactivateQueue = () => deactivateQueueCall(store, setStore);
   const emptyQueue = () => emptyQueueCall(setStore);
   const customerExited = () => {
-    customerExitedCall(setStore);
+    customerChangedCall(store, setStore, -1);
   };
 
   const setCurrent = (callback) => {
@@ -134,10 +134,10 @@ export default function QueueDashboard(props) {
   const qrAccept = () => {
     qrData.exit_time = new Date();
     qrData.accepted = true;
-    updateEvent(qrData);
-
-    setRecent(qrData);
     removeFromCurrent(qrData);
+    updateEvent(qrData);
+    setRecent(qrData);
+    customerChangedCall(store, setStore, 1);
   };
   const qrReject = () => {
     reject(qrData);
