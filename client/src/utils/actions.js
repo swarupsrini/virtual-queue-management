@@ -234,6 +234,11 @@ export const saveUserSettingsCall = async (
   setPassError,
   setNewPassError
 ) => {
+  const url = `http://localhost:5000/updateUser?username=${user.username}`;
+  fetch(url, Object.assign({}, fetchOptions, {
+    method: 'PATCH',
+    body: JSON.stringify(user)
+  }))
   // call backend to set 'user', if any errors set them
   return [];
 };
@@ -329,6 +334,19 @@ export const getEventsByStoreId = (store, setStore) => {
       store.customer_visits = res;
       setStore(store);
     });
+};
+
+export const joinQueue = (user_id, store_id) => {
+  const url = `http://localhost:5000/newEvent`;
+  fetch(url, Object.assign({}, fetchOptions, {
+    method: 'POST',
+    body: JSON.stringify({
+      store_id: store_id,
+      user_id: user_id,
+      entry_time: datetime.format(new Date(), "MMM D YYYY hh:mm:ss A"),
+      exit_time: "",
+    })
+  }))
 };
 
 export const getDistance = (userLat, userLong, storeLat, storeLong) => {

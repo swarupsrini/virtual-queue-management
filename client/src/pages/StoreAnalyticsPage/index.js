@@ -9,7 +9,7 @@ import Header from "../../components/Header";
 import useStyles from "./styles";
 import { Button, Card, CardContent, Typography, Paper } from "@material-ui/core";
 import useInterval from "../../utils/useInterval";
-import { REFRESH_INTERVAL,getUserStore, getStoreById, getEventsByStoreId, getQueue, getForeCastWaitTime } from "../../utils/actions";
+import { REFRESH_INTERVAL,getUserStore, getStoreById, getEventsByStoreId, getQueue, getForeCastWaitTime, joinQueue } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
 import datetime from "date-and-time";
@@ -102,6 +102,7 @@ export default function StoreAnalytics(props) {
     }
   )
   const [viewPage, setViewPage] = useState(null);
+  const currentUser = props.currentUser
 
   useEffect(() => {
     getStoreById(store_id, (store) => {
@@ -113,7 +114,6 @@ export default function StoreAnalytics(props) {
   useInterval(async () => {
     getStoreById(store_id, (store) => {
       updateStore(store, setStore)
-      console.log(store)
     });
   }, REFRESH_INTERVAL);
 
@@ -139,12 +139,15 @@ export default function StoreAnalytics(props) {
         className={classes.joinQueueButton}
         color="primary"
         variant="contained"
-        onClick={()=>{setViewPage("/queue-status")}}
+        onClick={()=>{
+          joinQueue(currentUser.currentUser)
+          setViewPage("/queue-status")
+        }}
       >
         Join Queue
       </Button>
       <Paper className={classes.paper} elevation={3}>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} className={classes.grid}>
           <Grid item>
             <div className={classes.divElem}>
               <p className={classes.typeTitle}>Forecast Wait</p>
@@ -178,7 +181,7 @@ export default function StoreAnalytics(props) {
             </div>
           </Grid>
           <Grid item>
-            <div className={classes.divElem}>
+            <div className={classes.divElem2}>
               <p className={classes.typeTitle}>Most busy time</p>
               <p className={classes.typeSubtitle2}>{store.most_busy_time%12}</p>
               <p className={classes.typeSubtitle3}>{(store.most_busy_time < 12) ? "am" : "pm"}</p>

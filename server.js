@@ -24,6 +24,8 @@ const {
   getAllUsers,
   getUserByID,
   getEventsByStoreID,
+  updateUser,
+  updateStore,
 } = require("./basic._mongo");
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
@@ -358,7 +360,7 @@ app.get("/getStoreById", authenticate, mongoStoreIDChecker, (req, res) => {
   );
 });
 
-app.post("/newEvent", authenticate, (req, res) => {
+app.post("/newEvent", (req, res) => {
   // Create a new Event
   const event = new Event({
     store_id: req.body.store_id,
@@ -393,6 +395,47 @@ app.get(
     );
   }
 );
+
+app.patch("/updateUser", (req, res) => {
+  updateUser(
+    () => {},
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.query.username,
+    req.body
+  );
+  getUserByID(
+    (result) => {
+      res.send(result);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.query.store_id
+  );
+});
+
+app.patch("/updateStore", (req, res) => {
+  updateStore(
+    () => {},
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.query.store_id,
+    req.body
+  );
+  getStoreByID(
+    (result) => {
+      res.send(result);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.query.store_id
+  );
+});
+
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
