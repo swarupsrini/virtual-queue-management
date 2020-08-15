@@ -12,6 +12,7 @@ const Store = mongoose.model("Store", {
   in_store: { type: Number },
   open_time: { type: String },
   close_time: { type: String },
+  announcement: { type: String },
 });
 
 module.exports = { Store };

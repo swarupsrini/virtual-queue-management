@@ -14,6 +14,7 @@ import {
   customerExitedCall,
   getQueue,
   getEventsByStoreId,
+  updateEvent,
 } from "../../utils/actions";
 
 import StoreHeader from "../../components/StoreHeader";
@@ -24,7 +25,6 @@ import { NavLink } from "react-router-dom";
 import QrPopup from "../../components/QrPopup";
 import AnnouncementPopup from "../../components/AnnouncementPopup";
 import StoreDnePopup from "../../components/StoreDnePopup";
-import { PhoneCallback } from "@material-ui/icons";
 
 function InfoCard(props) {
   return (
@@ -92,48 +92,50 @@ export default function QueueDashboard(props) {
     customerExitedCall(setStore);
   };
 
-  const updateStores = (old, new_store) => {
-    old.queue.forEach((item) => {
-      if (![...new_store.queue, recent].some((obj) => obj._id == item._id)) {
-        console.log("reject");
-      }
-    });
-  };
-
   const setCurrent = (callback) => {
-    const old = Object.assign({}, store);
-    const new_store = { ...store, queue: callback(store.queue) };
-    setStore(new_store);
-    updateStores(old, new_store);
+    setStore({ ...store, queue: callback(store.queue) });
   };
 
   const removeFromCurrent = (item) =>
-    setCurrent((current) =>
-      current.filter((x) => JSON.stringify(x) !== JSON.stringify(item))
-    );
+    setCurrent((current) => current.filter((x) => x._id !== item._id));
 
   const undo = () => {
+    recent.exit_time = null;
+    recent.accepted = false;
+    console.log(recent.entry_time);
+    updateEvent(recent);
+
     setCurrent((old) => [recent, ...old]);
     setRecent({});
   };
 
   const reject = (item, i) => {
-    removeFromCurrent(item);
+    item.exit_time = new Date();
+    item.accepted = false;
+    updateEvent(item);
+
+    removeFromCurrent(item, false);
   };
   const notify = (item, i) => {
-    setCurrent((current) =>
-      current.map((x) =>
-        JSON.stringify(x) === JSON.stringify(item)
-          ? { ...x, notified: true }
-          : x
-      )
-    );
+    setCurrent((current) => {
+      console.log(current);
+      return current.map((x) => {
+        if (x._id === item._id) {
+          updateEvent({ ...x, notified: true });
+          return { ...x, notified: true };
+        } else return x;
+      });
+    });
   };
   const accept = (item, i) => {
     setQrData(item);
     setShowQr(true);
   };
   const qrAccept = () => {
+    qrData.exit_time = new Date();
+    qrData.accepted = true;
+    updateEvent(qrData);
+
     setRecent(qrData);
     removeFromCurrent(qrData);
   };

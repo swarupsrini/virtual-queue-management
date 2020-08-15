@@ -8,6 +8,7 @@ const Event = mongoose.model("Event", {
   entry_time: { type: String }, // entry in queue
   exit_time: { type: String }, // exit from queue
   accepted: { type: Boolean },
+  notified: { type: Boolean },
 });
 
 module.exports = { Event };
