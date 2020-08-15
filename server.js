@@ -321,7 +321,7 @@ app.get("/getStoreById", authenticate, mongoStoreIDChecker, (req, res) => {
   );
 });
 
-app.post("/newEvent", authenticate, (req, res) => {
+app.post("/newEvent", (req, res) => {
   // Create a new Event
   const event = new Event({
     store_id: req.body.store_id,
@@ -356,6 +356,8 @@ app.get(
     );
   }
 );
+
+//Event.find({ store_id: storeID }).then(thenCallBack).catch(errorCallback);
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {

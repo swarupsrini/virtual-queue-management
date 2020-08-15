@@ -61,7 +61,7 @@ export default function App() {
   const storeAnalytics = (
     <Route
       path="/store-analytics/:store_id"
-      render={() => <StoreAnalytics />}
+      render={() => <StoreAnalytics currentUser={currentUser}/>}
     />
   );
   const queueStatus = (

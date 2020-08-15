@@ -320,6 +320,19 @@ export const getEventsByStoreId = (store, setStore) => {
     });
 };
 
+export const joinQueue = (user_id, store_id) => {
+  const url = `http://localhost:5000/newEvent`;
+  fetch(url, Object.assign({}, fetchOptions, {
+    method: 'POST',
+    body: JSON.stringify({
+      store_id: store_id,
+      user_id: user_id,
+      entry_time: datetime.format(new Date(), "MMM D YYYY hh:mm:ss A"),
+      exit_time: "",
+    })
+  }))
+};
+
 export const getDistance = (userLat, userLong, storeLat, storeLong) => {
   const url = `http://localhost:5000/getDistance?fromLat=${userLat}&fromLong=${userLong}&toLat=${storeLat}&toLong=${storeLong}`;
 
