@@ -323,6 +323,18 @@ app.get("/getUserFavStores", authenticate, (req, res) => {
   );
 });
 
+app.get("/getUserStoreId", authenticate, (req, res) => {
+  getUserByID(
+    (result) => {
+      res.send(result.store_id);
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
 app.post(
   "/updateUserFavStores",
   authenticate,
@@ -435,7 +447,6 @@ app.patch("/updateStore", (req, res) => {
     req.query.store_id
   );
 });
-
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {

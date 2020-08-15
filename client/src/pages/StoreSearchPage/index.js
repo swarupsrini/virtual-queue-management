@@ -207,7 +207,7 @@ export default function StoreSearchPage() {
           <ListItem key={store._id}>
             <StoreCard
               title={store.name}
-              min={store.wait}
+              min={0}
               dist={store.distance}
               storeID={store._id}
               verified={store.verified}
