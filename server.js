@@ -26,6 +26,8 @@ const {
   getEventsByStoreID,
   updateUser,
   updateStore,
+  getJoinedEventByUserID,
+  getEmployeeByUsername
 } = require("./basic._mongo");
 
 const bcrypt = require("bcryptjs");
@@ -479,6 +481,65 @@ app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
 });
 
 app.patch("/updateStore", (req, res) => {
+  //const employee_ids = req.body.employee_ids
+  //const store_id = req.body.store_id
+  /*getAllUsers(
+    (result)=>{
+      res.status(200).send(result)
+    },
+    ()=>{}
+  )*/
+  /*
+  for(let i=0;i<employee_ids.length;i++){
+    let username = employee_ids[i]
+    getEmployeeByUsername(
+      (result) => {
+        if(result !== null){
+          console.log("a")
+          //updateUser(()=>{},()=>{},result._id, {store_id:store_id})
+        }
+        else{
+          console.log("b")
+          res.status(400).send()
+          //return Promise.reject();
+          return;
+        }
+      },
+      (error) => {
+      },
+      username
+    )
+  }
+  res.status(200).send()*/
+  /*new Promise((resolve, reject) => {
+    employee_ids.forEach(username => {
+      getEmployeeByUsername(
+        (result) => {
+          if(result !== null){
+            //updateUser(()=>{},()=>{},result._id, {store_id:store_id})
+          }
+          else{
+            console.log("a")
+            reject();
+          }
+        },
+        (error) => {
+          console.log("b")
+          reject()
+        },
+        username
+      )
+    })
+    console.log("c")
+    resolve();
+  }).then(()=>{
+    console.log("d")
+    res.status(200).send()
+  }).catch(()=>{
+    console.log("e")
+    res.status(400).send("b");
+  })*/
+  
   updateStore(
     () => {},
     (error) => {
@@ -515,6 +576,111 @@ app.get("/getCurrentUser", authenticate, (req, res) => {
     req.session.user
   );
 });
+
+app.get("/getStoreIdFromJoinedQueue", authenticate, (req, res) => {
+  getJoinedEventByUserID(
+    (result) => {
+      if (result.length === 0) {
+        res.send({ store_id: "exited" });
+      } else {
+        res.send({ store_id: result[0].store_id });
+      }
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
+app.get("/getUserId", authenticate, (req, res) => {
+  res.send({ user_id: req.session.user });
+});
+
+app.get("/verifyEmployeeUsername", (req, res) => {
+  const username = req.query.username
+  getEmployeeByUsername(
+    (result) => {
+      if(result !== null){
+        //updateUser(()=>{},()=>{},result._id, {store_id:store_id})
+        res.status(200).send("a")
+      }
+      else{
+        res.status(400).send("b")
+        //return Promise.reject();
+      }
+    },
+    (error) => {
+    },
+    username
+  )
+  //const store_id = req.body.store_id
+  //test(employee_ids);
+  /*
+  for(let i=0;i<employee_ids.length;i++){
+    let username = employee_ids[i]
+    getEmployeeByUsername(
+      (result) => {
+        if(result !== null){
+          //updateUser(()=>{},()=>{},result._id, {store_id:store_id})
+        }
+        else{
+          res.status(400).send()
+          //return Promise.reject();
+          return;
+        }
+      },
+      (error) => {
+      },
+      username
+    )
+  }*/
+});
+
+/*
+function doSomethingAsync(username) {
+  return new Promise((resolve, reject) => {
+    getEmployeeByUsername(
+      (result) => {
+        if(result !== null){
+          //updateUser(()=>{},()=>{},result._id, {store_id:store_id})
+          resolve()
+        }
+        else{
+          console.log("a")
+          reject();
+        }
+      },
+      (error) => {
+        console.log("b")
+        reject()
+      },
+      username
+    )
+  });
+}
+
+function test(employee_ids) {
+  let i;
+  let promises = [];
+  
+  for (i = 0; i < 5; ++i) {
+    promises.push(doSomethingAsync(employee_ids[i]));
+  }
+  
+  Promise.all(promises)
+      .then((results) => {
+        console.log("All done", results);
+        res.status(200).send("a");
+      })
+      .catch((e) => {
+          // Handle errors here
+          res.status(400).send("b");
+      });
+}*/
+
+
+
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
