@@ -84,8 +84,9 @@ export const signup = (setUser, data) => {
         fetch(url1, {
           method: "post",
           body: JSON.stringify({
-            name: "Default Store",
-            address: "Default Address",
+            name: "Default",
+            address:
+              "Please visit the settings page to update your store's settings.",
             verified: false,
             owner_id: res._id,
             employee_ids: [],
@@ -271,7 +272,6 @@ export const saveStoreSettingsCall = async (
   closeTimeError
 ) => {
   console.log(store);
-  const store_id = getUserStoreId()
   const url = `http://localhost:5000/updateStore?store_id=${store.id}`;
   fetch(
     url,
@@ -406,14 +406,3 @@ export const updateUserFavs = (callback, bool, store_id) => {
 export const sendAnnouncement = (store, msg) => {
   // call backend to send announcement for the store
 };
-
-export const getUserStoreId = () => {
-  const url = `http://localhost:5000/getUserStoreId`;
-  fetch(url, {
-    ...fetchOptions,
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      return res;
-    });
-}

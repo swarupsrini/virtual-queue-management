@@ -234,37 +234,40 @@ app.post("/newStore", (req, res) => {
     verified: req.body.verified,
     owner_id: req.body.owner_id,
     employee_ids: [],
-    lat: -1,
-    long: -1,
+    lat: 100,
+    long: 100,
     in_store: 0,
     open_time: req.body.open_time,
     close_time: req.body.close_time,
   });
+  User.findById(req.body.owner_id).then((user) => {
+    store.save().then(
+      (store) => {
+        user.store_id = store.id;
+        user.save().catch((error) => res.status(500).send(error));
+        res.send(store);
+      },
+      (error) => res.status(500).send(error)
+    );
+  });
 
-  getLatLong(req.body.address)
-    .then((result) => {
-      store.lat = result.lat;
-      store.long = result.long;
-
-      store.save().then(
-        (store) => {
-          res.send(store);
-        },
-        (error) => {
-          res.status(400).send(error); // 400 for bad request
-        }
-      );
-    })
-    .catch((error) => {
-      store.save().then(
-        (store) => {
-          res.send(store);
-        },
-        (error) => {
-          res.status(400).send(error); // 400 for bad request
-        }
-      );
-    });
+  // getLatLong(req.body.address)
+  //   .then((result) => {
+  //     store.lat = result.lat;
+  //     store.long = result.long;
+  //     return User.findById(req.body.owner_id);
+  //   })
+  //   .then((user) => {
+  //     store.save().then(
+  //       (store) => {
+  //         user.store_id = store.id;
+  //         user.save().catch((error) => res.status(500).send(error));
+  //         res.send(store);
+  //       },
+  //       (error) => res.status(500).send(error)
+  //     );
+  //   })
+  //   .catch((error) => res.status(500).send(error));
 });
 
 app.get("/getDistance", (req, res) => {
