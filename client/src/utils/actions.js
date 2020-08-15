@@ -234,6 +234,11 @@ export const saveUserSettingsCall = async (
   setPassError,
   setNewPassError
 ) => {
+  const url = `http://localhost:5000/updateUser?username=${user.username}`;
+  fetch(url, Object.assign({}, fetchOptions, {
+    method: 'PATCH',
+    body: JSON.stringify(user)
+  }))
   // call backend to set 'user', if any errors set them
   return [];
 };
