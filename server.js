@@ -165,11 +165,10 @@ const userExists = (req, res, next) => {
 const userExistsExcludingCurrentUser = (req, res, next) => {
   getUserByID(
     (result) => {
-      if(result.username !== req.body.username){
-        userExists(req, res, next)
-      }
-      else{
-        next()
+      if (result.username !== req.body.username) {
+        userExists(req, res, next);
+      } else {
+        next();
       }
     },
     (error) => {
@@ -177,7 +176,6 @@ const userExistsExcludingCurrentUser = (req, res, next) => {
     },
     req.session.user
   );
-  
 };
 
 /*************************************************/
@@ -258,6 +256,7 @@ app.post("/newStore", (req, res) => {
     in_store: 0,
     open_time: req.body.open_time,
     close_time: req.body.close_time,
+    announcement: "",
   });
   User.findById(req.body.owner_id).then((user) => {
     store.save().then(
@@ -346,7 +345,7 @@ app.get("/getUserFavStores", authenticate, (req, res) => {
 });
 
 app.get("/getUserStoreId", (req, res) => {
-  console.log("ccc")
+  console.log("ccc");
   getUserByID(
     (result) => {
       //res.send(result.store_id);
@@ -410,13 +409,14 @@ app.get("/getUserStore", authenticate, (req, res) => {
 });
 
 app.post("/joinQueue", (req, res) => {
-  // Create a new Event
   const event = new Event({
     store_id: req.body.store_id,
     user_id: req.session.user,
     username: req.session.username,
     entry_time: req.body.entry_time,
     exit_time: req.body.exit_time,
+    accepted: false,
+    notified: false,
   });
 
   getJoinedEventByUserID(
@@ -439,6 +439,14 @@ app.post("/joinQueue", (req, res) => {
     },
     req.session.user
   );
+});
+
+app.post("/updateEvent", (req, res) => {
+  const event = req.body;
+  Event.findOneAndUpdate({ _id: event._id }, event, (error, result) => {
+    log(result);
+    res.send(result);
+  });
 });
 
 app.post("/exitQueue", (req, res) => {
@@ -468,13 +476,13 @@ app.get(
 );
 
 app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
-  const fields = req.body
-  const updatePassword = fields.password !== "" && fields.new_password !== ""
-  console.log(fields)
+  const fields = req.body;
+  const updatePassword = fields.password !== "" && fields.new_password !== "";
+  console.log(fields);
   new Promise((resolve, reject) => {
     getUserByID(
       (result) => {
-        resolve(result.password)
+        resolve(result.password);
       },
       (error) => {
         res.status(400).send(error);
@@ -485,13 +493,12 @@ app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
     bcrypt.compare(fields.password, password, (err, result) => {
       if (!result && updatePassword) {
         res.status(402).send();
-      }
-      else{
+      } else {
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(fields.new_password, salt, (err, hash) => {
-            fields.password = hash
-            if(!updatePassword){
-              delete fields.password
+            fields.password = hash;
+            if (!updatePassword) {
+              delete fields.password;
             }
             updateUser(
               () => {
@@ -507,14 +514,14 @@ app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
         });
       }
     });
-  })
+  });
 });
 
 app.patch("/updateStore", (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   updateStore(
     () => {
-      res.status(200).send()
+      res.status(200).send();
     },
     (error) => {
       res.status(400).send(error);

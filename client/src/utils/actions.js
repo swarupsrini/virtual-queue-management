@@ -21,6 +21,7 @@ export const readCookie = (setCurrentUser) => {
   fetch(url, { ...fetchOptions })
     .then((res) => {
       if (res.status === 200) return res.json();
+      else throw "Check session failed";
     })
     .then((res) => {
       if (res && res.currentUser) {
@@ -29,6 +30,7 @@ export const readCookie = (setCurrentUser) => {
     })
     .catch((error) => {
       console.log(error);
+      setCurrentUser(null);
     });
 };
 
@@ -249,44 +251,42 @@ export const saveUserSettingsCall = async (user, setUser) => {
       body: JSON.stringify(user),
     })
   ).then((res) => {
-    if (res.status === 200) alert("Your settings have been updated!")
+    if (res.status === 200) alert("Your settings have been updated!");
     else if (res.status === 402) {
       alert("Wrong password");
       throw "Wrong password";
-    }
-    else if (res.status === 403) {
+    } else if (res.status === 403) {
       alert("These credentials have been taken!");
       throw "Signup credentials have been taken!";
     }
   });
 };
 
-export const saveStoreSettingsCall = async (
-  store,
-  setStore,
-) => {
-  getUserStore(()=>{},(backEndStore)=>{
-    const url = base + `/updateStore?store_id=${backEndStore._id}`;
-    fetch(
-      url,
-      Object.assign({}, fetchOptions, {
-        method: "PATCH",
-        body: JSON.stringify({
-          name: store.name,
-          address:store.address,
-          open_time: datetime.format(store.open_time, "hh:mm:ss A"),
-          close_time: datetime.format(store.close_time, "hh:mm:ss A"),
-          owner_id: store.owner_id,
-          employee_ids: store.employee_ids
-          //lat long verified in store
-        }),
-      })
-    ).then((res) => {
-      if (res.status === 200) alert("Your settings have been updated!")
-    })
-  })
-  
-  
+export const saveStoreSettingsCall = async (store, setStore) => {
+  getUserStore(
+    () => {},
+    (backEndStore) => {
+      const url = base + `/updateStore?store_id=${backEndStore._id}`;
+      fetch(
+        url,
+        Object.assign({}, fetchOptions, {
+          method: "PATCH",
+          body: JSON.stringify({
+            name: store.name,
+            address: store.address,
+            open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+            close_time: datetime.format(store.close_time, "hh:mm:ss A"),
+            owner_id: store.owner_id,
+            employee_ids: store.employee_ids,
+            //lat long verified in store
+          }),
+        })
+      ).then((res) => {
+        if (res.status === 200) alert("Your settings have been updated!");
+      });
+    }
+  );
+
   // call backend to set 'store', if any errors set them
   return [];
 };
@@ -343,7 +343,9 @@ export const getUserFavStores = (callback) => {
     .then((res) => {
       callback(res);
     })
-    .catch((error)=>{console.log("ERRORRR")})
+    .catch((error) => {
+      console.log("ERRORRR");
+    });
 };
 
 export const getAllUsers = () => {
@@ -386,6 +388,24 @@ export const joinQueue = (store_id) => {
       }),
     })
   );
+};
+
+export const updateEvent = (event) => {
+  const url = base + "/updateEvent";
+  const event1 = {
+    ...event,
+    entry_time: datetime.format(event.entry_time, "MMM D YYYY hh:mm:ss A"),
+    exit_time:
+      event.exit_time === null
+        ? ""
+        : datetime.format(event.exit_time, "MMM D YYYY hh:mm:ss A"),
+  };
+  console.log(JSON.stringify(event1));
+  fetch(url, {
+    method: "post",
+    body: JSON.stringify(event1),
+    ...fetchOptions,
+  });
 };
 
 export const exitQueue = () => {

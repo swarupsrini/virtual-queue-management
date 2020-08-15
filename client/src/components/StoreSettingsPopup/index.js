@@ -44,8 +44,7 @@ export default function StoreSettings(props) {
 
   const setStoreVal = (key, value) => setStore({ ...store, [key]: value });
 
-  useEffect(() => {
-  }, [store]);
+  useEffect(() => {}, [store]);
 
   /*
   useEffect(() => {
@@ -75,10 +74,7 @@ export default function StoreSettings(props) {
   const [closeTimeError, setCloseTimeError] = useState(false);
 
   function saveStoreSettings() {
-    saveStoreSettingsCall(
-      store,
-      setStore,
-    );
+    saveStoreSettingsCall(store, setStore);
 
     // put in backend
     //   let updated = [];
@@ -173,7 +169,7 @@ export default function StoreSettings(props) {
               if (isNaN(time)) setCloseTimeError(true);
               else {
                 setCloseTimeError(false);
-                setStoreVal("open_time", time);
+                setStoreVal("close_time", time);
               }
             }}
             variant="outlined"
