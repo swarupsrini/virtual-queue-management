@@ -344,7 +344,7 @@ app.get("/getUserFavStores", authenticate, (req, res) => {
   );
 });
 
-app.get("/getUserStoreId", (req, res) => {
+app.get("/getUserStoreId", authenticate, (req, res) => {
   console.log("ccc");
   getUserByID(
     (result) => {
@@ -475,7 +475,7 @@ app.get(
   }
 );
 
-app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
+app.patch("/updateUser", authenticate, userExistsExcludingCurrentUser, (req, res) => {
   const fields = req.body;
   const updatePassword = fields.password !== "" && fields.new_password !== "";
   console.log(fields);
@@ -517,7 +517,7 @@ app.patch("/updateUser", userExistsExcludingCurrentUser, (req, res) => {
   });
 });
 
-app.patch("/updateStore", (req, res) => {
+app.patch("/updateStore", authenticate, (req, res) => {
   console.log(req.body);
   updateStore(
     () => {
@@ -529,16 +529,6 @@ app.patch("/updateStore", (req, res) => {
     req.query.store_id,
     req.body
   );
-  /*
-  getStoreByID(
-    (result) => {
-      res.send(result);
-    },
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.query.store_id
-  );*/
 });
 
 app.get("/getCurrentUser", authenticate, (req, res) => {
@@ -579,10 +569,20 @@ app.get("/getUserId", authenticate, (req, res) => {
   res.send({ user_id: req.session.user });
 });
 
+app.delete("/deleteUser", authenticate, (req, res) => {
+  User.deleteOne({_id:req.session.user}).then(()=>{
+    res.status(400).send();
+  }).catch(()=>{
+    res.status(400).send();
+  });
+})
+
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/client/build/index.html");
 });
+
+
 
 /*************************************************/
 // Express server listening...
