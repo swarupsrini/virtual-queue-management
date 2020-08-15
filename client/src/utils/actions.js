@@ -86,7 +86,7 @@ export const signup = (setUser, data) => {
           body: JSON.stringify({
             name: "Default",
             address:
-              "Please visit the settings page to update your store's settings.",
+              "Please visit the settings page to set your store's settings.",
             verified: false,
             owner_id: res._id,
             employee_ids: [],

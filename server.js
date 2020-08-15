@@ -147,9 +147,7 @@ const userExists = (req, res, next) => {
   let invalid = false;
   User.findOne(
     {
-      email: req.body.email,
       username: req.body.username,
-      phone_number: req.body.phone_number,
     },
     (err, obj) => {
       if (obj !== null) {

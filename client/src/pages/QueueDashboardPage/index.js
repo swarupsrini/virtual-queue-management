@@ -19,6 +19,7 @@ import useStyles from "./styles";
 import { NavLink } from "react-router-dom";
 import QrPopup from "../../components/QrPopup";
 import AnnouncementPopup from "../../components/AnnouncementPopup";
+import StoreDnePopup from "../../components/StoreDnePopup";
 
 function InfoCard(props) {
   return (
@@ -58,19 +59,24 @@ export default function QueueDashboard(props) {
   const [user, setUser] = useState({});
   const [store, setStore] = useState({});
 
+  const [inQueue, setInQueue] = useState(0);
+
   useEffect(() => {
     getUserStore(setUser, setStore);
+    console.log("store:", JSON.stringify(store));
+    console.log(JSON.stringify(store) === "{}");
   }, []);
 
   useInterval(async () => {
     getUserStore(setUser, setStore);
     // get queue from backend, remove from waiting if user exited queue
+    console.log("store:", JSON.stringify(store));
   }, REFRESH_INTERVAL);
 
   const getStoreId = () => store.id;
   const getStoreName = () => store.name;
   const getStoreAddress = () => store.address;
-  const getStoreInQueue = () => store.in_queue;
+  const getStoreInQueue = () => inQueue;
   const getStoreInStore = () => store.in_store;
   const deactivateQueue = () => deactivateQueueCall(store, setStore);
   const emptyQueue = () => emptyQueueCall(setStore);
@@ -107,7 +113,7 @@ export default function QueueDashboard(props) {
   ]);
 
   useEffect(() => {
-    setStore((old) => ({ ...old, in_queue: current.length }));
+    setInQueue(current.length);
   }, [current]);
 
   const removeFromCurrent = (item) =>
@@ -119,9 +125,7 @@ export default function QueueDashboard(props) {
     setCurrent((old) => [recent, ...current]);
     setRecent({});
   };
-  // const scanQr = (item, i) => {
-  //   setShowQr(item.id);
-  // };
+
   const reject = (item, i) => {
     removeFromCurrent(item);
   };
@@ -149,6 +153,7 @@ export default function QueueDashboard(props) {
   return (
     <div>
       <Header />
+      {JSON.stringify(store) === "{}" && <StoreDnePopup />}
       {showQr && (
         <QrPopup
           validData={qrData}
