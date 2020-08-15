@@ -26,6 +26,7 @@ const {
   getEventsByStoreID,
   updateUser,
   updateStore,
+  getJoinedEventByUserID,
 } = require("./basic._mongo");
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
@@ -386,7 +387,7 @@ app.get("/getUserStore", authenticate, (req, res) => {
     .catch((e) => res.status(400).send(e));
 });
 
-app.post("/newEvent", (req, res) => {
+app.post("/joinQueue", (req, res) => {
   // Create a new Event
   const event = new Event({
     store_id: req.body.store_id,
@@ -396,13 +397,26 @@ app.post("/newEvent", (req, res) => {
     exit_time: req.body.exit_time,
   });
 
-  event.save().then(
-    (event) => {
-      res.send(event);
+  getJoinedEventByUserID(
+    (result) => {
+      console.log(result);
+      if (result.length > 0) {
+        res.send(result);
+      } else {
+        event.save().then(
+          (event) => {
+            res.send(event);
+          },
+          (error) => {
+            res.status(400).send(error); // 400 for bad request
+          }
+        );
+      }
     },
     (error) => {
-      res.status(400).send(error); // 400 for bad request
-    }
+      res.status(400).send(error);
+    },
+    req.session.user
   );
 });
 
@@ -483,6 +497,19 @@ app.get("/getCurrentUser", authenticate, (req, res) => {
         phone_number: result.phone_number,
         fav_stores: result.fav_stores,
       });
+    },
+    (error) => {
+      res.status(400).send(error);
+    },
+    req.session.user
+  );
+});
+
+app.get("/getStoreIdFromJoinedQueue", authenticate, (req, res) => {
+  getJoinedEventByUserID(
+    (result) => {
+      console.log(result[0].store_id);
+      res.send({ store_id: result[0].store_id });
     },
     (error) => {
       res.status(400).send(error);

@@ -4,14 +4,17 @@ import Header from "../../components/Header";
 import { Button, Grid, Paper, Typography } from "@material-ui/core";
 import { useStyles } from "./styles";
 import { iconPerson, best } from "../StoreSearchPage/icon";
-import { REFRESH_INTERVAL, getUserStore } from "../../utils/actions";
+import {
+  REFRESH_INTERVAL,
+  getStoreIdFromJoinedQueue,
+  getStoreById,
+  getEventsByStoreId,
+  getQueue,
+  getForeCastWaitTime,
+} from "../../utils/actions";
 import useInterval from "../../utils/useInterval";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import "./index.css";
-
-function getStoreLatLong() {
-  return [43.7763, -79.25802];
-}
 
 function getPosition() {
   return new Promise((res) => {
@@ -25,10 +28,6 @@ function getPosition() {
   });
 }
 
-function getQueueInfo(callback) {
-  callback(["ewdw", "gegre", "fwqwwqs", "dqdqs", "gete"]);
-}
-
 function getCurrentLocation(callback) {
   return getPosition().then((coords) => {
     callback({ lat: coords.latitude, long: coords.longitude });
@@ -39,17 +38,25 @@ export default function QueueStatus(props) {
   const classes = useStyles();
 
   const [userLoc, setUserLoc] = useState({});
-  const [storeInfo, setStoreInfo] = useState({});
+  const [storeInfo, setStoreInfo] = useState({
+    lat: 0,
+    long: 0,
+  });
   const [userInfo, setUserInfo] = useState({ id: "ewdw" });
   const [userQueue, setUserQueue] = useState([]);
   const [msg, setMsg] = useState("");
 
   useInterval(async () => {
-    getUserStore(
-      () => {},
-      () => {}
-    );
-    getQueueInfo(setUserQueue);
+    getStoreIdFromJoinedQueue((store_id) => {
+      getStoreById(store_id, (store) => {
+        // console.log(store);
+        getEventsByStoreId(store, (store) => {
+          getQueue(store, () => {});
+          getForeCastWaitTime(store, () => {});
+          setStoreInfo(store);
+        });
+      });
+    });
     setMsg(
       "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
     );
@@ -63,10 +70,7 @@ export default function QueueStatus(props) {
     <div>
       <Header></Header>
       <div className={classes.root}>
-        <StoreHeader
-          title="Walmart"
-          subtitle="300 Borough Dr Unit 3635,  Scarborough, ON M1P 4P5"
-        />
+        <StoreHeader title={storeInfo.name} subtitle={storeInfo.address} />
         <Button
           size="large"
           className={classes.displayQR}
@@ -89,20 +93,22 @@ export default function QueueStatus(props) {
             <Grid item>
               <div className={classes.divElem}>
                 <p className={classes.typeTitle}>Forecast Wait</p>
-                <p className={classes.typeSubtitle2}>45</p>
+                <p className={classes.typeSubtitle2}>
+                  {storeInfo.forecast_wait_time}
+                </p>
                 <p className={classes.typeSubtitle3}> min</p>
               </div>
             </Grid>
             <Grid item>
               <div className={classes.divElem}>
                 <p className={classes.typeTitle}>In Queue</p>
-                <p className={classes.typeSubtitle}>20</p>
+                <p className={classes.typeSubtitle}>{storeInfo.in_queue}</p>
               </div>
             </Grid>
             <Grid item>
               <div className={classes.divElem}>
                 <p className={classes.typeTitle}>In Store</p>
-                <p className={classes.typeSubtitle}>45</p>
+                <p className={classes.typeSubtitle}>{storeInfo.in_store}</p>
               </div>
             </Grid>
             <Grid item>
@@ -151,7 +157,12 @@ export default function QueueStatus(props) {
                   position={[userLoc.lat, userLoc.long]}
                 ></Marker>
               )}
-            {<Marker key={122121213} position={getStoreLatLong()}></Marker>}
+            {
+              <Marker
+                key={122121213}
+                position={[storeInfo.lat, storeInfo.long]}
+              ></Marker>
+            }
           </Map>
         </div>
       </div>
