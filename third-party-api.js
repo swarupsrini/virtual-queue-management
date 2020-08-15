@@ -10,8 +10,7 @@ require("dotenv").config();
 const request = require("request");
 
 const getLatLong = (address) => {
-  // http://open.mapquestapi.com/geocoding/v1/address?key=KEY&location=Washington,DC
-  const url = `https://geocode.xyz/${address},Canada?json=1`;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.GOOGLE_GEOCODE_API_KEY}`;
   return new Promise((resolve, reject) => {
     request(
       {
@@ -25,9 +24,10 @@ const getLatLong = (address) => {
           reject("Issue with getting resource");
         } else {
           // const result = body.l;
+          console.log(body);
           resolve({
-            lat: body.latt,
-            long: body.longt,
+            lat: body.results[0].geometry.location.lat,
+            long: body.results[0].geometry.location.lng,
           });
         }
       }
