@@ -102,6 +102,9 @@ Below are a list of all the back-end API routes we've made for the application.
 * `PATCH` - `/updateStore`
   Takes in a JSON body of the store to update and updates the store corresponding to store_id in the query parameters.
 
+* `PATCH` - `/queueChanged`
+  Similar to /updateStore except does not update employee information.
+
 * `GET` - `/getCurrentUser`
   Returns the currently logged in user's user object.
 
