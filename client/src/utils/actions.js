@@ -285,6 +285,8 @@ export const saveStoreSettingsCall = async (store, setStore) => {
             close_time: datetime.format(store.close_time, "hh:mm:ss A"),
             owner_id: store.owner_id,
             employee_ids: store.employee_ids,
+            lat: store.lat,
+            long: store.long,
             //lat long verified in store
           }),
         })
