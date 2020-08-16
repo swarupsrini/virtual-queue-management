@@ -146,7 +146,7 @@ export default function StoreAnalytics(props) {
         color="primary"
         variant="contained"
         onClick={() => {
-          setViewPage("/store-search");
+          setViewPage((currentUser.__t === "visitor") ? "/store-search" : "/queue-dashboard");
         }}
       >
         Back
