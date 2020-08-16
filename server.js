@@ -627,11 +627,10 @@ app.delete("/deleteUser", authenticate, (req, res) => {
 app.get("/checkValidEmployee", authenticate, (req, res) => {
   User.find({ username: req.query.username })
     .then((result) => {
-      console.log(result);
-      if (result.__t !== "Employee") {
+      if (result[0].__t !== "Employee") {
         res.send({ valid: "incorrect" });
       } else {
-        if (result.store_id !== "") {
+        if (result[0].store_id !== "") {
           res.send({ valid: "incorrect" });
         }
         res.send({ valid: "correct" });
