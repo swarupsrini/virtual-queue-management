@@ -250,33 +250,34 @@ export const resetStoreCall = async (setStore) => {
 };
 
 export const saveUserSettingsCall = async (user, setUser) => {
-  getUserStore((cur_user)=>{
-    let ext = ""
-    if(cur_user.__t === "Admin"){
-      ext = "/updateUserAdmin"
-    }
-    else{
-      ext = "/updateUser"
-    }
-    const url = base + ext;
-    fetch(
-      url,
-      Object.assign({}, fetchOptions, {
-        method: "PATCH",
-        body: JSON.stringify(user),
-      })
-    ).then((res) => {
-      if (res.status === 200) alert("Your settings have been updated!");
-      else if (res.status === 402) {
-        alert("Wrong password");
-        throw "Wrong password";
-      } else if (res.status === 403) {
-        alert("These credentials have been taken!");
-        throw "Signup credentials have been taken!";
+  getUserStore(
+    (cur_user) => {
+      let ext = "";
+      if (cur_user.__t === "Admin") {
+        ext = "/updateUserAdmin";
+      } else {
+        ext = "/updateUser";
       }
-    });
-  }, ()=>{})
-  
+      const url = base + ext;
+      fetch(
+        url,
+        Object.assign({}, fetchOptions, {
+          method: "PATCH",
+          body: JSON.stringify(user),
+        })
+      ).then((res) => {
+        if (res.status === 200) alert("Your settings have been updated!");
+        else if (res.status === 402) {
+          alert("Wrong password");
+          throw "Wrong password";
+        } else if (res.status === 403) {
+          alert("These credentials have been taken!");
+          throw "Signup credentials have been taken!";
+        }
+      });
+    },
+    () => {}
+  );
 };
 
 export const saveStoreSettingsCall = async (store, setStore) => {
@@ -305,6 +306,30 @@ export const saveStoreSettingsCall = async (store, setStore) => {
       });
     }
   );
+  return [];
+};
+
+export const saveStoreSettingsCallAdmin = async (store, setStore) => {
+  const url = base + `/updateStore?store_id=${store._id}`;
+  fetch(
+    url,
+    Object.assign({}, fetchOptions, {
+      method: "PATCH",
+      body: JSON.stringify({
+        name: store.name,
+        address: store.address,
+        open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+        close_time: datetime.format(store.close_time, "hh:mm:ss A"),
+        owner_id: store.owner_id,
+        employee_ids: store.employee_ids,
+        lat: store.lat,
+        long: store.long,
+        //lat long verified in store
+      }),
+    })
+  ).then((res) => {
+    if (res.status === 200) alert("Your settings have been updated!");
+  });
   return [];
 };
 

@@ -28,7 +28,7 @@ export default function App() {
 
   // for debugging
   useEffect(() => {
-    console.log("changed current user:", currentUser);
+    // console.log("changed current user:", currentUser);
   }, [currentUser]);
 
   const setUser = (newCurrentUser) => {
