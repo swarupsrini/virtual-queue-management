@@ -390,7 +390,17 @@ export const grantVerificationCall = async (store, setStore, verified) => {
     ...fetchOptions,
   })
     .then((res) => {
-      setStore(newStore);
+      setStore({
+        ...newStore,
+        open_time:
+          store.open_time instanceof string
+            ? datetime.parse(store.open_time, "hh:mm:ss A")
+            : store.open_time,
+        close_time:
+          store.close_time instanceof string
+            ? datetime.parse(store.close_time, "hh:mm:ss A")
+            : store.close_time,
+      });
     })
     .catch((error) => console.log(error));
 };
