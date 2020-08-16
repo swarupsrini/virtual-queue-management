@@ -403,15 +403,6 @@ export const getQueue = async (store, setStore) => {
   store.queue.sort((a, b) =>
     datetime.subtract(a.entry_time, b.entry_time).toSeconds()
   );
-  // let i = store.customer_visits.length - 1;
-  // while (
-  //   i >= 0 &&
-  //   (store.customer_visits[i].exit_time === "" ||
-  //     store.customer_visits[i].exit_time === null)
-  // ) {
-  //   i--;
-  // }
-  // store.queue = store.customer_visits.slice(i + 1);
   store.in_queue = store.queue.length;
   setStore(store);
 };
