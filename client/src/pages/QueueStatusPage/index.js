@@ -71,7 +71,7 @@ export default function QueueStatus(props) {
           setAnnouncement(store.announcement);
           getEventsByStoreId(store, (store) => {
             getQueue(store, () => {});
-            getForeCastWaitTime(store, () => {});
+            getForeCastWaitTime(store, () => {}, userInfo._id);
             console.log(store.queue);
 
             if (
@@ -104,7 +104,7 @@ export default function QueueStatus(props) {
           setAnnouncement(store.announcement);
           getEventsByStoreId(store, (store) => {
             getQueue(store, () => {});
-            getForeCastWaitTime(store, () => {});
+            getForeCastWaitTime(store, () => {}, userInfo._id);
             // console.log(store.queue);
             // console.log(userInfo);
             if (store.queue.find((e) => e.user_id === userInfo && e.notified)) {

@@ -390,7 +390,17 @@ export const grantVerificationCall = async (store, setStore, verified) => {
     ...fetchOptions,
   })
     .then((res) => {
-      setStore(newStore);
+      setStore({
+        ...newStore,
+        open_time:
+          store.open_time instanceof string
+            ? datetime.parse(store.open_time, "hh:mm:ss A")
+            : store.open_time,
+        close_time:
+          store.close_time instanceof string
+            ? datetime.parse(store.close_time, "hh:mm:ss A")
+            : store.close_time,
+      });
     })
     .catch((error) => console.log(error));
 };
@@ -409,9 +419,18 @@ export const getQueue = async (store, setStore) => {
   setStore(store);
 };
 
-export const getForeCastWaitTime = async (store, setStore) => {
-  const queue_size = store.queue.length;
-  store.forecast_wait_time = queue_size * AVG_WAIT_TIME_SCALE;
+export const getForeCastWaitTime = async (store, setStore, id) => {
+  let position = 0
+  if(id !== null && id !== undefined){
+    while(position< store.queue.length && 
+      store.queue[position].user_id !== id
+    ){
+      position+=1
+    }
+  }
+  console.log(position)
+  
+  store.forecast_wait_time = (store.queue.length - position) * AVG_WAIT_TIME_SCALE;
   setStore(store);
 };
 
