@@ -374,6 +374,14 @@ export const grantVerificationCall = async (store, setStore, verified) => {
   const newStore = {
     ...store,
     verified: verified,
+    open_time:
+      store.open_time instanceof Date
+        ? datetime.format(store.open_time, "hh:mm:ss A")
+        : store.open_time,
+    close_time:
+      store.close_time instanceof Date
+        ? datetime.format(store.close_time, "hh:mm:ss A")
+        : store.close_time,
   };
   console.log(newStore);
   fetch(url, {
