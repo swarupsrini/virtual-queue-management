@@ -14,7 +14,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 // import mongoose models
 const { Store } = require("./models/store");
-const { User, Employee, Owner } = require("./models/user");
+const { User, Employee, Owner, Admin } = require("./models/user");
 const { Event } = require("./models/events");
 const { getLatLong, getDistance } = require("./third-party-api");
 const { ObjectID } = require("mongodb");
