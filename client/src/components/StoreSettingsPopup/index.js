@@ -9,6 +9,7 @@ import {
   saveStoreSettingsCall,
   getStoreById,
   getUserStore,
+  grantVerificationCall,
 } from "../../utils/actions";
 
 import {
@@ -53,19 +54,20 @@ export default function StoreSettings(props) {
   }, [props.id]);*/
 
   useEffect(() => {
-    getUserStore(()=>{},(store1)=>{
-      console.log(store1.open_time)
-      setStore(
-        {
+    getUserStore(
+      () => {},
+      (store1) => {
+        console.log(store1.open_time);
+        setStore({
           name: store1.name,
-          address:store1.address,
+          address: store1.address,
           open_time: datetime.parse(store1.open_time, "hh:mm:ss A"),
           close_time: datetime.parse(store1.close_time, "hh:mm:ss A"),
           owner_id: store1.owner_id,
-          employee_ids: store1.employee_ids
-        }
-      )
-    })
+          employee_ids: store1.employee_ids,
+        });
+      }
+    );
   }, []);
 
   const [storeError, setStoreError] = useState(false);
@@ -105,6 +107,10 @@ export default function StoreSettings(props) {
   }
 
   const resetStore = () => resetStoreCall(setStore);
+
+  const grantVerification = () => {
+    grantVerificationCall(store, setStore);
+  };
 
   return (
     <div className={props.isAdmin ? classes.root : ""}>
@@ -204,13 +210,16 @@ export default function StoreSettings(props) {
           ))}
         </List>
 
-        <Button
-          className={classes.topMargin}
-          color="default"
-          variant="contained"
-        >
-          Request For Verification
-        </Button>
+        {props.isAdmin && (
+          <Button
+            className={classes.topMargin}
+            color="default"
+            variant="contained"
+            onClick={grantVerification}
+          >
+            Grant Verification
+          </Button>
+        )}
         <br />
         <Button
           className={classes.topMargin}

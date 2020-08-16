@@ -24,9 +24,9 @@ const useStyles = makeStyles({
     height: "135px",
   },
   paper2: {
-    marginTop: "20px",
+    marginTop: "15px",
     marginRight: "30px",
-    height: "75px",
+    height: "60px",
     backgroundColor: "rgba(184, 184, 184, 0.5)",
   },
   typeTitle: {
@@ -64,7 +64,7 @@ const useStyles = makeStyles({
   message: {
     marginLeft: "10px",
     display: "inline-block",
-    marginTop: "20px",
+    marginTop: "10px",
   },
   storeMsg: {
     marginLeft: "10px",
