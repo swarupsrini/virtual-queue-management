@@ -523,26 +523,26 @@ app.patch(
 );
 
 app.patch("/updateStore", authenticate, (req, res) => {
-  console.log(req.body)
-  console.log("a")
+  console.log(req.body);
+  console.log("a");
   getLatLong(req.body.address)
     .then((result) => {
-      console.log(result)
-       req.body.lat = result.lat;
-       req.body.long = result.long;
+      console.log(result);
+      req.body.lat = result.lat;
+      req.body.long = result.long;
 
-       updateStore(
-          () => {
-            res.status(200).send();
-          },
-          (error) => {
-            res.status(400).send(error);
-          },
-          req.query.store_id,
-          req.body
+      updateStore(
+        () => {
+          res.status(200).send();
+        },
+        (error) => {
+          res.status(400).send(error);
+        },
+        req.query.store_id,
+        req.body
       );
-       //return User.findById(req.body.owner_id);
-     })/*
+      //return User.findById(req.body.owner_id);
+    }) /*
      .then((user) => {
        store.save().then(
          (store) => {
@@ -553,8 +553,7 @@ app.patch("/updateStore", authenticate, (req, res) => {
          (error) => res.status(500).send(error)
        );
      })*/
-     .catch((error) => res.status(500).send(error));
-  
+    .catch((error) => res.status(500).send(error));
 });
 
 app.get("/getCurrentUser", authenticate, (req, res) => {
@@ -608,11 +607,10 @@ app.delete("/deleteUser", authenticate, (req, res) => {
 app.get("/checkValidEmployee", authenticate, (req, res) => {
   User.find({ username: req.query.username })
     .then((result) => {
-      console.log(result);
-      if (result.__t !== "Employee") {
+      if (result[0].__t !== "Employee") {
         res.send({ valid: "incorrect" });
       } else {
-        if (result.store_id !== "") {
+        if (result[0].store_id !== "") {
           res.send({ valid: "incorrect" });
         }
         res.send({ valid: "correct" });
