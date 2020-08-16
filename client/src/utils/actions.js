@@ -337,8 +337,6 @@ export const deactivateQueueCall = async (store, setStore) => {
   const url = base + `/updateStore?store_id=${store._id}`;
   const newStore = {
     ...store,
-    open_time: datetime.format(store.open_time, "hh:mm:ss A"),
-    close_time: datetime.format(store.close_time, "hh:mm:ss A"),
     activated: !store.activated,
   };
   console.log(newStore);
