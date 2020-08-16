@@ -358,8 +358,6 @@ export const customerChangedCall = async (store, setStore, inc) => {
   const newStore = {
     ...store,
     in_store: store.in_store + inc < 0 ? 0 : store.in_store + inc,
-    open_time: datetime.format(store.open_time, "hh:mm:ss A"),
-    close_time: datetime.format(store.close_time, "hh:mm:ss A"),
   };
   console.log(newStore);
   fetch(url, {
