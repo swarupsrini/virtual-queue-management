@@ -17,7 +17,7 @@ On signing up/logging in, you will be redirected to the store searching page. He
 
 Username: `user1`, password: `user1`
 
-When you sign up as a store owner you will be given default credentials for your store. you must visit the settings page to customize it. You can customize the name, address, opening/closing time, and the list of employees. Once logging in/signing up, you will be redirected to the queue dashboard page where you can view information about the queue for your store and some quick stats about the store. You can go to your store's analytics at any point by clicking on store analytics. You also have various controls over your store such as emptying its queue, marking a customer as exited, etc. You will see two lists of users, the first one shows you only one visitor, the visitor you most recently accepted so you may undo any mistaken clicks, and a list of currently waiting visitors in the queue. You can at any time choose to announce something to all users by using the Send Announcement button. You have various controls for the users in the waiting queue. You can reject any user in the queue or choose to notify them that they must present themselves soon. Once notified, you may choose to accept them which brings up a QR code reader to read the visitor's QR code. If the QR code was valid, a green message saying so will pop up. If not, a red message saying so will pop up. You can choose to let the user inside or reject the user from the QR popup.
+When you sign up as a store owner you will be given default credentials for your store. you must visit the settings page to customize it. You can customize the name, address, opening/closing time, and the list of employees. Once logging in/signing up, you will be redirected to the queue dashboard page where you can view information about the queue for your store and some quick stats about the store. Note that you must click on Activate Queue before users can start joining your queue. You must Deactivate Queue to disallow this. You can go to your store's analytics at any point by clicking on store analytics. You also have various controls over your store such as emptying its queue, marking a customer as exited, etc. You will see two lists of users, the first one shows you only one visitor, the visitor you most recently accepted so you may undo any mistaken clicks, and a list of currently waiting visitors in the queue. You can at any time choose to announce something to all users by using the Send Announcement button. You have various controls for the users in the waiting queue. You can reject any user in the queue or choose to notify them that they must present themselves soon. Once notified, you may choose to accept them which brings up a QR code reader to read the visitor's QR code. If the QR code was valid, a green message saying so will pop up. If not, a red message saying so will pop up. You can choose to let the user inside or reject the user from the QR popup.
 
 ### Employee user
 
@@ -30,6 +30,8 @@ When you sign up/log in as an employee, you will be redirected to your store's q
 Username: `admin`, password: `admin`
 
 When you log in as an admin, you will see the admin panel page. Here you can search for users, stores using the filter functionality and edit a user/store at any point. You can also verify a store which lets users know that this store has been officially verified by our administration team. This brings up a popup where you will have to make your changes and then save them.
+
+## What we've mocked
 
 
 
