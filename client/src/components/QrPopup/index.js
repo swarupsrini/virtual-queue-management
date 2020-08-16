@@ -23,6 +23,7 @@ function Button(props) {
 }
 
 export default function QrPopup(props) {
+  console.log(props.validData);
   const classes = useStyles();
 
   const [msg, setMsg] = useState(0); // 0-nothing, 1-valid, 2-invalid

@@ -77,7 +77,7 @@ export default function QueueDashboard(props) {
 
   // for testing
   useEffect(() => {
-    console.log("store changed:", JSON.stringify(store));
+    // console.log("store changed:", JSON.stringify(store));
   }, [store]);
 
   const getStoreId = () => store._id;
@@ -132,6 +132,7 @@ export default function QueueDashboard(props) {
     });
   };
   const accept = (item, i) => {
+    console.log(item.user_id);
     setQrData(item);
     setShowQr(true);
   };
@@ -153,7 +154,7 @@ export default function QueueDashboard(props) {
       {JSON.stringify(store) === '{"queue":[]}' && <StoreDnePopup />}
       {showQr && (
         <QrPopup
-          validData={qrData._id}
+          validData={qrData.user_id}
           accept={qrAccept}
           reject={qrReject}
           close={() => setShowQr(false)}

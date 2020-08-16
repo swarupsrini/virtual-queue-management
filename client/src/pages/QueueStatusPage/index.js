@@ -47,7 +47,7 @@ export default function QueueStatus(props) {
     lat: 0,
     long: 0,
   });
-  const [userInfo, setUserInfo] = useState("ewew");
+  const [userInfo, setUserInfo] = useState("");
   const [userQueue, setUserQueue] = useState([]);
   const [msg, setMsg] = useState("");
   const [announcement, setAnnouncement] = useState("");
@@ -56,6 +56,7 @@ export default function QueueStatus(props) {
 
   useEffect(() => {
     getUserId(setUserInfo);
+    console.log(userInfo);
   }, []);
 
   useEffect(() => {
@@ -71,12 +72,10 @@ export default function QueueStatus(props) {
           setAnnouncement(store.announcement);
           getEventsByStoreId(store, (store) => {
             getQueue(store, () => {});
-            getForeCastWaitTime(store, () => {}, userInfo._id);
+            getForeCastWaitTime(store, () => {}, userInfo);
             console.log(store.queue);
 
-            if (
-              store.queue.find((e) => e.user_id === userInfo._id && e.notified)
-            ) {
+            if (store.queue.find((e) => e.user_id === userInfo && e.notified)) {
               setMsg(
                 "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
               );
@@ -104,7 +103,7 @@ export default function QueueStatus(props) {
           setAnnouncement(store.announcement);
           getEventsByStoreId(store, (store) => {
             getQueue(store, () => {});
-            getForeCastWaitTime(store, () => {}, userInfo._id);
+            getForeCastWaitTime(store, () => {}, userInfo);
             // console.log(store.queue);
             // console.log(userInfo);
             if (store.queue.find((e) => e.user_id === userInfo && e.notified)) {

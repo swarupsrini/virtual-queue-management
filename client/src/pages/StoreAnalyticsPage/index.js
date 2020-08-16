@@ -23,6 +23,7 @@ import {
   getQueue,
   getForeCastWaitTime,
   joinQueue,
+  readCookie,
 } from "../../utils/actions";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 
@@ -36,19 +37,17 @@ function getNumVisitsToday(store) {
   dayStart.setSeconds(0);
 
   let num_visits_today = 0;
-  while (
-    num_visits_today < store.customer_admissions.length &&
-    dayStart <
-      store.customer_admissions[
-        store.customer_admissions.length - num_visits_today - 1
-      ].exit_time
-  ) {
-    num_visits_today += 1;
-  }
+  store.customer_admissions.forEach((e) => {
+    if (e.exit_time && dayStart < e.exit_time) {
+      num_visits_today += 1;
+    }
+  });
+
   return num_visits_today;
 }
 
 function getAvgAdmissions(store) {
+  console.log(store);
   const num_admissions = new Array(
     store.close_time.getHours() - store.open_time.getHours()
   ).fill(0);
@@ -57,8 +56,11 @@ function getAvgAdmissions(store) {
   let last_day = 0;
   let last_month = 0;
   let last_year = 0;
+  console.log(store.customer_admissions);
+  console.log(store.open_time.getHours());
   for (let i = 0; i < store.customer_admissions.length; i++) {
     const visit = store.customer_admissions[i].exit_time;
+    if (!visit) continue;
     if (
       visit.getDay() != last_day ||
       visit.getMonth() != last_month ||
@@ -69,10 +71,12 @@ function getAvgAdmissions(store) {
       last_year = visit.getYear();
       num_days += 1;
     }
+    if (visit.getHours() - store.open_time.getHours() < 0) continue;
     num_admissions[visit.getHours() - store.open_time.getHours()] += 1;
   }
-  const avg_num_admissions = num_admissions.map((n) => n / num_days);
-  return avg_num_admissions;
+  // const avg_num_admissions = num_admissions.map((n) => n / num_days);
+  console.log(num_admissions);
+  return num_admissions;
 }
 
 function getLeastBusyTime(store) {
@@ -112,7 +116,7 @@ function updateStore(store, setStore) {
 export default function StoreAnalytics(props) {
   const { store_id } = useParams();
   const classes = useStyles();
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({ __t: "" });
   const [store, setStore] = useState({
     open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
     close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
@@ -127,6 +131,7 @@ export default function StoreAnalytics(props) {
     getStoreById(store_id, (store) => {
       updateStore(store, setStore);
     });
+    readCookie(setUser);
   }, []);
 
   useInterval(async () => {
@@ -146,23 +151,31 @@ export default function StoreAnalytics(props) {
         color="primary"
         variant="contained"
         onClick={() => {
-          setViewPage((currentUser.__t === "visitor") ? "/store-search" : "/queue-dashboard");
+          setViewPage(
+            currentUser.__t === "visitor" ? "/store-search" : "/queue-dashboard"
+          );
         }}
       >
         Back
       </Button>
-      <Button
-        size="large"
-        className={classes.joinQueueButton}
-        color="primary"
-        variant="contained"
-        onClick={() => {
-          joinQueue(store._id);
-          setViewPage("/queue-status");
-        }}
-      >
-        Join Queue
-      </Button>
+      {user.__t == "visitor" && (
+        <Button
+          size="large"
+          className={classes.joinQueueButton}
+          color="primary"
+          variant="contained"
+          onClick={() => {
+            if (store.activated) {
+              joinQueue(store._id);
+              setViewPage("/queue-status");
+            } else {
+              alert("This Store's Queue is Closed");
+            }
+          }}
+        >
+          Join Queue
+        </Button>
+      )}
       <Paper className={classes.paper} elevation={3}>
         <Grid container spacing={1} className={classes.grid}>
           <Grid item>

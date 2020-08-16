@@ -237,8 +237,12 @@ export default function StoreSearchPage() {
               verified={store.verified}
               favorited={userFavs}
               joinClick={() => {
-                joinQueue(store._id);
-                setViewPage("/queue-status");
+                if (store.activated) {
+                  joinQueue(store._id);
+                  setViewPage("/queue-status");
+                } else {
+                  alert("This Store's Queue is Closed");
+                }
               }}
               viewClick={() => {
                 setAnalyticsPage("/store-analytics/" + store._id);
