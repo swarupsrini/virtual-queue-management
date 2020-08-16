@@ -195,7 +195,9 @@ export default function QueueDashboard(props) {
                   <Button
                     className={classes.btnDeactivateQueue}
                     onClick={deactivateQueue}
-                    text="Deactivate Queue"
+                    text={
+                      store.activated ? "Deactivate Queue" : "Activate Queue"
+                    }
                   />
                 </td>
               </tr>

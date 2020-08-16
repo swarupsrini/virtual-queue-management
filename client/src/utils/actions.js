@@ -333,7 +333,23 @@ export const saveStoreSettingsCallAdmin = async (store, setStore) => {
   return [];
 };
 
-export const deactivateQueueCall = async (setStore) => {};
+export const deactivateQueueCall = async (store, setStore) => {
+  const url = base + `/updateStore?store_id=${store._id}`;
+  const newStore = {
+    ...store,
+    activated: !store.activated,
+  };
+  console.log(newStore);
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify(newStore),
+    ...fetchOptions,
+  })
+    .then((res) => {
+      setStore(newStore);
+    })
+    .catch((error) => console.log(error));
+};
 
 export const customerChangedCall = async (store, setStore, inc) => {
   const url = base + `/updateStore?store_id=${store._id}`;
