@@ -270,7 +270,6 @@ app.post("/newEmployee", userExists, (req, res) => {
 });
 
 app.post("/newStore", (req, res) => {
-  // Create a new Store
   const store = new Store({
     name: req.body.name,
     address: req.body.address,
@@ -283,6 +282,7 @@ app.post("/newStore", (req, res) => {
     open_time: req.body.open_time,
     close_time: req.body.close_time,
     announcement: "",
+    activated: false,
   });
   User.findById(req.body.owner_id).then((user) => {
     store.save().then(

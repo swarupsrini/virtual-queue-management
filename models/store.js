@@ -13,6 +13,7 @@ const Store = mongoose.model("Store", {
   open_time: { type: String },
   close_time: { type: String },
   announcement: { type: String },
+  activated: { type: Boolean },
 });
 
 module.exports = { Store };

@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import {
   resetStoreCall,
   saveStoreSettingsCall,
+  saveStoreSettingsCallAdmin,
   getStoreById,
   getUserStore,
   checkValidEmployee,
@@ -82,7 +83,8 @@ export default function StoreSettings(props) {
   const [closeTimeError, setCloseTimeError] = useState(false);
 
   function saveStoreSettings() {
-    saveStoreSettingsCall(store, setStore);
+    if (props.isAdmin) saveStoreSettingsCallAdmin(store, setStore);
+    else saveStoreSettingsCall(store, setStore);
 
     if (props.isAdmin) {
       props.close();

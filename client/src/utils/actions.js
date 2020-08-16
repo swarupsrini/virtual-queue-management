@@ -309,7 +309,47 @@ export const saveStoreSettingsCall = async (store, setStore) => {
   return [];
 };
 
-export const deactivateQueueCall = async (setStore) => {};
+export const saveStoreSettingsCallAdmin = async (store, setStore) => {
+  const url = base + `/updateStore?store_id=${store._id}`;
+  fetch(
+    url,
+    Object.assign({}, fetchOptions, {
+      method: "PATCH",
+      body: JSON.stringify({
+        name: store.name,
+        address: store.address,
+        open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+        close_time: datetime.format(store.close_time, "hh:mm:ss A"),
+        owner_id: store.owner_id,
+        employee_ids: store.employee_ids,
+        lat: store.lat,
+        long: store.long,
+        //lat long verified in store
+      }),
+    })
+  ).then((res) => {
+    if (res.status === 200) alert("Your settings have been updated!");
+  });
+  return [];
+};
+
+export const deactivateQueueCall = async (store, setStore) => {
+  const url = base + `/updateStore?store_id=${store._id}`;
+  const newStore = {
+    ...store,
+    activated: !store.activated,
+  };
+  console.log(newStore);
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify(newStore),
+    ...fetchOptions,
+  })
+    .then((res) => {
+      setStore(newStore);
+    })
+    .catch((error) => console.log(error));
+};
 
 export const customerChangedCall = async (store, setStore, inc) => {
   const url = base + `/updateStore?store_id=${store._id}`;
