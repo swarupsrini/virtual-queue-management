@@ -5,7 +5,7 @@ export const REFRESH_INTERVAL = 3000;
 // In minutes
 export const AVG_WAIT_TIME_SCALE = 3;
 
-const base = "http://localhost:5000";
+const base = "http://localhost:5000" || process.env.MONGODB_URI;
 
 const fetchOptions = {
   headers: {
