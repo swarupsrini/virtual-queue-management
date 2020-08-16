@@ -10,7 +10,6 @@ import {
   REFRESH_INTERVAL,
   getUserStore,
   deactivateQueueCall,
-  emptyQueueCall,
   customerChangedCall,
   getQueue,
   getEventsByStoreId,
@@ -87,7 +86,12 @@ export default function QueueDashboard(props) {
   const getStoreInQueue = () => (store.queue ? store.queue.length : 0);
   const getStoreInStore = () => store.in_store;
   const deactivateQueue = () => deactivateQueueCall(store, setStore);
-  const emptyQueue = () => emptyQueueCall(setStore);
+  const emptyQueue = () => {
+    store.queue.forEach((event) => {
+      reject(event, 0);
+    });
+    setRecent({});
+  };
   const customerExited = () => {
     customerChangedCall(store, setStore, -1);
   };

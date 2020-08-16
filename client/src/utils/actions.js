@@ -298,16 +298,6 @@ export const saveStoreSettingsCall = async (store, setStore) => {
 
 export const deactivateQueueCall = async (setStore) => {};
 
-export const emptyQueueCall = async (setStore) => {
-  setStore({
-    id: 1,
-    name: "Walmart",
-    address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-    in_store: 54,
-    in_queue: 0,
-  });
-};
-
 export const customerChangedCall = async (store, setStore, inc) => {
   const url = base + `/updateStore?store_id=${store._id}`;
   const newStore = {
