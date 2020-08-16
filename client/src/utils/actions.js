@@ -419,9 +419,18 @@ export const getQueue = async (store, setStore) => {
   setStore(store);
 };
 
-export const getForeCastWaitTime = async (store, setStore) => {
-  const queue_size = store.queue.length;
-  store.forecast_wait_time = queue_size * AVG_WAIT_TIME_SCALE;
+export const getForeCastWaitTime = async (store, setStore, id) => {
+  let position = 0
+  if(id !== null && id !== undefined){
+    while(position< store.queue.length && 
+      store.queue[position].user_id !== id
+    ){
+      position+=1
+    }
+  }
+  console.log(position)
+  
+  store.forecast_wait_time = (store.queue.length - position) * AVG_WAIT_TIME_SCALE;
   setStore(store);
 };
 
