@@ -180,7 +180,7 @@ export default function StoreSettings(props) {
             variant="outlined"
             size="small"
             label="Open time"
-            value={datetime.format(store.open_time, "hh:mm:ss A")}
+            value={store.open_time}
             error={openTimeError}
             className={`${classes.textField} ${classes.rightMargin}`}
           ></TextField>
@@ -196,7 +196,7 @@ export default function StoreSettings(props) {
             variant="outlined"
             size="small"
             label="Close time"
-            value={datetime.format(store.close_time, "hh:mm:ss A")}
+            value={store.close_time}
             error={closeTimeError}
             className={`${classes.textField} ${classes.rightMargin}`}
           ></TextField>
