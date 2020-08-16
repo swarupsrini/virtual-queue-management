@@ -55,20 +55,23 @@ export default function StoreSettings(props) {
   }, [props.id]);*/
 
   useEffect(() => {
-    getUserStore(
-      () => {},
-      (store1) => {
-        console.log(store1.open_time);
-        setStore({
-          name: store1.name,
-          address: store1.address,
-          open_time: datetime.parse(store1.open_time, "hh:mm:ss A"),
-          close_time: datetime.parse(store1.close_time, "hh:mm:ss A"),
-          owner_id: store1.owner_id,
-          employee_ids: store1.employee_ids,
-        });
-      }
-    );
+    if (props.id) getStoreById(props.id, setStore);
+    else {
+      getUserStore(
+        () => {},
+        (store1) => {
+          console.log(store1.open_time);
+          setStore({
+            name: store1.name,
+            address: store1.address,
+            open_time: datetime.parse(store1.open_time, "hh:mm:ss A"),
+            close_time: datetime.parse(store1.close_time, "hh:mm:ss A"),
+            owner_id: store1.owner_id,
+            employee_ids: store1.employee_ids,
+          });
+        }
+      );
+    }
   }, []);
 
   const [storeError, setStoreError] = useState(false);
@@ -79,6 +82,9 @@ export default function StoreSettings(props) {
   function saveStoreSettings() {
     saveStoreSettingsCall(store, setStore);
 
+    if (props.isAdmin) {
+      props.close();
+    }
     // put in backend
     //   let updated = [];
     //   // call server to get all the current info about user

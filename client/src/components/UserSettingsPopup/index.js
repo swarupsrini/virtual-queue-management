@@ -7,7 +7,7 @@ import {
   saveUserSettingsCall,
   getCurrentUser,
   deleteUser,
-  logout
+  logout,
 } from "../../utils/actions";
 
 import {
@@ -43,13 +43,15 @@ export default function UserSettingsPopup(props) {
     setUser((user) => ({ ...user, [key]: value }));
 
   useEffect(() => {
-    getCurrentUser((user)=>{
-      user.password = ""
-      setUser(user)
-    })
-    console.log(user)
-    //getUserById(props.id, setUser);
-  }, [props.id]);
+    if (props.id) getUserById(props.id, setUser);
+    else {
+      getCurrentUser((user) => {
+        user.password = "";
+        setUser(user);
+      });
+    }
+    console.log(user);
+  }, []);
 
   const [newPassError, setNewPassError] = useState(false);
 
@@ -61,14 +63,14 @@ export default function UserSettingsPopup(props) {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   function saveUserSettings() {
-    console.log(user)
-    console.log(newConfirmPassError)
-    if(newConfirmPassError){
+    console.log(user);
+    console.log(newConfirmPassError);
+    if (newConfirmPassError) {
       alert("New Password and Confirm Password are different");
+    } else {
+      saveUserSettingsCall(user, setUser);
     }
-    else{
-      saveUserSettingsCall(user, setUser)
-    }
+    if (props.isAdmin) props.close();
     /*const errors = saveUserSettingsCall(
       user,
       setUser,
@@ -113,8 +115,8 @@ export default function UserSettingsPopup(props) {
   function deactivateAccount() {
     // send a server call to deactivate the account
     alert("Account deactivated!");
-    deleteUser()
-    logout()
+    deleteUser();
+    logout();
     props.close();
   }
 
