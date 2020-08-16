@@ -47,7 +47,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 /*** Webpage routes below **********************************/
 // Serve the build
-// app.use(express.static(__dirname + "/client/public"));
+app.use(express.static(__dirname + "/client/public"));
 
 /*************************************************
  * Session Handling */
