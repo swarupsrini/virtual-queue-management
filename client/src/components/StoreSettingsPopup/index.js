@@ -47,7 +47,10 @@ export default function StoreSettings(props) {
 
   const setStoreVal = (key, value) => setStore({ ...store, [key]: value });
 
-  useEffect(() => {}, [store]);
+  useEffect(() => {
+    console.log(typeof store.open_time);
+    console.log(typeof store.close_time);
+  }, [store]);
 
   useEffect(() => {
     if (props.id) {
