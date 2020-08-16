@@ -285,6 +285,7 @@ export const saveStoreSettingsCall = async (store, setStore) => {
     () => {},
     (backEndStore) => {
       const url = base + `/updateStore?store_id=${backEndStore._id}`;
+      console.log(store.employee_ids);
       fetch(
         url,
         Object.assign({}, fetchOptions, {
@@ -334,7 +335,8 @@ export const saveStoreSettingsCallAdmin = async (store, setStore) => {
 };
 
 export const deactivateQueueCall = async (store, setStore) => {
-  const url = base + `/updateStore?store_id=${store._id}`;
+  console.log("deactivating");
+  const url = base + `/queueChanged?store_id=${store._id}`;
   const newStore = {
     ...store,
     activated: !store.activated,
@@ -352,7 +354,8 @@ export const deactivateQueueCall = async (store, setStore) => {
 };
 
 export const customerChangedCall = async (store, setStore, inc) => {
-  const url = base + `/updateStore?store_id=${store._id}`;
+  console.log("customer changed call");
+  const url = base + `/queueChanged?store_id=${store._id}`;
   const newStore = {
     ...store,
     in_store: store.in_store + inc < 0 ? 0 : store.in_store + inc,
@@ -364,13 +367,16 @@ export const customerChangedCall = async (store, setStore, inc) => {
     ...fetchOptions,
   })
     .then((res) => {
+      console.log("return from response");
+      console.log(res);
       setStore(newStore);
     })
     .catch((error) => console.log(error));
 };
 
 export const grantVerificationCall = async (store, setStore, verified) => {
-  const url = base + `/updateStore?store_id=${store._id}`;
+  console.log("grant verification");
+  const url = base + `/queueChanged?store_id=${store._id}`;
   const newStore = {
     ...store,
     verified: verified,
@@ -551,8 +557,8 @@ export const updateUserFavs = (callback, bool, store_id) => {
 };
 
 export const sendAnnouncement = (store, msg) => {
-  const url = base + `/updateStore?store_id=${store._id}`;
-  console.log({ ...store, announcement: msg });
+  const url = base + `/queueChanged?store_id=${store._id}`;
+  console.log("send announcment");
   fetch(url, {
     method: "PATCH",
     body: JSON.stringify({

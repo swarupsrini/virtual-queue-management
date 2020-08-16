@@ -77,7 +77,7 @@ export default function QueueDashboard(props) {
 
   // for testing
   useEffect(() => {
-    // console.log("store changed:", JSON.stringify(store));
+    console.log("store changed:", store);
   }, [store]);
 
   const getStoreId = () => store._id;

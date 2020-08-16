@@ -558,15 +558,33 @@ app.patch("/updateStore", authenticate, (req, res) => {
       req.body.long = result.long;
 
       updateStore(
-        (out) => {
-          console.log(out);
-          req.body.employee_ids.forEach((e) =>
-            User.findOneAndUpdate(
-              { username: e },
-              { store_id: req.query.store_id }
-            )
+        (store) => {
+          User.find({ store_id: req.query.store_id, __t: "Employee" }).then(
+            (out) => {
+              out.map((each) => {
+                each.store_id = "";
+                console.log("right before out.save()");
+                return each.save();
+              });
+              Promise.all(out).then(() => {
+                Promise.all(
+                  req.body.employee_ids.map((e) => {
+                    console.log("each employee", e);
+                    return User.findOneAndUpdate(
+                      { username: e, __t: "Employee" },
+                      { store_id: req.query.store_id },
+                      {
+                        new: true,
+                      }
+                    ).exec();
+                  })
+                ).then(() => {
+                  console.log("returning");
+                  res.send();
+                });
+              });
+            }
           );
-          res.status(200).send();
         },
         (error) => {
           res.status(400).send(error);
@@ -588,6 +606,36 @@ app.patch("/updateStore", authenticate, (req, res) => {
          (error) => res.status(500).send(error)
        );
      })*/
+    .catch((error) => res.status(500).send(error));
+});
+
+app.patch("/queueChanged", authenticate, (req, res) => {
+  console.log(req.body);
+  console.log("got here");
+  getLatLong(req.body.address)
+    .then((result) => {
+      console.log(result);
+      req.body.lat = result.lat;
+      req.body.long = result.long;
+
+      updateStore(
+        (out) => {
+          console.log("printing out", out);
+          // req.body.employee_ids.forEach((e) =>
+          //   User.findOneAndUpdate(
+          //     { username: e },
+          //     { store_id: req.query.store_id }
+          //   )
+          // );
+          res.status(200).send();
+        },
+        (error) => {
+          res.status(400).send(error);
+        },
+        req.query.store_id,
+        req.body
+      );
+    })
     .catch((error) => res.status(500).send(error));
 });
 
