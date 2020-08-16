@@ -337,8 +337,8 @@ export const deactivateQueueCall = async (store, setStore) => {
   const url = base + `/updateStore?store_id=${store._id}`;
   const newStore = {
     ...store,
-    open_time: datetime.format(store.open_time, "MMM D YYYY hh:mm:ss A"),
-    close_time: datetime.format(store.close_time, "MMM D YYYY hh:mm:ss A"),
+    open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+    close_time: datetime.format(store.close_time, "hh:mm:ss A"),
     activated: !store.activated,
   };
   console.log(newStore);
@@ -358,8 +358,8 @@ export const customerChangedCall = async (store, setStore, inc) => {
   const newStore = {
     ...store,
     in_store: store.in_store + inc < 0 ? 0 : store.in_store + inc,
-    open_time: datetime.format(store.open_time, "MMM D YYYY hh:mm:ss A"),
-    close_time: datetime.format(store.close_time, "MMM D YYYY hh:mm:ss A"),
+    open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+    close_time: datetime.format(store.close_time, "hh:mm:ss A"),
   };
   console.log(newStore);
   fetch(url, {
@@ -378,8 +378,8 @@ export const grantVerificationCall = async (store, setStore, verified) => {
   const newStore = {
     ...store,
     verified: verified,
-    open_time: datetime.format(store.open_time, "MMM D YYYY hh:mm:ss A"),
-    close_time: datetime.format(store.close_time, "MMM D YYYY hh:mm:ss A"),
+    open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+    close_time: datetime.format(store.close_time, "hh:mm:ss A"),
   };
   console.log(newStore);
   fetch(url, {
@@ -543,8 +543,8 @@ export const sendAnnouncement = (store, msg) => {
     method: "PATCH",
     body: JSON.stringify({
       ...store,
-      open_time: datetime.format(store.open_time, "MMM D YYYY hh:mm:ss A"),
-      close_time: datetime.format(store.close_time, "MMM D YYYY hh:mm:ss A"),
+      open_time: datetime.format(store.open_time, "hh:mm:ss A"),
+      close_time: datetime.format(store.close_time, "hh:mm:ss A"),
       announcement: msg,
     }),
     ...fetchOptions,
