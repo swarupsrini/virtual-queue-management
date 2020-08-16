@@ -560,6 +560,12 @@ app.patch("/updateStore", authenticate, (req, res) => {
       updateStore(
         (out) => {
           console.log(out);
+          req.body.employee_ids.forEach((e) =>
+            User.findOneAndUpdate(
+              { username: e },
+              { store_id: req.query.store_id }
+            )
+          );
           res.status(200).send();
         },
         (error) => {
@@ -568,8 +574,10 @@ app.patch("/updateStore", authenticate, (req, res) => {
         req.query.store_id,
         req.body
       );
+    })
+
+    /*
       //return User.findById(req.body.owner_id);
-    }) /*
      .then((user) => {
        store.save().then(
          (store) => {
