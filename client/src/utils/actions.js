@@ -543,15 +543,30 @@ export const getFancyQueue = (callback) => {
 
 export const deleteUser = () => {
   const url = base + `/deleteUser`;
-  console.log("a")
+  console.log("a");
   fetch(url, {
     method: "delete",
     ...fetchOptions,
   })
     .then((res) => res.json())
-    .then((res) => {
-    })
+    .then((res) => {})
     .catch((error) => {
       console.log(error);
     });
-}
+};
+
+export const checkValidEmployee = (username, callback) => {
+  const url = base + `/checkValidEmployee?username=${username}`;
+  fetch(url, {
+    method: "get",
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res);
+      callback(res);
+    })
+    .catch((error) => {
+      callback({ valid: "incorrect" });
+    });
+};

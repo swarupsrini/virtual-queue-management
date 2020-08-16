@@ -9,6 +9,7 @@ import {
   saveStoreSettingsCall,
   getStoreById,
   getUserStore,
+  checkValidEmployee,
 } from "../../utils/actions";
 
 import {
@@ -53,19 +54,20 @@ export default function StoreSettings(props) {
   }, [props.id]);*/
 
   useEffect(() => {
-    getUserStore(()=>{},(store1)=>{
-      console.log(store1.open_time)
-      setStore(
-        {
+    getUserStore(
+      () => {},
+      (store1) => {
+        console.log(store1.open_time);
+        setStore({
           name: store1.name,
-          address:store1.address,
+          address: store1.address,
           open_time: datetime.parse(store1.open_time, "hh:mm:ss A"),
           close_time: datetime.parse(store1.close_time, "hh:mm:ss A"),
           owner_id: store1.owner_id,
-          employee_ids: store1.employee_ids
-        }
-      )
-    })
+          employee_ids: store1.employee_ids,
+        });
+      }
+    );
   }, []);
 
   const [storeError, setStoreError] = useState(false);
@@ -92,7 +94,13 @@ export default function StoreSettings(props) {
     } else if (store.employee_ids.includes(user)) {
       alert("Employee already added!");
     } else {
-      setStoreVal("employee_ids", [...store.employee_ids, user]);
+      checkValidEmployee(user, (res) => {
+        if (res.valid === "correct") {
+          setStoreVal("employee_ids", [...store.employee_ids, user]);
+        } else {
+          alert("Employee is enrolled in another store or username is invalid");
+        }
+      });
     }
   }
 
