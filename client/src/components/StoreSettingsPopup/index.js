@@ -49,12 +49,6 @@ export default function StoreSettings(props) {
 
   useEffect(() => {}, [store]);
 
-  /*
-  useEffect(() => {
-    if (props.id) getStoreById(props.id, setStore);
-    else getUserStore(() => {}, setStore);
-  }, [props.id]);*/
-
   useEffect(() => {
     if (props.id) {
       getStoreById(props.id, (res) => {
