@@ -5,14 +5,15 @@ export const REFRESH_INTERVAL = 3000;
 // In minutes
 export const AVG_WAIT_TIME_SCALE = 3;
 
-const base = "http://localhost:5000";
+// const base = "http://localhost:5000";
+const base = "";
 
 const fetchOptions = {
   headers: {
     Accept: "application/json, text/plain, */*",
     "Content-Type": "application/json",
   },
-  credentials: "include", // REMOVE IF BUILDING
+  // credentials: "include", // REMOVE IF BUILDING
 };
 
 export const readCookie = (setCurrentUser) => {
@@ -156,85 +157,6 @@ export const getUserStore = async (setUser, setStore) => {
       if (res.store) setStore(res.store);
     })
     .catch((e) => console.error(e));
-
-  // setUser({
-  //   username: "user",
-  //   email: "user@user.com",
-  //   password: "user",
-  //   phone_number: "123",
-  // });
-  // const store = {
-  //   id: 1,
-  //   owner_id: "1",
-  //   name: "Walmart",
-  //   address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-  //   employee_ids: [],
-  //   in_store: 54,
-  //   open_time: datetime.parse("09:00:00 AM", "hh:mm:ss A"),
-  //   close_time: datetime.parse("08:00:00 PM", "hh:mm:ss A"),
-  //   customer_visits: [
-  //     {
-  //       user_id: "1001",
-  //       entry_time: datetime.parse(
-  //         "Aug 14 2020 06:00:00 PM",
-  //         "MMM D YYYY hh:mm:ss A"
-  //       ),
-  //       exit_time: "",
-  //     },
-  //     {
-  //       user_id: "1001",
-  //       entry_time: datetime.parse(
-  //         "Aug 14 2020 05:00:00 PM",
-  //         "MMM D YYYY hh:mm:ss A"
-  //       ),
-  //       exit_time: "",
-  //     },
-  //     {
-  //       user_id: "1001",
-  //       entry_time: datetime.parse(
-  //         "Aug 14 2020 04:00:00 PM",
-  //         "MMM D YYYY hh:mm:ss A"
-  //       ),
-  //       exit_time: "",
-  //     },
-  //     {
-  //       user_id: "1001",
-  //       entry_time: datetime.parse(
-  //         "Aug 14 2020 03:00:00 PM",
-  //         "MMM D YYYY hh:mm:ss A"
-  //       ),
-  //       exit_time: datetime.parse(
-  //         "Aug 14 2020 03:10:00 PM",
-  //         "MMM D YYYY hh:mm:ss A"
-  //       ),
-  //     },
-  //     {
-  //       user_id: "1001",
-  //       entry_time: datetime.parse(
-  //         "Aug 14 2020 02:00:00 PM",
-  //         "MMM D YYYY hh:mm:ss A"
-  //       ),
-  //       exit_time: datetime.parse(
-  //         "Aug 14 2020 02:10:00 PM",
-  //         "MMM D YYYY hh:mm:ss A"
-  //       ),
-  //     },
-  //     {
-  //       user_id: "1001",
-  //       entry_time: datetime.parse(
-  //         "Aug 14 2020 01:00:00 PM",
-  //         "MMM D YYYY hh:mm:ss A"
-  //       ),
-  //       exit_time: datetime.parse(
-  //         "Aug 14 2020 01:10:00 PM",
-  //         "MMM D YYYY hh:mm:ss A"
-  //       ),
-  //     },
-  //   ],
-  // };
-  // getQueue(store, () => {});
-  // getForeCastWaitTime(store, () => {});
-  // setStore(store);
 };
 
 export const resetStoreCall = async (setStore) => {

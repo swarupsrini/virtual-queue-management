@@ -11,7 +11,8 @@ const cors = require("cors");
 const app = express();
 // CORS for React back-end
 // REMOVE OPTIONS IN CORS CALL IF BUILDING
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+// app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors());
 
 // import mongoose models
 const { Store } = require("./models/store");
@@ -46,7 +47,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 /*** Webpage routes below **********************************/
 // Serve the build
-app.use(express.static(__dirname + "/client/public"));
+// app.use(express.static(__dirname + "/client/public"));
 
 /*************************************************
  * Session Handling */
