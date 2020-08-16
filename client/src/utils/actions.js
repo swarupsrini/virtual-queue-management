@@ -491,17 +491,6 @@ export const sendAnnouncement = (store, msg) => {
     .catch((error) => console.log(error));
 };
 
-export const getUserStoreId = () => {
-  const url = base + `/getUserStoreId`;
-  fetch(url, {
-    ...fetchOptions,
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      return res;
-    });
-};
-
 export const getCurrentUser = (setUser) => {
   const url = base + `/getCurrentUser`;
   fetch(url, {
