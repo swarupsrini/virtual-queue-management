@@ -393,11 +393,11 @@ export const grantVerificationCall = async (store, setStore, verified) => {
       setStore({
         ...newStore,
         open_time:
-          store.open_time instanceof string
+          store.open_time instanceof String
             ? datetime.parse(store.open_time, "hh:mm:ss A")
             : store.open_time,
         close_time:
-          store.close_time instanceof string
+          store.close_time instanceof String
             ? datetime.parse(store.close_time, "hh:mm:ss A")
             : store.close_time,
       });
@@ -420,17 +420,19 @@ export const getQueue = async (store, setStore) => {
 };
 
 export const getForeCastWaitTime = async (store, setStore, id) => {
-  let position = 0
-  if(id !== null && id !== undefined){
-    while(position< store.queue.length && 
+  let position = 0;
+  if (id !== null && id !== undefined) {
+    while (
+      position < store.queue.length &&
       store.queue[position].user_id !== id
-    ){
-      position+=1
+    ) {
+      position += 1;
     }
   }
-  console.log(position)
-  
-  store.forecast_wait_time = (store.queue.length - position) * AVG_WAIT_TIME_SCALE;
+  console.log(position);
+
+  store.forecast_wait_time =
+    (store.queue.length - position) * AVG_WAIT_TIME_SCALE;
   setStore(store);
 };
 
