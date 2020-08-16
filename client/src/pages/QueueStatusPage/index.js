@@ -14,6 +14,7 @@ import {
   getForeCastWaitTime,
   exitQueue,
   getFancyQueue,
+  getUserId,
 } from "../../utils/actions";
 import useInterval from "../../utils/useInterval";
 import { Map, TileLayer, Marker } from "react-leaflet";
@@ -46,12 +47,16 @@ export default function QueueStatus(props) {
     lat: 0,
     long: 0,
   });
-  const [userInfo, setUserInfo] = useState({ id: "ewdw" });
+  const [userInfo, setUserInfo] = useState("ewew");
   const [userQueue, setUserQueue] = useState([]);
   const [msg, setMsg] = useState("");
   const [announcement, setAnnouncement] = useState("");
   const [storeSearch, setStoreSearch] = useState(null);
   const [displayQR, setDisplayQR] = useState(false);
+
+  useEffect(() => {
+    getUserId(setUserInfo);
+  }, []);
 
   useEffect(() => {
     getStoreIdFromJoinedQueue((store_id) => {
@@ -67,12 +72,16 @@ export default function QueueStatus(props) {
           getEventsByStoreId(store, (store) => {
             getQueue(store, () => {});
             getForeCastWaitTime(store, () => {});
-            setStoreInfo(store);
-            if (store.notified === true) {
+            console.log(store.queue);
+
+            if (
+              store.queue.find((e) => e.user_id === userInfo._id && e.notified)
+            ) {
               setMsg(
                 "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
               );
             }
+            setStoreInfo(store);
           });
         });
       }
@@ -96,12 +105,14 @@ export default function QueueStatus(props) {
           getEventsByStoreId(store, (store) => {
             getQueue(store, () => {});
             getForeCastWaitTime(store, () => {});
-            setStoreInfo(store);
-            if (store.notified === true) {
+            console.log(store.queue);
+            console.log(userInfo);
+            if (store.queue.find((e) => e.user_id === userInfo && e.notified)) {
               setMsg(
                 "Please arrive near the entrance, ready with your QR code on the application, Thank You!"
               );
             }
+            setStoreInfo(store);
           });
         });
       }
