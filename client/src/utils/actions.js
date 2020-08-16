@@ -394,15 +394,24 @@ export const grantVerificationCall = async (store, setStore, verified) => {
 };
 
 export const getQueue = async (store, setStore) => {
-  let i = store.customer_visits.length - 1;
-  while (
-    i >= 0 &&
-    (store.customer_visits[i].exit_time === "" ||
-      store.customer_visits[i].exit_time === null)
-  ) {
-    i--;
-  }
-  store.queue = store.customer_visits.slice(i + 1);
+  store.queue = [];
+  store.customer_visits.forEach((e) => {
+    if (e.exit_time === "" || e.exit_time === null) {
+      store.queue.push(e);
+    }
+  });
+  store.queue.sort((a, b) =>
+    datetime.subtract(a.entry_time, b.entry_time).toSeconds()
+  );
+  // let i = store.customer_visits.length - 1;
+  // while (
+  //   i >= 0 &&
+  //   (store.customer_visits[i].exit_time === "" ||
+  //     store.customer_visits[i].exit_time === null)
+  // ) {
+  //   i--;
+  // }
+  // store.queue = store.customer_visits.slice(i + 1);
   store.in_queue = store.queue.length;
   setStore(store);
 };
@@ -451,7 +460,7 @@ export const getEventsByStoreId = (store, setStore) => {
       res.map((n) => {
         n.entry_time = datetime.parse(n.entry_time, "MMM D YYYY hh:mm:ss A");
         n.exit_time =
-          n.exit_time != ""
+          n.exit_time !== ""
             ? datetime.parse(n.exit_time, "MMM D YYYY hh:mm:ss A")
             : null;
         return n;
