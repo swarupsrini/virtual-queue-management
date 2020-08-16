@@ -543,8 +543,6 @@ export const sendAnnouncement = (store, msg) => {
     method: "PATCH",
     body: JSON.stringify({
       ...store,
-      open_time: datetime.format(store.open_time, "hh:mm:ss A"),
-      close_time: datetime.format(store.close_time, "hh:mm:ss A"),
       announcement: msg,
     }),
     ...fetchOptions,
