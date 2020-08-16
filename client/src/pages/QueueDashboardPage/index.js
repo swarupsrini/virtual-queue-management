@@ -149,7 +149,7 @@ export default function QueueDashboard(props) {
       {JSON.stringify(store) === "{}" && <StoreDnePopup />}
       {showQr && (
         <QrPopup
-          validData={qrData}
+          validData={qrData._id}
           accept={qrAccept}
           reject={qrReject}
           close={() => setShowQr(false)}
