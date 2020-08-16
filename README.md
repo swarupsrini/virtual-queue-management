@@ -1,3 +1,8 @@
+## Note to TA
+We are submitting this project 1 day late. I would like to note that this is purely because we spent a lot of time on our deployement. We found that a critical piece of information regarding deploying a react app to Heroku was missing from the provided documentation. We spent the day testing our code and making changes for this reason. Our issue was finally resolved when we added a line in our package.json `"heroku-postbuild": "cd client && npm install && npm run build"`. We sincerely hope you are lenient about the late penalty.
+
+# Queue Mangaement system
+
 This application is a virtual Queue Management system.
 
 ## Users
