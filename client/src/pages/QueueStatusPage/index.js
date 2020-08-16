@@ -105,8 +105,8 @@ export default function QueueStatus(props) {
           getEventsByStoreId(store, (store) => {
             getQueue(store, () => {});
             getForeCastWaitTime(store, () => {});
-            console.log(store.queue);
-            console.log(userInfo);
+            // console.log(store.queue);
+            // console.log(userInfo);
             if (store.queue.find((e) => e.user_id === userInfo && e.notified)) {
               setMsg(
                 "Please arrive near the entrance, ready with your QR code on the application, Thank You!"

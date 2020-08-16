@@ -677,10 +677,11 @@ app.get("/getFancyQueue", authenticate, (req, res) => {
               res.send({ queue: [] });
             } else {
               sorted[index] = { ...sorted[index], isUser: "True" };
-              if (sorted.length > 6) {
-                res.send({ queue: sorted.slice(index - 5, index + 1) });
+              const temp = sorted.slice(0, index + 1);
+              if (temp.length > 6) {
+                res.send({ queue: temp.slice(index - 5, index + 1) });
               } else {
-                res.send({ queue: sorted.slice(0, index + 1) });
+                res.send({ queue: temp });
               }
             }
           },
