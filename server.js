@@ -42,6 +42,10 @@ app.use(express.static(__dirname + "/client/build"));
 const session = require("express-session");
 app.use(bodyParser.urlencoded({ extended: true }));
 
+/*** Webpage routes below **********************************/
+// Serve the build
+app.use(express.static(__dirname + "/client/public"));
+
 /*************************************************
  * Session Handling */
 app.use(
