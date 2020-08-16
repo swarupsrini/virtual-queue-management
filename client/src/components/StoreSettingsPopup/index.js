@@ -55,12 +55,14 @@ export default function StoreSettings(props) {
   }, [props.id]);*/
 
   useEffect(() => {
-    if (props.id) getStoreById(props.id, setStore);
-    else {
+    if (props.id) {
+      getStoreById(props.id, (res) => {
+        setStore(res);
+      });
+    } else {
       getUserStore(
         () => {},
         (store1) => {
-          console.log(store1.open_time);
           setStore({
             name: store1.name,
             address: store1.address,
@@ -122,7 +124,8 @@ export default function StoreSettings(props) {
   const resetStore = () => resetStoreCall(setStore);
 
   const grantVerification = () => {
-    grantVerificationCall(store, setStore);
+    console.log(store);
+    grantVerificationCall(store, setStore, !store.verified);
   };
 
   return (
@@ -230,7 +233,7 @@ export default function StoreSettings(props) {
             variant="contained"
             onClick={grantVerification}
           >
-            Grant Verification
+            {!store.verified ? "Grant Verification" : "Remove Verification"}
           </Button>
         )}
         <br />

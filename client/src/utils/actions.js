@@ -250,33 +250,34 @@ export const resetStoreCall = async (setStore) => {
 };
 
 export const saveUserSettingsCall = async (user, setUser) => {
-  getUserStore((cur_user)=>{
-    let ext = ""
-    if(cur_user.__t === "Admin"){
-      ext = "/updateUserAdmin"
-    }
-    else{
-      ext = "/updateUser"
-    }
-    const url = base + ext;
-    fetch(
-      url,
-      Object.assign({}, fetchOptions, {
-        method: "PATCH",
-        body: JSON.stringify(user),
-      })
-    ).then((res) => {
-      if (res.status === 200) alert("Your settings have been updated!");
-      else if (res.status === 402) {
-        alert("Wrong password");
-        throw "Wrong password";
-      } else if (res.status === 403) {
-        alert("These credentials have been taken!");
-        throw "Signup credentials have been taken!";
+  getUserStore(
+    (cur_user) => {
+      let ext = "";
+      if (cur_user.__t === "Admin") {
+        ext = "/updateUserAdmin";
+      } else {
+        ext = "/updateUser";
       }
-    });
-  }, ()=>{})
-  
+      const url = base + ext;
+      fetch(
+        url,
+        Object.assign({}, fetchOptions, {
+          method: "PATCH",
+          body: JSON.stringify(user),
+        })
+      ).then((res) => {
+        if (res.status === 200) alert("Your settings have been updated!");
+        else if (res.status === 402) {
+          alert("Wrong password");
+          throw "Wrong password";
+        } else if (res.status === 403) {
+          alert("These credentials have been taken!");
+          throw "Signup credentials have been taken!";
+        }
+      });
+    },
+    () => {}
+  );
 };
 
 export const saveStoreSettingsCall = async (store, setStore) => {
@@ -328,11 +329,11 @@ export const customerChangedCall = async (store, setStore, inc) => {
     .catch((error) => console.log(error));
 };
 
-export const grantVerificationCall = async (store, setStore) => {
+export const grantVerificationCall = async (store, setStore, verified) => {
   const url = base + `/updateStore?store_id=${store._id}`;
   const newStore = {
     ...store,
-    verified: true,
+    verified: verified,
   };
   console.log(newStore);
   fetch(url, {
