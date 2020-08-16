@@ -5,7 +5,6 @@ log("Express server");
 
 const express = require("express");
 const { mongoose } = require("./db/mongoose");
-const datetime = require("date-and-time");
 mongoose.set("useFindAndModify", false); // for some deprecation issues
 const cors = require("cors");
 const app = express();
@@ -15,7 +14,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 // import mongoose models
 const { Store } = require("./models/store");
-const { User, Employee, Owner, Admin } = require("./models/user");
+const { User, Employee, Owner } = require("./models/user");
 const { Event } = require("./models/events");
 const { getLatLong, getDistance } = require("./third-party-api");
 const { ObjectID } = require("mongodb");
@@ -28,7 +27,6 @@ const {
   updateUser,
   updateStore,
   getJoinedEventByUserID,
-  getInQueueEventsByStoreID,
 } = require("./basic._mongo");
 
 const bcrypt = require("bcryptjs");
@@ -232,26 +230,6 @@ app.post("/newEmployee", userExists, (req, res) => {
     username: req.body.username,
     phone_number: req.body.phone_number,
     store_id: "",
-  });
-
-  // Save the user
-  user.save().then(
-    (user) => {
-      res.send({ _id: user._id });
-    },
-    (error) => {
-      res.status(400).send(error);
-    }
-  );
-});
-
-app.post("/newAdmin", (req, res) => {
-  log("new admin");
-  const user = new Admin({
-    password: req.body.password,
-    email: req.body.email,
-    username: req.body.username,
-    phone_number: req.body.phone_number,
   });
 
   // Save the user
@@ -497,60 +475,86 @@ app.get(
   }
 );
 
-app.patch("/updateUser", authenticate, userExistsExcludingCurrentUser, (req, res) => {
-  const fields = req.body;
-  const updatePassword = fields.password !== "" && fields.new_password !== "";
-  console.log(fields);
-  new Promise((resolve, reject) => {
-    getUserByID(
-      (result) => {
-        resolve(result.password);
-      },
-      (error) => {
-        res.status(400).send(error);
-      },
-      req.session.user
-    );
-  }).then((password) => {
-    bcrypt.compare(fields.password, password, (err, result) => {
-      if (!result && updatePassword) {
-        res.status(402).send();
-      } else {
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(fields.new_password, salt, (err, hash) => {
-            fields.password = hash;
-            if (!updatePassword) {
-              delete fields.password;
-            }
-            updateUser(
-              () => {
-                res.status(200).send();
-              },
-              (error) => {
-                res.status(400).send(error);
-              },
-              req.session.user,
-              fields
-            );
+app.patch(
+  "/updateUser",
+  authenticate,
+  userExistsExcludingCurrentUser,
+  (req, res) => {
+    const fields = req.body;
+    const updatePassword = fields.password !== "" && fields.new_password !== "";
+    console.log(fields);
+    new Promise((resolve, reject) => {
+      getUserByID(
+        (result) => {
+          resolve(result.password);
+        },
+        (error) => {
+          res.status(400).send(error);
+        },
+        req.session.user
+      );
+    }).then((password) => {
+      bcrypt.compare(fields.password, password, (err, result) => {
+        if (!result && updatePassword) {
+          res.status(402).send();
+        } else {
+          bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(fields.new_password, salt, (err, hash) => {
+              fields.password = hash;
+              if (!updatePassword) {
+                delete fields.password;
+              }
+              updateUser(
+                () => {
+                  res.status(200).send();
+                },
+                (error) => {
+                  res.status(400).send(error);
+                },
+                req.session.user,
+                fields
+              );
+            });
           });
-        });
-      }
+        }
+      });
     });
-  });
-});
+  }
+);
 
 app.patch("/updateStore", authenticate, (req, res) => {
-  console.log(req.body);
-  updateStore(
-    () => {
-      res.status(200).send();
-    },
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.query.store_id,
-    req.body
-  );
+  console.log(req.body)
+  console.log("a")
+  getLatLong(req.body.address)
+    .then((result) => {
+      console.log(result)
+       req.body.lat = result.lat;
+       req.body.long = result.long;
+
+       updateStore(
+          () => {
+            res.status(200).send();
+          },
+          (error) => {
+            res.status(400).send(error);
+          },
+          req.query.store_id,
+          req.body
+      );
+       //return User.findById(req.body.owner_id);
+     })/*
+     .then((user) => {
+       store.save().then(
+         (store) => {
+           user.store_id = store.id;
+           user.save().catch((error) => res.status(500).send(error));
+           res.send(store);
+         },
+         (error) => res.status(500).send(error)
+       );
+     })*/
+     .catch((error) => res.status(500).send(error));
+  
 });
 
 app.get("/getCurrentUser", authenticate, (req, res) => {
@@ -587,71 +591,42 @@ app.get("/getStoreIdFromJoinedQueue", authenticate, (req, res) => {
   );
 });
 
-app.get("/getFancyQueue", authenticate, (req, res) => {
-  getJoinedEventByUserID(
-    (result) => {
-      let fancy = [];
-      if (result.length === 0) {
-        res.send({ queue: fancy });
-      } else {
-        getInQueueEventsByStoreID(
-          (allEvents) => {
-            const sorted = allEvents;
-            sorted.sort((a, b) => {
-              return datetime
-                .subtract(
-                  datetime.parse(a.entry_time, "MMM D YYYY hh:mm:ss A"),
-                  datetime.parse(b.entry_time, "MMM D YYYY hh:mm:ss A")
-                )
-                .toSeconds();
-            });
-
-            sorted.map((each, i) => {
-              sorted[i] = { ...sorted[i].toObject(), position: i };
-            });
-            const index = sorted.findIndex((elem) => {
-              return elem.user_id === req.session.user;
-            });
-            if (index === -1) {
-              res.send({ queue: [] });
-            } else {
-              sorted[index] = { ...sorted[index], isUser: "True" };
-              console.log(sorted.slice(0, index + 1));
-              res.send({ queue: sorted.slice(0, index + 1) });
-            }
-          },
-          (error) => {
-            console.log(error);
-          },
-          result[0].store_id
-        );
-      }
-    },
-    (error) => {
-      res.status(400).send(error);
-    },
-    req.session.user
-  );
-});
-
 app.get("/getUserId", authenticate, (req, res) => {
   res.send({ user_id: req.session.user });
 });
 
 app.delete("/deleteUser", authenticate, (req, res) => {
-  User.deleteOne({_id:req.session.user}).then(()=>{
-    res.status(400).send();
-  }).catch(()=>{
-    res.status(400).send();
-  });
-})
+  User.deleteOne({ _id: req.session.user })
+    .then(() => {
+      res.status(400).send();
+    })
+    .catch(() => {
+      res.status(400).send();
+    });
+});
+
+app.get("/checkValidEmployee", authenticate, (req, res) => {
+  User.find({ username: req.query.username })
+    .then((result) => {
+      console.log(result);
+      if (result.__t !== "Employee") {
+        res.send({ valid: "incorrect" });
+      } else {
+        if (result.store_id !== "") {
+          res.send({ valid: "incorrect" });
+        }
+        res.send({ valid: "correct" });
+      }
+    })
+    .catch((error) => {
+      res.send({ valid: "incorrect" });
+    });
+});
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/client/build/index.html");
 });
-
-
 
 /*************************************************/
 // Express server listening...

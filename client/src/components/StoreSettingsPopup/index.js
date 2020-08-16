@@ -9,6 +9,7 @@ import {
   saveStoreSettingsCall,
   getStoreById,
   getUserStore,
+  checkValidEmployee,
   grantVerificationCall,
 } from "../../utils/actions";
 
@@ -94,7 +95,13 @@ export default function StoreSettings(props) {
     } else if (store.employee_ids.includes(user)) {
       alert("Employee already added!");
     } else {
-      setStoreVal("employee_ids", [...store.employee_ids, user]);
+      checkValidEmployee(user, (res) => {
+        if (res.valid === "correct") {
+          setStoreVal("employee_ids", [...store.employee_ids, user]);
+        } else {
+          alert("Employee is enrolled in another store or username is invalid");
+        }
+      });
     }
   }
 

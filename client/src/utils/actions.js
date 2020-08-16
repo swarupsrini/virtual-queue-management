@@ -285,6 +285,8 @@ export const saveStoreSettingsCall = async (store, setStore) => {
             close_time: datetime.format(store.close_time, "hh:mm:ss A"),
             owner_id: store.owner_id,
             employee_ids: store.employee_ids,
+            lat: store.lat,
+            long: store.long,
             //lat long verified in store
           }),
         })
@@ -568,5 +570,21 @@ export const deleteUser = () => {
     .then((res) => {})
     .catch((error) => {
       console.log(error);
+    });
+};
+
+export const checkValidEmployee = (username, callback) => {
+  const url = base + `/checkValidEmployee?username=${username}`;
+  fetch(url, {
+    method: "get",
+    ...fetchOptions,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res);
+      callback(res);
+    })
+    .catch((error) => {
+      callback({ valid: "incorrect" });
     });
 };
