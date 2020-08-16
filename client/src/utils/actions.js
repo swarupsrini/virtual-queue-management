@@ -285,6 +285,8 @@ export const saveStoreSettingsCall = async (store, setStore) => {
             close_time: datetime.format(store.close_time, "hh:mm:ss A"),
             owner_id: store.owner_id,
             employee_ids: store.employee_ids,
+            lat: store.lat,
+            long: store.long,
             //lat long verified in store
           }),
         })
@@ -293,25 +295,45 @@ export const saveStoreSettingsCall = async (store, setStore) => {
       });
     }
   );
-
-  // call backend to set 'store', if any errors set them
   return [];
 };
 
 export const deactivateQueueCall = async (setStore) => {};
 
-export const emptyQueueCall = async (setStore) => {
-  setStore({
-    id: 1,
-    name: "Walmart",
-    address: "300 Borough Dr Unit 3635, Scarborough, ON M1P 4P5",
-    in_store: 54,
-    in_queue: 0,
-  });
+export const customerChangedCall = async (store, setStore, inc) => {
+  const url = base + `/updateStore?store_id=${store._id}`;
+  const newStore = {
+    ...store,
+    in_store: store.in_store + inc < 0 ? 0 : store.in_store + inc,
+  };
+  console.log(newStore);
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify(newStore),
+    ...fetchOptions,
+  })
+    .then((res) => {
+      setStore(newStore);
+    })
+    .catch((error) => console.log(error));
 };
 
-export const customerExitedCall = async (setStore) => {
-  setStore((store) => ({ ...store, in_store: store.in_store - 1 }));
+export const grantVerificationCall = async (store, setStore) => {
+  const url = base + `/updateStore?store_id=${store._id}`;
+  const newStore = {
+    ...store,
+    verified: true,
+  };
+  console.log(newStore);
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify(newStore),
+    ...fetchOptions,
+  })
+    .then((res) => {
+      setStore(newStore);
+    })
+    .catch((error) => console.log(error));
 };
 
 export const getQueue = async (store, setStore) => {
@@ -463,11 +485,7 @@ export const sendAnnouncement = (store, msg) => {
   fetch(url, {
     method: "PATCH",
     body: JSON.stringify({ ...store, announcement: msg }),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    },
-    credentials: "include", // REMOVE IF BUILDING
+    ...fetchOptions,
   })
     .then((res) => res.json())
     .catch((error) => console.log(error));

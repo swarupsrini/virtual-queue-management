@@ -10,6 +10,7 @@ import {
   getStoreById,
   getUserStore,
   checkValidEmployee,
+  grantVerificationCall,
 } from "../../utils/actions";
 
 import {
@@ -114,6 +115,10 @@ export default function StoreSettings(props) {
 
   const resetStore = () => resetStoreCall(setStore);
 
+  const grantVerification = () => {
+    grantVerificationCall(store, setStore);
+  };
+
   return (
     <div className={props.isAdmin ? classes.root : ""}>
       <Paper elevation={2} variant="elevation" className={classes.paper}>
@@ -212,13 +217,16 @@ export default function StoreSettings(props) {
           ))}
         </List>
 
-        <Button
-          className={classes.topMargin}
-          color="default"
-          variant="contained"
-        >
-          Request For Verification
-        </Button>
+        {props.isAdmin && (
+          <Button
+            className={classes.topMargin}
+            color="default"
+            variant="contained"
+            onClick={grantVerification}
+          >
+            Grant Verification
+          </Button>
+        )}
         <br />
         <Button
           className={classes.topMargin}
