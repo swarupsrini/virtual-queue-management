@@ -337,6 +337,8 @@ export const deactivateQueueCall = async (store, setStore) => {
   const url = base + `/updateStore?store_id=${store._id}`;
   const newStore = {
     ...store,
+    entry_time: datetime.format(event.entry_time, "MMM D YYYY hh:mm:ss A"),
+    exit_time: datetime.format(event.exit_time, "MMM D YYYY hh:mm:ss A"),
     activated: !store.activated,
   };
   console.log(newStore);
@@ -356,6 +358,8 @@ export const customerChangedCall = async (store, setStore, inc) => {
   const newStore = {
     ...store,
     in_store: store.in_store + inc < 0 ? 0 : store.in_store + inc,
+    entry_time: datetime.format(event.entry_time, "MMM D YYYY hh:mm:ss A"),
+    exit_time: datetime.format(event.exit_time, "MMM D YYYY hh:mm:ss A"),
   };
   console.log(newStore);
   fetch(url, {
@@ -374,6 +378,8 @@ export const grantVerificationCall = async (store, setStore, verified) => {
   const newStore = {
     ...store,
     verified: verified,
+    entry_time: datetime.format(event.entry_time, "MMM D YYYY hh:mm:ss A"),
+    exit_time: datetime.format(event.exit_time, "MMM D YYYY hh:mm:ss A"),
   };
   console.log(newStore);
   fetch(url, {
@@ -535,7 +541,12 @@ export const sendAnnouncement = (store, msg) => {
   console.log({ ...store, announcement: msg });
   fetch(url, {
     method: "PATCH",
-    body: JSON.stringify({ ...store, announcement: msg }),
+    body: JSON.stringify({
+      ...store,
+      entry_time: datetime.format(event.entry_time, "MMM D YYYY hh:mm:ss A"),
+      exit_time: datetime.format(event.exit_time, "MMM D YYYY hh:mm:ss A"),
+      announcement: msg,
+    }),
     ...fetchOptions,
   })
     .then((res) => res.json())
