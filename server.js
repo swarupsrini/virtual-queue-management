@@ -57,6 +57,26 @@ app.use(
   })
 );
 
+app.post("/newAdmin", (req, res) => {
+  log("new admin");
+  const user = new Admin({
+    password: req.body.password,
+    email: req.body.email,
+    username: req.body.username,
+    phone_number: req.body.phone_number,
+  });
+
+  // Save the user
+  user.save().then(
+    (user) => {
+      res.send({ _id: user._id });
+    },
+    (error) => {
+      res.status(400).send(error);
+    }
+  );
+});
+
 // A route to login and create a session
 app.post("/login", (req, res) => {
   const username = req.body.username;
@@ -597,6 +617,23 @@ app.delete("/deleteUser", authenticate, (req, res) => {
     res.status(400).send();
   });
 })
+
+app.get("/checkValidEmployee", authenticate, (req, res) => {
+  User.find({ username: req.query.username })
+    .then((result) => {
+      if (result[0].__t !== "Employee") {
+        res.send({ valid: "incorrect" });
+      } else {
+        if (result[0].store_id !== "") {
+          res.send({ valid: "incorrect" });
+        }
+        res.send({ valid: "correct" });
+      }
+    })
+    .catch((error) => {
+      res.send({ valid: "incorrect" });
+    });
+});
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
