@@ -31,9 +31,9 @@ Username: `admin`, password: `admin`
 
 When you log in as an admin, you will see the admin panel page. Here you can search for users, stores using the filter functionality and edit a user/store at any point. You can also verify a store which lets users know that this store has been officially verified by our administration team. This brings up a popup where you will have to make your changes and then save them.
 
-## What we've mocked
+## Database prepoulation
 
-We've made 11 users, 6 stores. Each user's password is the same as their username. Users: user, user1, user2, admin, owner1, owner2, owner3, owner4, owner5, employee1, employee2. The type of the user is evident from their name except for the ones listed in the above section. 
+We've made 11 users, 6 stores. Each user's password is the same as their username. Users: user, user1, user2, admin, owner1, owner2, owner3, owner4, owner5, employee1, employee2. The type of the user is evident from their name except for the ones listed in the above section. user has visited user1's store twice as you will see on user1's store's store analytics page. All owners' stores have been configured to a random address we input from the settings page. user1's store has been given two employees: user2 and employee1. employee2 does not belong to any store, therefore will receive a notification saying so. 
 
 ## Routes Overview
 
