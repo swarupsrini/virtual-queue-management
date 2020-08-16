@@ -14,7 +14,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 // import mongoose models
 const { Store } = require("./models/store");
-const { User, Employee, Owner } = require("./models/user");
+const { User, Employee, Owner, Admin } = require("./models/user");
 const { Event } = require("./models/events");
 const { getLatLong, getDistance } = require("./third-party-api");
 const { ObjectID } = require("mongodb");
@@ -230,6 +230,26 @@ app.post("/newEmployee", userExists, (req, res) => {
     username: req.body.username,
     phone_number: req.body.phone_number,
     store_id: "",
+  });
+
+  // Save the user
+  user.save().then(
+    (user) => {
+      res.send({ _id: user._id });
+    },
+    (error) => {
+      res.status(400).send(error);
+    }
+  );
+});
+
+app.post("/newAdmin", (req, res) => {
+  log("new admin");
+  const user = new Admin({
+    password: req.body.password,
+    email: req.body.email,
+    username: req.body.username,
+    phone_number: req.body.phone_number,
   });
 
   // Save the user
