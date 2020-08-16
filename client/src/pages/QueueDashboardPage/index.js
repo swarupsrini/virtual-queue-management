@@ -77,7 +77,7 @@ export default function QueueDashboard(props) {
 
   // for testing
   useEffect(() => {
-    // console.log("store changed:", JSON.stringify(store));
+    console.log("store changed:", JSON.stringify(store));
   }, [store]);
 
   const getStoreId = () => store._id;
@@ -150,7 +150,7 @@ export default function QueueDashboard(props) {
   return (
     <div>
       <Header />
-      {JSON.stringify(store) === "{}" && <StoreDnePopup />}
+      {JSON.stringify(store) === '{"queue":[]}' && <StoreDnePopup />}
       {showQr && (
         <QrPopup
           validData={qrData._id}
