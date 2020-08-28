@@ -6,7 +6,7 @@ A website for people to completely virtualize queueing for a store. Users can jo
 
 ## Tech
 
-`MongoDB`, `Express`, `Node.js`, `React`
+`MongoDB`, `Express`, `React`, `Node.js`
 
 ## Motives
 
