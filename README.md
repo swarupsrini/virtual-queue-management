@@ -2,8 +2,6 @@
 
 A website for people to completely virtualize queueing for a store. Users can join a store's queue, and store owners can create/edit stores, add store employees and manage customers in their queue. The website has many powerful features including intelligent store searching, store analytics tracking, real-time queue status monitoring, QR code validation, etc.
 
-
-
 [Click here to visit our website!](https://immense-basin-10375.herokuapp.com/)  
 Note: Please wait a moment for the page to load, Heroku takes some time to wake up the servers.
 
